@@ -107,11 +107,11 @@ button:disabled{cursor:default}
 .tags>span{font-size:11px;line-height:1.5;border:1px solid #e4e6e0;background:#fafbf9;padding:4px 8px;border-radius:4px;color:#596252}
 .audience{border-top:1px solid #ebede7;margin-top:20px;padding-top:14px;display:flex;justify-content:space-between;gap:15px;font-size:11px;color:#767c75}
 .audience>span:last-child{color:#7c8475;text-align:right;overflow-wrap:anywhere}
-.project-card:last-child{grid-column:1/-1}
-.project-card:last-child .project-open{display:grid;grid-template-columns:.6fr 1fr}
-.project-card:last-child .project-visual{height:100%;min-height:275px}
-.project-card:last-child .miniature{max-width:280px;margin-top:14px}
-.project-card:last-child .project-info{padding:30px 38px}
+
+
+
+
+
 .repository-note{font-size:11px;text-align:right;color:#757b72;margin:23px 0 0}
 .mini-discord{background:#303339;color:#dddde5;display:flex;min-height:210px;border-radius:7px;overflow:hidden;box-shadow:0 14px 28px #15192324;font-size:10px;text-align:left}
 .mini-sidebar{width:32%;background:#27292e;padding:13px 10px;flex-shrink:0}
@@ -301,7 +301,7 @@ dialog[open]{animation:modal-in .3s ease-out}
 .detail-body ul{padding-left:18px}
 .detail-bottom{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding:23px 48px;gap:16px;font-size:12px;color:#5f6b57}
 .detail-bottom .button{font-size:13px}
-.motion-paused *,.motion-paused *:before,.motion-paused *:after{animation-play-state:paused!important;scroll-behavior:auto!important;transition:none!important}
+.motion-paused *,.motion-paused *:before,.motion-paused *:after{animation-play-state:paused!important;scroll-behavior:auto!important}
 .motion-paused dialog[open]{animation:none}
 .motion-paused .hero-window{transform:rotate(-3deg)}
 
@@ -377,10 +377,10 @@ to{opacity:1;transform:translateY(0)}
 .mini-sidebar>b{font-size:10px}
 .project-info h3{font-size:23px}
 .project-info>p{font-size:14px;min-height:0}
-.project-card:last-child .project-open{display:block}
-.project-card:last-child .project-visual{min-height:265px;height:265px}
-.project-card:last-child .project-info{padding:22px}
-.project-card:last-child .miniature{max-width:330px}
+
+
+
+
 .repository-note{text-align:left;font-size:10px}
 .approach{padding-block:47px}
 .approach .section-heading h2{font-size:28px}
@@ -571,9 +571,9 @@ dialog{width:calc(100% - 20px);max-height:calc(100dvh - 24px);border-radius:10px
 
 .motion-paused .reveal{opacity:1;transform:none}
 
-.motion-paused .demo-screen *{animation:none!important}
 
-.motion-paused .demo-screen .ball{animation:none!important}
+
+
 
 @keyframes frame-in{from{opacity:.4;transform:translateY(7px)}
 to{opacity:1;transform:translateY(0)}
