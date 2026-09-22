@@ -29,7 +29,7 @@ assert.ok(!html.includes('あったらいいな'));
 assert.ok(!html.includes('全7件'));
 for(const match of html.matchAll(/(?:src|href)="\.\/([^"]+)"/g))assert.ok((await stat(path.join(root,'dist',match[1]))).size>0);
 for(const match of html.matchAll(/href="#project=([^"]+)"/g))assert.ok(projects.some(p=>p.id===match[1]));
-for(const file of ['dist/app.js','dist/projects.js','dist/demos.js','scripts/serve.mjs'])execFileSync(process.execPath,['--check',path.join(root,file)],{stdio:'pipe'});
+for(const file of ['dist/app.js','dist/projects.js','dist/demos.js','scripts/serve.mjs','scripts/build.mjs'])execFileSync(process.execPath,['--check',path.join(root,file)],{stdio:'pipe'});
 const vercel=JSON.parse(await readFile(path.join(root,'vercel.json'),'utf8'));
 assert.equal(vercel.outputDirectory,'dist');assert.equal(vercel.buildCommand,'npm run build');
 // The browser runs all actors on one continuous CSS clock; there are no JS step timers.
@@ -40,3 +40,17 @@ assert.ok(!app.includes('setTimeout') && !app.includes('data-step'));
 assert.ok(css.includes('--sequence-duration:18.6s'));
 for(const name of ['continuous-ball','continuous-speaking','continuous-output','continuous-decision','continuous-log-three','continuous-camera-weather'])assert.ok(css.includes('@keyframes '+name));
 console.log('PASS: 6 projects, usage stories, shared continuous animation scenes, 6-v-6, links, JS syntax, Vercel configuration and no step controls/timers.');
+
+// Sharing crawlers must find a public image in the initial HTML, without JS.
+const meta = name => html.match(new RegExp(`<meta (?:property|name)="${name}" content="([^"]+)"`))?.[1];
+const imageUrl = new URL(meta('og:image'));
+assert.equal(imageUrl.protocol, 'https:');
+assert.equal(imageUrl.pathname, '/og-image.png');
+assert.equal(meta('twitter:image'), meta('og:image'));
+assert.equal(meta('twitter:card'), 'summary_large_image');
+const png = await readFile(path.join(root,'dist/og-image.png'));
+assert.equal(png.subarray(0,8).toString('hex'), '89504e470d0a1a0a');
+assert.equal(png.readUInt32BE(16), Number(meta('og:image:width')));
+assert.equal(png.readUInt32BE(20), Number(meta('og:image:height')));
+assert.ok(meta('og:image:alt'));
+console.log('PASS: public OGP / X image URLs and PNG dimensions.');

@@ -88,3 +88,16 @@ audience: '友人のDiscordコミュニティで、ボイスチャット参加�
 Discordの入室・発話表示・実コマンド、地震情報の通知、配信エディターの追加・ドラッグ・保存、Pythonの判断経路、通信検査のログ、Javaシミュレーターの6対6と位置評価に沿って動作を再構成しています。画面を切り替えて作り直さず同じDOMを動かすため、カメラ・選手・モジュールが連続して移動します。UI上の操作とバックグラウンド処理の解説を分けています。実サービスやモデルへ接続するライブデモではありません。地震情報・気象値・通信ログ・位置評価の色は説明用のサンプルです。
 
 再生はCSSの共通時間軸で制御します。旧来のsetTimeoutによるステップ切り替えと「次のステップ」操作は削除しました。
+
+
+## リンク共有時のサムネイル
+
+`dist/og-image.png`（1200 × 630 px）をOGPとXの画像付きカードに設定しています。メタ情報は初期HTMLに含まれるので、JavaScriptを実行しない共有サービスでも読み取れます。
+
+公開URLは `https://portfolio-amz-jpcslr.vercel.app` です。`npm run build` は `scripts/build.mjs` でURLを書き込んでからチェックを実行します。優先順位は `SITE_URL` → `VERCEL_PROJECT_PRODUCTION_URL` → `VERCEL_URL` → 上記の公開URLです。独自ドメインに変更する場合は、Vercelの `SITE_URL` に `https://` から始まるURLを設定してください。
+
+PNGはコミット対象です。Vercelで画像生成やPythonのインストールは不要です。デザインを変更する場合は `scripts/create-social-image.py` を編集し、PillowとWindowsのArial / 游ゴシックが利用できる環境で実行します。
+
+公開サイトへの反映には再デプロイが必要です。共有サービスに以前の表示が残る場合は、キャッシュ更新後に新しい画像が表示されます。
+
+仕様: [Open Graph](https://ogp.me/) / [Vercelの公開URL環境変数](https://vercel.com/docs/environment-variables/system-environment-variables#vercel_project_production_url)
