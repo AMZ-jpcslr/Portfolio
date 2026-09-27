@@ -39,7 +39,7 @@ assert.ok(!html.includes('あったらいいな'));
 assert.ok(html.includes('7つの個人開発'));
 for(const match of html.matchAll(/(?:src|href)="\.\/([^"]+)"/g))assert.ok((await stat(path.join(root,'dist',match[1]))).size>0);
 for(const match of html.matchAll(/href="#project=([^"]+)"/g))assert.ok(projects.some(p=>p.id===match[1]));
-for(const file of ['dist/app.js','dist/projects.js','dist/demos.js','dist/films.js','dist/case-study.js','scripts/serve.mjs','scripts/build.mjs'])execFileSync(process.execPath,['--check',path.join(root,file)],{stdio:'pipe'});
+for(const file of ['dist/app.js','dist/page-motion.js','dist/projects.js','dist/demos.js','dist/films.js','dist/case-study.js','scripts/serve.mjs','scripts/build.mjs'])execFileSync(process.execPath,['--check',path.join(root,file)],{stdio:'pipe'});
 const vercel=JSON.parse(await readFile(path.join(root,'vercel.json'),'utf8'));
 assert.equal(vercel.outputDirectory,'dist');assert.equal(vercel.buildCommand,'npm run build');
 // The browser runs all actors on one continuous CSS clock; there are no JS step timers.

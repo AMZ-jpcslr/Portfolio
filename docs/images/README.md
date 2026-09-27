@@ -4,7 +4,7 @@
 
 | ファイル | 内容 |
 | --- | --- |
-| portfolio-home.jpg | 本ポートフォリオのトップページ |
+| portfolio-home.jpg | 2026-09-27刷新後のトップページ。軌道・新レイアウト・ページ全体の演出 |
 | case-study-process.jpg | Streaming Screen詳細の課題・検討プロセス・設計判断 |
 | demo-streaming.jpg | サイト内の配信画面エディター機能再現デモ |
 | demo-soccer.jpg | サイト内のロボットサッカーのプロモーション映像 |

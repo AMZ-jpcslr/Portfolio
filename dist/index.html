@@ -29,9 +29,11 @@
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./demos.css">
   <link rel="stylesheet" href="./films.css">
+  <link rel="stylesheet" href="./page-motion.css">
   <script type="module" src="./app.js"></script>
 </head>
 <body>
+  <div class="reading-progress" aria-hidden="true"><i></i></div>
   <a class="skip-link" href="#work">プロジェクト一覧へ移動</a>
   <header class="header">
     <a class="brand" href="#top" aria-label="AMZ ホーム">amz<span class="brand-dot">.</span><span class="brand-sub">DEVELOPER PORTFOLIO</span></a>
@@ -41,30 +43,38 @@
     <section class="hero wrap" aria-labelledby="hero-title">
       <div class="hero-copy">
         <div class="eyebrow"><span class="tiny-line"></span> A WIDER VIEW. A PERSONAL APPROACH.</div>
-        <h1 id="hero-title">日常の不便から、<br><span class="hero-emphasis">社会の課題</span>まで<span class="period">.</span></h1>
+        <h1 id="hero-title"><span class="title-line"><span>日常の不便から、</span></span><span class="title-line"><span><span class="hero-emphasis">社会の課題</span>まで<span class="period">.</span></span></span></h1>
         <p class="hero-description">身近な困りごとにも、社会が抱える問題にも。<br>一人の開発者として広い視野を持ち、<br>個人開発から、問題解決の糸口をつくります。</p>
         <a class="button primary" href="#work">制作したものを見る <span aria-hidden="true">↘</span></a>
         <p class="authorship-note">機能・仕様設計：本人 <span>／</span> コーディング：AI</p>
         <div class="hero-meta"><span>AMZ-jpcslr</span><span class="meta-divider"></span><span>Independent development</span></div>
       </div>
+      <div class="hero-art">
+      <div class="orbit-art ambient-motion" aria-hidden="true"><i></i><i></i><i></i><span class="orbit-point"></span></div>
+      <span class="hero-art-caption" aria-hidden="true">FROM A QUESTION<br>TO SOMETHING REAL.</span>
       <div class="hero-stage" aria-label="読み上げBotのインターフェースイメージ">
         <div class="stage-grid"></div><span class="stage-label">TEXT INPUT → VOICE PARTICIPATION</span>
         <div id="hero-demo" class="hero-live-demo" aria-hidden="true"></div>
         <div class="stage-sticker"><span>BUILD.<br>LEARN.<br>REPEAT.</span><span aria-hidden="true">↗</span></div>
         <span class="stage-foot">01 / EVERYDAY TOOLS</span>
       </div>
+      <div class="hero-art-index"><span><i></i> IDEA → DESIGN → IMPACT</span><span>01 — 07</span></div>
+      </div>
+      <div class="hero-bottom"><span>PERSONAL PROJECTS. REAL PEOPLE.</span><a href="#work">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a></div>
     </section>
     <div class="tech-strip"><div class="wrap"><span class="strip-label">MY TOOLBOX</span><span>TypeScript</span><b>／</b><span>JavaScript</span><b>／</b><span>Python</span><b>／</b><span>Java</span><b>／</b><span>Discord.js</span><b>／</b><span>Node.js</span></div></div>
     <section id="work" class="work wrap" aria-labelledby="work-title">
+      <div class="editorial-title" aria-hidden="true"><span>Selected</span> <em>works.</em><span class="editorial-index">01 — 07</span></div>
       <div class="section-heading"><div><div class="eyebrow">01 — SELECTED & EXPERIMENTAL</div><h2 id="work-title">つくったもの<span class="heading-count">07</span></h2></div><p>身近な人への支援から、社会課題への探究まで。<br>課題・設計の理由・担当範囲・AI活用を紹介します。</p></div>
       <div id="project-grid" class="project-grid"></div>
       <p class="repository-note">7つの個人開発 · 課題設定から設計判断、利用者に届いた価値まで</p>
     </section>
     <section id="approach" class="approach" aria-labelledby="approach-title"><div class="wrap">
+      <div class="approach-orbit ambient-motion" aria-hidden="true"><i></i><i></i></div>
       <div class="section-heading"><div><div class="eyebrow">02 — HOW I BUILD</div><h2 id="approach-title">つくるときに、<br>大切にしていること。</h2></div><p>分野を限定せず、問題を広い視野で捉える。<br>個人の実装を、解決への一歩につなげる。</p></div>
       <div class="approach-grid"><article><span class="approach-number">01 / DISCOVER</span><h3>身近にも、社会にも目を向ける。</h3><p>会話への参加、防災情報へのアクセス、AIの行動判断。日常から社会まで、分野を横断して問題を捉えます。</p><a href="#project=Yomiage_Discord_Bot">読み上げBotで見る ↗</a></article><article><span class="approach-number">02 / ENGINEER</span><h3>動く、その先を設計する。</h3><p>APIの失敗、通知の重複、再起動。正常に動くとき以外も考え、継続して使える仕組みを設計します。</p><a href="#project=Shindo_Discord_Bot">防災Botで見る ↗</a></article><article><span class="approach-number">03 / EXPLORE</span><h3>個人開発を、解決の糸口に。</h3><p>一人の視点で広く考え、実装と検証で問いを深める。小さな実践を、より大きな問題に取り組む足がかりにします。</p><a href="#project=Artificial-Moral-Architecture">AIの研究で見る ↗</a></article></div>
     </div></section>
-    <section class="closing wrap"><div class="eyebrow">ALWAYS A WORK IN PROGRESS</div><p>個人の一歩を、<br><span>問題解決の糸口に。</span></p><a href="https://github.com/AMZ-jpcslr" target="_blank" rel="noopener noreferrer" class="button primary">GitHubで開発を見る <span aria-hidden="true">↗</span></a></section>
+    <section class="closing wrap"><div class="closing-orbit ambient-motion" aria-hidden="true"><i></i><i></i><span>↗</span></div><div class="eyebrow">ALWAYS A WORK IN PROGRESS</div><p>個人の一歩を、<br><span>問題解決の糸口に。</span></p><a href="https://github.com/AMZ-jpcslr" target="_blank" rel="noopener noreferrer" class="button primary">GitHubで開発を見る <span aria-hidden="true">↗</span></a><div class="closing-signature" aria-hidden="true">Keep asking. Keep building.</div></section>
   </main>
   <footer class="footer wrap"><a class="brand" href="#top">amz<span class="brand-dot">.</span></a><span>© 2026 AMZ-jpcslr</span><a href="#top">BACK TO TOP ↑</a><button id="motion-toggle" type="button" aria-pressed="false">アニメーションを停止</button></footer>
   <dialog id="project-dialog" aria-labelledby="detail-title"><div class="dialog-top"><span>PROJECT DETAILS</span><button class="close-button" id="close-dialog" aria-label="詳細を閉じる">閉じる <span aria-hidden="true">×</span></button></div><div id="detail-content"></div></dialog>

@@ -1,3 +1,4 @@
+import { createPageMotion } from './page-motion.js';
 import { projects } from './projects.js';
 import { renderDemoScene } from './demos.js';
 import { filmDuration } from './films.js';
@@ -93,6 +94,7 @@ grid.innerHTML = projects.map(p => `<article class="project-card ${p.color}">
 </article>`).join('');
 for (const p of projects) new ScenePlayer(document.querySelector(`[data-scene="${p.id}"]`), p, {button:document.querySelector(`[data-pause="${p.id}"]`)});
 new ScenePlayer(document.querySelector('#hero-demo'), projects[0]);
+const pageMotion = createPageMotion({paused: motionPaused, dialog});
 
 function syncPlayers() { for (const player of players) player.sync(); }
 function updateDetailControls() {
@@ -143,6 +145,7 @@ dialog.addEventListener('close',()=>{
 });
 function setMotion() {
   syncPlayers();
+  pageMotion.setPaused(motionPaused);
   document.documentElement.classList.toggle('motion-paused', motionPaused);
   motionButton.disabled=preference.matches;
   motionButton.setAttribute('aria-pressed',String(motionPaused));
