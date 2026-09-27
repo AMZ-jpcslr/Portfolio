@@ -1,5 +1,7 @@
 import { projects } from './projects.js';
 import { renderDemoScene } from './demos.js';
+import { filmDuration } from './films.js';
+import { renderCaseOverview, renderCaseStudy } from './case-study.js';
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const count = String(projects.length).padStart(2, '0');
 const preference = matchMedia('(prefers-reduced-motion: reduce)');
@@ -44,14 +46,38 @@ class ScenePlayer {
       this.button.setAttribute('aria-pressed', String(this.userPlaying && !motionPaused));
       this.button.disabled = motionPaused;
     }
-    if (this.detail) updateDetailControls();
+    if (this.detail) {
+      updateDetailControls();
+      cancelAnimationFrame(this.frame);
+      this.updateTime();
+      if (run) {
+        const tick = () => { this.updateTime(); this.frame = requestAnimationFrame(tick); };
+        this.frame = requestAnimationFrame(tick);
+      }
+    }
   }
   toggle() {
     if (motionPaused) return;
     this.userPlaying = !this.userPlaying;
     this.sync();
   }
+  updateTime() {
+    if (!this.detail) return;
+    const clock = this.viewport.querySelector('.sequence-progress > i').getAnimations()[0];
+    const seconds = ((Number(clock?.currentTime) || 0) / 1000) % filmDuration;
+    const range = document.querySelector('#film-seek');
+    const time = document.querySelector('#film-time');
+    if (range) range.value = String(seconds);
+    if (time) time.textContent = `0:${String(Math.floor(seconds)).padStart(2,'0')} / 0:${filmDuration}`;
+  }
+  seek(seconds) {
+    if (motionPaused) return;
+    const position = Math.min(filmDuration - .001, Math.max(0, Number(seconds))) * 1000;
+    for (const animation of this.viewport.getAnimations({subtree:true})) animation.currentTime = position;
+    this.updateTime();
+  }
   destroy() {
+    cancelAnimationFrame(this.frame);
     this.resize.disconnect(); this.visibility?.disconnect();
     players.delete(this);
   }
@@ -61,9 +87,9 @@ const grid = document.querySelector('#project-grid');
 grid.innerHTML = projects.map(p => `<article class="project-card ${p.color}">
   <div class="project-visual"><div class="visual-meta"><span>${escape(p.label)}</span><span>${p.number} / ${count}</span></div>
     <a class="scene-link" href="#project=${p.id}" aria-label="${escape(p.title)}の詳細とデモを見る"><div class="card-scene" data-scene="${p.id}" aria-hidden="true"></div></a>
-    <div class="card-motion-bar"><span>PRODUCT IN MOTION · 機能再現</span><button type="button" data-pause="${p.id}" aria-pressed="true">Ⅱ 一時停止</button></div>
+    <div class="card-motion-bar"><span>PRODUCT FILM · 24 SEC</span><button type="button" data-pause="${p.id}" aria-pressed="true">Ⅱ 一時停止</button></div>
   </div>
-  <a class="project-open" href="#project=${p.id}"><div class="project-info"><div class="project-category">${p.category}</div><h3>${escape(p.title)}<span aria-hidden="true">↗</span></h3><p>${escape(p.summary)}</p><div class="tags">${p.tags.map(t=>`<span>${escape(t)}</span>`).join('')}</div><div class="audience"><span>${p.kind === 'moral' ? 'RESEARCH STATUS / 研究の現在地' : 'PEOPLE & IMPACT / 利用実績'}</span><span>${escape(p.audience)}</span></div><p class="audience-feedback">${escape(p.impact)}</p></div></a>
+  <a class="project-open" href="#project=${p.id}"><div class="project-info"><div class="project-category">${p.category}</div><h3>${escape(p.title)}<span aria-hidden="true">↗</span></h3><p>${escape(p.summary)}</p><div class="tags">${p.tags.map(t=>`<span>${escape(t)}</span>`).join('')}</div><div class="audience"><span>${p.kind === 'moral' ? 'RESEARCH STATUS / 研究の現在地' : 'PEOPLE & IMPACT / 利用実績'}</span><span>${escape(p.audience)}</span></div><p class="audience-feedback">${escape(p.impact)}</p><div class="card-case-focus"><span>設計の焦点</span><p>${escape(p.caseStudy.focus)}</p><b>課題と開発プロセスを読む ↗</b></div></div></a>
 </article>`).join('');
 for (const p of projects) new ScenePlayer(document.querySelector(`[data-scene="${p.id}"]`), p, {button:document.querySelector(`[data-pause="${p.id}"]`)});
 new ScenePlayer(document.querySelector('#hero-demo'), projects[0]);
@@ -76,6 +102,8 @@ function updateDetailControls() {
   button.textContent = motionPaused ? '自動再生は停止中' : detailPlayer.userPlaying ? 'Ⅱ 一時停止' : '▶ 再生';
   button.setAttribute('aria-pressed', String(detailPlayer.userPlaying && !motionPaused));
   button.disabled = motionPaused;
+  document.querySelector('#film-seek').disabled = motionPaused;
+  document.querySelector('#film-restart').disabled = motionPaused;
 }
 function openProject(project) {
   detailPlayer?.destroy(); detailPlayer = null;
@@ -83,13 +111,16 @@ function openProject(project) {
   if (!dialog.open) returnFocus = document.activeElement;
   const p = project;
   document.querySelector('#detail-content').innerHTML = `<div class="detail-heading"><div class="eyebrow">${p.number} / ${p.category}</div><h2 id="detail-title">${escape(p.title)}</h2><p>${escape(p.tagline)}</p><div class="tags">${p.tags.map(t=>`<span>${escape(t)}</span>`).join('')}</div></div>
-    <div class="detail-demo ${p.color}"><div class="demo-toolbar"><span>PRODUCT WALKTHROUGH</span><span>機能の流れを再現 · 自動再生</span></div><div id="demo-screen" class="demo-screen" role="img" aria-label="${escape(p.title)}の機能再現アニメーション"></div><p class="demo-status">${p.steps.map(escape).join(" → ")}。ひと続きの動作として自動で繰り返します。</p><div class="demo-controls"><button id="demo-play" class="button primary" type="button">Ⅱ 一時停止</button><span>約19秒 / ループ再生</span></div><p class="demo-note">${escape(p.demoNote)}</p></div>
-    <div class="detail-body"><section><div class="eyebrow">THE IDEA</div><h3>何を解決するか</h3><p>${escape(p.challenge)}</p></section><section><div class="eyebrow">ENGINEERING</div><h3>実装の工夫</h3><p>${escape(p.engineering)}</p></section><section><div class="eyebrow">FEATURES</div><h3>主な機能</h3><ul>${p.features.map(f=>`<li>${escape(f)}</li>`).join('')}</ul></section><section><div class="eyebrow">${p.kind === 'moral' ? 'RESEARCH STATUS' : 'PEOPLE & IMPACT'}</div><h3>${p.kind === 'moral' ? '研究の現在地' : '利用者と、届いた価値'}</h3><div class="usage-callout"><strong>${escape(p.audience)}</strong><p>${escape(p.impact)}</p></div></section>${p.outlook ? `<section class="outlook"><div class="eyebrow">WHAT COMES NEXT</div><h3>今後の展望 — 既存のAIモデルへの活用</h3><p>${escape(p.outlook)}</p></section>` : ''}</div><div class="detail-bottom"><span>コードと詳しい仕様はこちら</span><a class="button primary" href="https://github.com/AMZ-jpcslr/${p.id}" target="_blank" rel="noopener noreferrer">GitHubを見る ↗</a></div>`;
+    <div class="detail-demo ${p.color}"><div class="demo-toolbar"><span>PRODUCT FILM</span><span>24秒のストーリー · 自動再生</span></div><div id="demo-screen" class="demo-screen" role="img" aria-label="${escape(p.title)}の機能再現アニメーション"></div><p class="demo-status">${p.steps.map(escape).join(" → ")}。ひと続きの動作として自動で繰り返します。</p><div class="demo-controls"><button id="demo-play" class="button primary" type="button">Ⅱ 一時停止</button><button id="film-restart" class="film-restart" type="button" aria-label="映像を最初から見る">↺ 最初から</button><output id="film-time" aria-label="再生時間">0:00 / 0:24</output></div><label class="film-scrubber">再生位置<input id="film-seek" type="range" min="0" max="24" step="0.5" value="0" aria-label="映像の再生位置（秒）"></label><p class="demo-note">${escape(p.demoNote)}</p></div>
+    ${renderCaseOverview(p)}
+    ${renderCaseStudy(p)}<div class="detail-bottom"><span>コードと詳しい仕様はこちら</span>${p.liveUrl ? `<a class="button live-link" href="${escape(p.liveUrl)}" target="_blank" rel="noopener noreferrer">アプリを開く ↗</a>` : ''}<a class="button primary" href="https://github.com/AMZ-jpcslr/${p.id}" target="_blank" rel="noopener noreferrer">GitHubを見る ↗</a></div>`;
   if (!dialog.open) dialog.showModal();
   document.body.classList.add('dialog-open'); dialog.scrollTop = 0;
   detailPlayer = new ScenePlayer(document.querySelector('#demo-screen'), p, {detail:true});
   updateDetailControls();
   document.querySelector('#demo-play').addEventListener('click',()=>detailPlayer.toggle());
+  document.querySelector('#film-restart').addEventListener('click',()=>detailPlayer.seek(0));
+  document.querySelector('#film-seek').addEventListener('input',event=>detailPlayer.seek(event.target.value));
   document.querySelector('#close-dialog').focus(); syncPlayers();
 }
 function syncHash() {

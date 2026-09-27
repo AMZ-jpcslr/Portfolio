@@ -29,15 +29,15 @@ line([(60,521),(1140,521)],'#daded7',1)
 text(60,558,'AMZ-jpcslr',22,bold=True)
 text(915,562,'BUILD. LEARN. REPEAT.',16,color='#57634e',bold=True)
 
-box(674,135,467,340,'#eaf0e4',22)
-text(697,155,'SELECTED WORKS',12,color='#65765c',bold=True)
-text(1089,153,'06',18,color='#65765c',bold=True)
-items=[('DISCORD','Voice Bot','#e7def2'),('DISASTER','Earthquake Bot','#dbe9f6'),('CREATOR','Streaming Screen','#f1e0e8'),('AI / RESEARCH','Moral Architecture','#e2ecd4'),('NETWORK','Inspection Proxy','#ede8dc'),('SIMULATION','Robot Soccer','#d9eee2')]
+box(674,110,467,380,'#eaf0e4',22)
+text(697,130,'SELECTED WORKS',12,color='#65765c',bold=True)
+text(1089,128,'07',18,color='#65765c',bold=True)
+items=[('DISCORD','Voice Bot','#e7def2'),('DISASTER','Earthquake Bot','#dbe9f6'),('CREATOR','Streaming Screen','#f1e0e8'),('AI / RESEARCH','Moral Architecture','#e2ecd4'),('NETWORK','Inspection Proxy','#ede8dc'),('SIMULATION','Robot Soccer','#d9eee2'),('CAREER','しゅうかつ手帳','#dceef0')]
 for i,(tag,title,color) in enumerate(items):
-    x=692+(i%2)*222; y=192+(i//2)*91
-    box(x,y,209,79,color,10)
+    x=692+(i%2)*222; y=166+(i//2)*77
+    box(x,y,431 if i==6 else 209,67,color,10)
     text(x+13,y+13,tag,10,color='#617064',bold=True)
-    text(x+13,y+37,title,16,bold=True)
+    text(x+13,y+33,title,16,bold=True,jp=i==6)
     line([(x+185,y+16),(x+193,y+16),(x+193,y+24)],'#617064',1)
     line([(x+186,y+23),(x+193,y+16)],'#617064',1)
 
