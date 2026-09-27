@@ -8,16 +8,18 @@ const count = String(projects.length).padStart(2, '0');
 const preference = matchMedia('(prefers-reduced-motion: reduce)');
 let motionPaused = preference.matches;
 const dialog = document.querySelector('#project-dialog');
-const motionButton = document.querySelector('#motion-toggle');
+const motionButtons = [...document.querySelectorAll('[data-motion-toggle]')];
 const players = new Set();
 let detailPlayer = null;
 let activeProject = null;
 let returnFocus = null;
+let pageHash = location.hash.startsWith('#project=') ? '#work' : location.hash || '#top';
 
 class ScenePlayer {
   constructor(host, project, {detail = false, button = null} = {}) {
     Object.assign(this, {host, project, detail, button});
     this.userPlaying = true;
+    this.scrubbing = false;
     this.visible = detail;
     host.innerHTML = renderDemoScene(project);
     this.viewport = host.querySelector('.scene-viewport');
@@ -36,14 +38,15 @@ class ScenePlayer {
     if (button) button.addEventListener('click', () => this.toggle());
     players.add(this);
     this.sync();
+    if (motionPaused && !preference.matches) this.setPosition(filmDuration / 2);
   }
   sync() {
-    const run = this.userPlaying && this.visible && !document.hidden && !motionPaused && (this.detail || !dialog.open);
+    const run = this.userPlaying && !this.scrubbing && this.visible && !document.hidden && !motionPaused && (this.detail || !dialog.open);
     this.viewport.classList.toggle('scene-paused', !run);
     this.viewport.dataset.playback = run ? 'playing' : 'paused';
     if (this.button) {
       this.button.textContent = motionPaused ? '動きを停止中' : this.userPlaying ? 'Ⅱ 一時停止' : '▶ 再生';
-      this.button.setAttribute('aria-label', `${this.project.title}のアニメーションを${this.userPlaying ? '一時停止' : '再生'}`);
+      this.button.setAttribute('aria-label', motionPaused ? `${this.project.title}：全体設定でアニメーション停止中` : `${this.project.title}のアニメーションを${this.userPlaying ? '一時停止' : '再生'}`);
       this.button.setAttribute('aria-pressed', String(this.userPlaying && !motionPaused));
       this.button.disabled = motionPaused;
     }
@@ -68,14 +71,28 @@ class ScenePlayer {
     const seconds = ((Number(clock?.currentTime) || 0) / 1000) % filmDuration;
     const range = document.querySelector('#film-seek');
     const time = document.querySelector('#film-time');
-    if (range) range.value = String(seconds);
-    if (time) time.textContent = `0:${String(Math.floor(seconds)).padStart(2,'0')} / 0:${filmDuration}`;
+    if (range && !this.scrubbing) range.value = String(seconds);
+    const label = `0:${String(Math.floor(seconds)).padStart(2,'0')} / 0:${filmDuration}`;
+    if (time && time.textContent !== label) time.textContent = label;
   }
   seek(seconds) {
     if (motionPaused) return;
+    this.setPosition(seconds);
+  }
+  setPosition(seconds) {
     const position = Math.min(filmDuration - .001, Math.max(0, Number(seconds))) * 1000;
     for (const animation of this.viewport.getAnimations({subtree:true})) animation.currentTime = position;
     this.updateTime();
+  }
+  beginScrub() {
+    if (motionPaused || this.scrubbing) return;
+    this.scrubbing = true;
+    this.sync();
+  }
+  endScrub() {
+    if (!this.scrubbing) return;
+    this.scrubbing = false;
+    this.sync();
   }
   destroy() {
     cancelAnimationFrame(this.frame);
@@ -104,6 +121,7 @@ function updateDetailControls() {
   button.textContent = motionPaused ? '自動再生は停止中' : detailPlayer.userPlaying ? 'Ⅱ 一時停止' : '▶ 再生';
   button.setAttribute('aria-pressed', String(detailPlayer.userPlaying && !motionPaused));
   button.disabled = motionPaused;
+  document.querySelector('#film-playback-note').textContent = `24秒のストーリー · ${motionPaused || !detailPlayer.userPlaying ? '停止中' : '自動再生'}`;
   document.querySelector('#film-seek').disabled = motionPaused;
   document.querySelector('#film-restart').disabled = motionPaused;
 }
@@ -113,7 +131,7 @@ function openProject(project) {
   if (!dialog.open) returnFocus = document.activeElement;
   const p = project;
   document.querySelector('#detail-content').innerHTML = `<div class="detail-heading"><div class="eyebrow">${p.number} / ${p.category}</div><h2 id="detail-title">${escape(p.title)}</h2><p>${escape(p.tagline)}</p><div class="tags">${p.tags.map(t=>`<span>${escape(t)}</span>`).join('')}</div></div>
-    <div class="detail-demo ${p.color}"><div class="demo-toolbar"><span>PRODUCT FILM</span><span>24秒のストーリー · 自動再生</span></div><div id="demo-screen" class="demo-screen" role="img" aria-label="${escape(p.title)}の機能再現アニメーション"></div><p class="demo-status">${p.steps.map(escape).join(" → ")}。ひと続きの動作として自動で繰り返します。</p><div class="demo-controls"><button id="demo-play" class="button primary" type="button">Ⅱ 一時停止</button><button id="film-restart" class="film-restart" type="button" aria-label="映像を最初から見る">↺ 最初から</button><output id="film-time" aria-label="再生時間">0:00 / 0:24</output></div><label class="film-scrubber">再生位置<input id="film-seek" type="range" min="0" max="24" step="0.5" value="0" aria-label="映像の再生位置（秒）"></label><p class="demo-note">${escape(p.demoNote)}</p></div>
+    <div class="detail-demo ${p.color}"><div class="demo-toolbar"><span>PRODUCT FILM</span><span id="film-playback-note">24秒のストーリー · 自動再生</span></div><div id="demo-screen" class="demo-screen" role="img" aria-label="${escape(p.title)}の機能再現アニメーション"></div><p class="demo-status">${p.steps.map(escape).join(" → ")}。ひと続きの動作として自動で繰り返します。</p><div class="demo-controls"><button id="demo-play" class="button primary" type="button">Ⅱ 一時停止</button><button id="film-restart" class="film-restart" type="button" aria-label="映像を最初から見る">↺ 最初から</button><output id="film-time" aria-label="再生時間" aria-live="off">0:00 / 0:24</output></div><label class="film-scrubber">再生位置<input id="film-seek" type="range" min="0" max="24" step="0.5" value="0" aria-label="映像の再生位置（秒）"></label><p class="demo-note">${escape(p.demoNote)}</p></div>
     ${renderCaseOverview(p)}
     ${renderCaseStudy(p)}<div class="detail-bottom"><span>コードと詳しい仕様はこちら</span>${p.liveUrl ? `<a class="button live-link" href="${escape(p.liveUrl)}" target="_blank" rel="noopener noreferrer">アプリを開く ↗</a>` : ''}<a class="button primary" href="https://github.com/AMZ-jpcslr/${p.id}" target="_blank" rel="noopener noreferrer">GitHubを見る ↗</a></div>`;
   if (!dialog.open) dialog.showModal();
@@ -122,13 +140,24 @@ function openProject(project) {
   updateDetailControls();
   document.querySelector('#demo-play').addEventListener('click',()=>detailPlayer.toggle());
   document.querySelector('#film-restart').addEventListener('click',()=>detailPlayer.seek(0));
-  document.querySelector('#film-seek').addEventListener('input',event=>detailPlayer.seek(event.target.value));
+  const seek = document.querySelector('#film-seek');
+  seek.addEventListener('input', event => detailPlayer.seek(event.target.value));
+  seek.addEventListener('pointerdown', () => detailPlayer.beginScrub());
+  seek.addEventListener('keydown', event => {
+    if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','PageUp','PageDown'].includes(event.key)) detailPlayer.beginScrub();
+  });
+  seek.addEventListener('keyup', () => detailPlayer.endScrub());
+  seek.addEventListener('blur', () => detailPlayer.endScrub());
   document.querySelector('#close-dialog').focus(); syncPlayers();
 }
 function syncHash() {
   const id = location.hash.startsWith('#project=') ? location.hash.slice(9) : null;
   const project = projects.find(p=>p.id===id);
-  if(project) openProject(project); else if(dialog.open) dialog.close();
+  if(project) openProject(project);
+  else {
+    pageHash = location.hash || '#top';
+    if(dialog.open) dialog.close();
+  }
 }
 document.querySelector('#close-dialog').addEventListener('click',()=>dialog.close());
 dialog.addEventListener('click',event=>{
@@ -139,19 +168,31 @@ dialog.addEventListener('click',event=>{
 dialog.addEventListener('close',()=>{
   detailPlayer?.destroy(); detailPlayer=null;
   document.body.classList.remove('dialog-open');
-  if(location.hash.startsWith('#project='))history.replaceState(null,'','#work');
+  if(location.hash.startsWith('#project='))history.replaceState(null,'',pageHash);
   syncPlayers();
-  if(returnFocus instanceof HTMLElement)returnFocus.focus({preventScroll:true});
+  if (returnFocus instanceof HTMLElement && returnFocus !== document.body && !dialog.contains(returnFocus)) {
+    returnFocus.focus({preventScroll:true});
+  } else {
+    const fallback = document.querySelector(`.scene-link[href="#project=${activeProject.id}"]`);
+    fallback?.focus({preventScroll:true});
+    fallback?.scrollIntoView({block:'center',behavior:'instant'});
+  }
 });
 function setMotion() {
   syncPlayers();
   pageMotion.setPaused(motionPaused);
   document.documentElement.classList.toggle('motion-paused', motionPaused);
-  motionButton.disabled=preference.matches;
-  motionButton.setAttribute('aria-pressed',String(motionPaused));
-  motionButton.textContent=preference.matches ? '端末設定でアニメーション停止中' : motionPaused ? 'アニメーションを再開' : 'アニメーションを停止';
+  for (const button of motionButtons) {
+    button.disabled = preference.matches;
+    button.setAttribute('aria-pressed', String(motionPaused));
+    const compact = button.id === 'dialog-motion-toggle';
+    button.textContent = preference.matches ? (compact ? '端末設定で停止中' : '端末設定でアニメーション停止中') : compact ? (motionPaused ? '全体の動きを再開' : '全体の動きを停止') : (motionPaused ? 'アニメーションを再開' : 'アニメーションを停止');
+  }
 }
-motionButton.addEventListener('click',()=>{motionPaused=!motionPaused;setMotion();});
+for (const button of motionButtons) button.addEventListener('click',()=>{motionPaused=!motionPaused;setMotion();});
+window.addEventListener('pointerup', () => detailPlayer?.endScrub());
+window.addEventListener('pointercancel', () => detailPlayer?.endScrub());
+window.addEventListener('blur', () => detailPlayer?.endScrub());
 preference.addEventListener('change',event=>{motionPaused=event.matches;setMotion();});
 document.addEventListener('visibilitychange',syncPlayers);
 window.addEventListener('hashchange',syncHash);

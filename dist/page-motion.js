@@ -37,7 +37,7 @@ export function createPageMotion({ paused = false, dialog }) {
   mark(document.querySelector('.hero-bottom'), 360);
   mark(document.querySelector('.editorial-title'));
   document.querySelectorAll('.section-heading').forEach(element => mark(element));
-  document.querySelectorAll('.project-card').forEach((element, index) => mark(element, (index % 2) * 110));
+  document.querySelectorAll('.project-card').forEach(element => mark(element));
   document.querySelectorAll('.approach-grid article').forEach((element, index) => mark(element, index * 110));
   document.querySelectorAll('.closing > :not(.closing-orbit)').forEach((element, index) => mark(element, index * 90));
   // Register targets before enabling concealment; an initialization failure keeps the page readable.
@@ -68,8 +68,6 @@ export function createPageMotion({ paused = false, dialog }) {
     cancelAnimationFrame(pointerFrame);
     pointerFrame = 0;
     if (activeCard) {
-      activeCard.style.removeProperty('--card-rx');
-      activeCard.style.removeProperty('--card-ry');
       activeCard.style.removeProperty('--light-x');
       activeCard.style.removeProperty('--light-y');
     }
@@ -81,8 +79,6 @@ export function createPageMotion({ paused = false, dialog }) {
     const bounds = activeCard.getBoundingClientRect();
     const x = Math.max(0, Math.min(1, (pointer.x - bounds.left) / bounds.width));
     const y = Math.max(0, Math.min(1, (pointer.y - bounds.top) / bounds.height));
-    activeCard.style.setProperty('--card-rx', `${(.5 - y) * 1.6}deg`);
-    activeCard.style.setProperty('--card-ry', `${(x - .5) * 2}deg`);
     activeCard.style.setProperty('--light-x', `${x * 100}%`);
     activeCard.style.setProperty('--light-y', `${y * 100}%`);
   }

@@ -54,10 +54,10 @@ main{overflow:clip}
 .work .section-heading{margin-bottom:44px}
 .work .section-heading h2{font-size:23px;letter-spacing:-.8px}
 .work .section-heading>.eyebrow,.work .eyebrow{font-size:9px;letter-spacing:1.6px}
-.project-grid{gap:42px 30px;align-items:start}
-.project-card{position:relative;border:1px solid #dce1d6;border-radius:18px;background:#fff;isolation:isolate;box-shadow:0 4px 9px #22301202;transform:perspective(1400px) rotateX(var(--card-rx,0deg)) rotateY(var(--card-ry,0deg));transition:box-shadow .5s,border-color .4s,transform .45s var(--page-ease)}
+.project-grid{gap:42px 30px;align-items:stretch}
+.project-card{position:relative;border:1px solid #dce1d6;border-radius:18px;background:#fff;isolation:isolate;box-shadow:0 4px 9px #22301202;transform:none;transition:box-shadow .5s,border-color .4s,transform .45s var(--page-ease)}
 .project-card:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(500px circle at var(--light-x,50%) var(--light-y,0%),#ffffff50,transparent 65%);opacity:0;transition:opacity .6s;z-index:3}
-.project-card:hover{box-shadow:0 24px 50px -26px #34442a38;border-color:#b7c7a6}
+.project-card:hover{transform:none;box-shadow:0 24px 50px -26px #34442a38;border-color:#b7c7a6}
 .project-card:hover:after{opacity:1}
 .project-card .project-open{border:0;box-shadow:none;background:transparent;transform:none;border-radius:0}
 .project-card .project-visual{padding:21px 22px 16px;background:linear-gradient(145deg,#ffffff35,transparent),var(--surface)}
@@ -66,7 +66,7 @@ main{overflow:clip}
 .project-info{padding:29px}
 .project-info h3{font-size:27px;letter-spacing:-.9px}
 .project-info h3>span{display:grid;place-items:center;flex-shrink:0;width:35px;height:35px;border:1px solid #e1e5d9;border-radius:50%;font-size:20px;transition:rotate .5s var(--page-ease),background .4s}
-.project-open:hover h3>span{rotate:45deg;background:#dff0cc}
+.project-open:hover h3>span{background:#dff0cc}
 .project-category{font-size:10px!important;letter-spacing:1.7px}
 .card-case-focus b{transition:color .3s}
 .project-open:hover .card-case-focus b{color:#527531}
@@ -122,7 +122,7 @@ body.dialog-open #motion-toggle{visibility:hidden}
 .motion-paused .button,.motion-paused .button:before,.motion-paused .card-scene,.motion-paused .project-info h3>span{transition:none!important}
 @keyframes page-orbit{to{transform:rotate(360deg)}}
 @keyframes page-scroll-cue{0%,100%{transform:translateY(-3px)}50%{transform:translateY(4px)}}
-@media(min-width:1101px){.project-card:nth-child(2),.project-card:nth-child(4),.project-card:nth-child(6){margin-top:74px}.project-card.sky{margin-top:20px}}
+
 @media(max-width:1100px){.hero{column-gap:34px;row-gap:45px;padding-top:90px}.hero h1{font-size:clamp(30px,4.1vw,45px);letter-spacing:-1.9px}.hero-art-caption{font-size:8px}.hero-description{font-size:14px}.project-info{padding:24px}.project-info h3{font-size:23px}.approach-grid{gap:25px}}
 @media(max-width:760px){.hero{padding-top:52px;row-gap:36px}.hero .eyebrow{font-size:8px;letter-spacing:1.1px;margin-bottom:20px}.hero h1{font-size:clamp(30px,8.4vw,48px);letter-spacing:-1.5px;line-height:1.55}.hero-description{font-size:14px}.hero-art{margin:35px 6px 0;translate:none}.hero .hero-stage{padding-block:29px;border-radius:16px}.hero-art-caption{top:-37px;font-size:7px}.hero-art-index{font-size:7px;margin-top:20px}.hero .stage-sticker{scale:.8}.hero-meta{margin-top:28px}.hero-bottom{font-size:7px;letter-spacing:.65px;padding-top:19px}.hero-bottom a{gap:7px}.hero-bottom a>span{font-size:18px}.tech-strip{padding-block:18px}.tech-strip>.wrap{flex-wrap:wrap;justify-content:center;gap:12px;font-size:11px;white-space:normal}.tech-strip .strip-label{width:100%;text-align:center;font-size:8px}.tech-strip b{font-size:9px}.work{padding-top:54px;padding-bottom:65px}.editorial-title{font-size:clamp(45px,11.8vw,82px);margin-bottom:25px;padding-bottom:19px}.editorial-title .editorial-index{font-size:8px;padding-bottom:3px;letter-spacing:0}.work .section-heading{margin-bottom:28px}.work .section-heading h2{font-size:24px}.project-grid{gap:28px}.project-card{border-radius:14px;transform:none!important}.project-card .project-visual{padding:16px 15px 12px}.project-info{padding:24px 21px}.project-info h3{font-size:24px}.approach{padding:64px 0}.approach .section-heading{margin-bottom:40px}.approach .section-heading h2{font-size:32px;letter-spacing:-1px}.approach-grid{gap:36px}.approach-grid article{padding-top:22px}.approach-grid h3{font-size:18px}.closing{padding-block:85px 65px}.closing>p{font-size:clamp(27px,7.6vw,43px);letter-spacing:-1.3px}.closing-orbit{width:390px;height:390px}.closing-signature{font-size:16px;margin-top:40px}.footer{padding-bottom:85px;gap:17px}.footer>span{font-size:10px}#motion-toggle{font-size:10px;padding:9px 13px;right:12px;bottom:12px}.motion-ready [data-reveal]:not(.is-visible){translate:0 22px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.ambient-motion,.hero-bottom a>span{animation:none!important}[data-reveal],.title-line>span{opacity:1!important;translate:none!important;transform:none!important;transition:none!important}.hero-art{translate:none!important}.hero-emphasis:before{scale:1 1!important;transition:none!important}.approach-grid article:before{transform:none!important;transition:none!important}.project-card{transform:none!important}*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
@@ -139,3 +139,28 @@ dialog#project-dialog::backdrop{background:#14201670;backdrop-filter:blur(10px)}
 @media(prefers-reduced-motion:reduce){dialog#project-dialog[open]{animation:none}}
 @media(max-width:760px){.editorial-title{font-size:clamp(32px,11vw,82px);padding-bottom:25px}.editorial-title .editorial-index{position:absolute;right:0;bottom:4px;padding:0}}
 @media(max-width:360px){.header nav{gap:10px;font-size:10px}.header nav .nav-github{padding:5px 7px}.header nav .nav-github span{margin-left:3px}.hero-bottom{font-size:6px;letter-spacing:.4px}.project-info h3{font-size:21px}}
+
+/* Aligned card rows retain a stable frame during pointer interaction. */
+.project-card .project-open{height:auto;min-width:0}
+.project-card .project-info{gap:0}
+.project-card .audience-feedback{padding-bottom:20px}
+.project-card .card-case-focus{margin-top:auto}
+.project-open:focus-visible,.scene-link:focus-visible{outline-offset:-3px}
+input:focus-visible{outline:3px solid #477a05;outline-offset:3px}
+.dialog-actions{display:flex;align-items:center;gap:12px}
+#dialog-motion-toggle{font:inherit;font-size:11px;letter-spacing:0;min-height:36px;padding:7px 12px;background:#eef3e8;border:1px solid #d4ddcb;border-radius:20px;color:#425738;cursor:pointer}
+#dialog-motion-toggle:disabled{opacity:.7;cursor:default}
+.dialog-top .close-button{min-height:36px;flex-shrink:0}
+@media(max-width:600px){.dialog-top{gap:10px;flex-wrap:wrap}.dialog-top>span{font-size:9px}.dialog-actions{margin-left:auto;gap:8px}#dialog-motion-toggle{font-size:10px;padding:6px 10px}.demo-toolbar{flex-wrap:wrap;gap:5px 12px}}
+@media(max-width:380px){.dialog-top>span{width:100%}.dialog-actions{width:100%;justify-content:space-between}}
+.motion-paused .button:hover,.motion-paused .project-card:hover .card-scene,.motion-paused .brand:hover .brand-dot{transform:none!important}
+.motion-paused .tech-strip span:hover,.motion-paused .approach-grid a:hover{translate:none!important}
+@media(prefers-reduced-motion:reduce){.button:hover,.project-card:hover .card-scene,.brand:hover .brand-dot{transform:none!important}.tech-strip span:hover,.approach-grid a:hover{translate:none!important}}
+
+html{scrollbar-gutter:stable;scroll-padding-bottom:76px}
+dialog#project-dialog{scroll-padding-top:80px;scroll-padding-bottom:24px}
+@media(max-width:380px){dialog#project-dialog{scroll-padding-top:110px}}
+.motion-paused .button:hover>span{transform:none!important}
+@media(prefers-reduced-motion:reduce){.button:hover>span{transform:none!important}}
+/* The explicit responsive width already supplies the outer margin; remove the browser's additional dialog clamp. */
+dialog#project-dialog{max-width:none}
