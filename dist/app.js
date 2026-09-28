@@ -21,29 +21,56 @@ class ScenePlayer {
     this.userPlaying = true;
     this.scrubbing = false;
     this.visible = detail;
-    host.innerHTML = renderDemoScene(project);
-    this.viewport = host.querySelector('.scene-viewport');
-    this.resize = new ResizeObserver(entries => {
-      for (const entry of entries) if (entry.contentRect.width > 0) this.viewport.style.setProperty('--scene-scale', entry.contentRect.width / 620);
-    });
-    this.resize.observe(this.viewport);
-    this.viewport.style.setProperty('--scene-scale', this.viewport.clientWidth / 620);
-    if (!detail) {
-      this.visibility = new IntersectionObserver(entries => {
-        this.visible = entries[0].isIntersecting;
-        this.sync();
-      }, {threshold: 0.08});
-      this.visibility.observe(host);
-    }
+    this.viewport = null;
+    host.classList.add('scene-host');
+    host.dataset.sceneState = 'pending';
     if (button) button.addEventListener('click', () => this.toggle());
     players.add(this);
+    if (detail) this.mount();
+    else {
+      // Reserve the canvas immediately; build actors only shortly before they enter view.
+      this.preload = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) this.mount();
+      }, {rootMargin:'180px 0px'});
+      this.preload.observe(host);
+    }
+    // The dialog's scroll container also clips visibility: stop its film while reading below it.
+    this.visibility = new IntersectionObserver(entries => {
+      const entry = entries[0];
+      this.visible = entry.isIntersecting && entry.intersectionRatio >= .08;
+      if (this.visible) this.mount();
+      this.sync();
+    }, {threshold:[0, .08]});
+    this.visibility.observe(host);
+    this.sync();
+  }
+  mount() {
+    if (this.viewport) return;
+    this.preload?.disconnect();
+    this.host.innerHTML = renderDemoScene(this.project);
+    this.viewport = this.host.querySelector('.scene-viewport');
+    this.progress = this.viewport.querySelector('.sequence-progress > i');
+    this.range = this.detail ? document.querySelector('#film-seek') : null;
+    this.time = this.detail ? document.querySelector('#film-time') : null;
+    this.resize = new ResizeObserver(entries => {
+      for (const entry of entries) this.setScale(entry.contentRect.width);
+    });
+    this.resize.observe(this.viewport);
+    this.setScale(this.viewport.clientWidth);
+    this.host.dataset.sceneState = 'ready';
     this.sync();
     if (motionPaused && !preference.matches) this.setPosition(filmDuration / 2);
   }
+  setScale(width) {
+    if (width > 0 && width !== this.scaledWidth) {
+      this.scaledWidth = width;
+      this.viewport.style.setProperty('--scene-scale', width / 620);
+    }
+  }
   sync() {
     const run = this.userPlaying && !this.scrubbing && this.visible && !document.hidden && !motionPaused && (this.detail || !dialog.open);
-    this.viewport.classList.toggle('scene-paused', !run);
-    this.viewport.dataset.playback = run ? 'playing' : 'paused';
+    this.viewport?.classList.toggle('scene-paused', !run);
+    if (this.viewport) this.viewport.dataset.playback = run ? 'playing' : 'paused';
     if (this.button) {
       this.button.textContent = motionPaused ? '動きを停止中' : this.userPlaying ? 'Ⅱ 一時停止' : '▶ 再生';
       this.button.setAttribute('aria-label', motionPaused ? `${this.project.title}：全体設定でアニメーション停止中` : `${this.project.title}のアニメーションを${this.userPlaying ? '一時停止' : '再生'}`);
@@ -52,25 +79,24 @@ class ScenePlayer {
     }
     if (this.detail) {
       updateDetailControls();
-      cancelAnimationFrame(this.frame);
+      clearInterval(this.clockTimer);
+      this.clock = null;
       this.updateTime();
-      if (run) {
-        const tick = () => { this.updateTime(); this.frame = requestAnimationFrame(tick); };
-        this.frame = requestAnimationFrame(tick);
-      }
+      // The film stays on its CSS clock. Only its numeric controls need 10 Hz updates.
+      if (run) this.clockTimer = setInterval(() => this.updateTime(), 100);
     }
   }
   toggle() {
     if (motionPaused) return;
     this.userPlaying = !this.userPlaying;
+    this.mount();
     this.sync();
   }
   updateTime() {
     if (!this.detail) return;
-    const clock = this.viewport.querySelector('.sequence-progress > i').getAnimations()[0];
+    const clock = this.clock ||= this.progress.getAnimations()[0];
     const seconds = ((Number(clock?.currentTime) || 0) / 1000) % filmDuration;
-    const range = document.querySelector('#film-seek');
-    const time = document.querySelector('#film-time');
+    const {range, time} = this;
     if (range && !this.scrubbing) range.value = String(seconds);
     const label = `0:${String(Math.floor(seconds)).padStart(2,'0')} / 0:${filmDuration}`;
     if (time && time.textContent !== label) time.textContent = label;
@@ -95,8 +121,8 @@ class ScenePlayer {
     this.sync();
   }
   destroy() {
-    cancelAnimationFrame(this.frame);
-    this.resize.disconnect(); this.visibility?.disconnect();
+    clearInterval(this.clockTimer);
+    this.resize?.disconnect(); this.visibility?.disconnect(); this.preload?.disconnect();
     players.delete(this);
   }
 }

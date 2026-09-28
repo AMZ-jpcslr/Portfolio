@@ -11,6 +11,9 @@ export function createPageMotion({ paused = false, dialog }) {
   let pointerFrame = 0;
   let activeCard = null;
   let pointer = null;
+  let scrollable = 0;
+  let lastProgress = -1;
+  let lastDrift = null;
 
   const reveal = new IntersectionObserver(entries => {
     for (const entry of entries) {
@@ -50,19 +53,30 @@ export function createPageMotion({ paused = false, dialog }) {
 
   function paint() {
     paintFrame = 0;
-    const scrollable = root.scrollHeight - innerHeight;
-    progress.style.setProperty('--read-progress', scrollable > 0 ? Math.min(1, Math.max(0, scrollY / scrollable)) : 0);
-    if (!suspended && innerWidth > 760) {
-      heroArt.style.setProperty('--hero-drift', `${Math.min(28, Math.max(0, scrollY * .06))}px`);
-    } else heroArt.style.removeProperty('--hero-drift');
+    const position = scrollY;
+    const fraction = scrollable > 0 ? Math.min(1, Math.max(0, position / scrollable)) : 0;
+    if (fraction !== lastProgress) {
+      progress.style.setProperty('--read-progress', fraction);
+      lastProgress = fraction;
+    }
+    const drift = !suspended && innerWidth > 760 ? Math.min(28, Math.max(0, position * .06)) : 0;
+    if (drift !== lastDrift) {
+      heroArt.style.setProperty('--hero-drift', `${drift}px`);
+      lastDrift = drift;
+    }
   }
   function queuePaint() {
     if (!paintFrame) paintFrame = requestAnimationFrame(paint);
   }
   addEventListener('scroll', queuePaint, { passive: true });
-  addEventListener('resize', queuePaint, { passive: true });
-  // Card images and font loading may change the document's total height.
-  new ResizeObserver(queuePaint).observe(document.body);
+  function measurePage() {
+    scrollable = root.scrollHeight - innerHeight;
+    queuePaint();
+  }
+  addEventListener('resize', measurePage, { passive: true });
+  // Re-measure when layout changes, rather than reading layout on every scroll frame.
+  new ResizeObserver(measurePage).observe(document.body);
+  measurePage();
 
   function resetPointer() {
     cancelAnimationFrame(pointerFrame);

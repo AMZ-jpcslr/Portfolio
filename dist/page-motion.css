@@ -164,3 +164,11 @@ dialog#project-dialog{scroll-padding-top:80px;scroll-padding-bottom:24px}
 @media(prefers-reduced-motion:reduce){.button:hover>span{transform:none!important}}
 /* The explicit responsive width already supplies the outer margin; remove the browser's additional dialog clamp. */
 dialog#project-dialog{max-width:none}
+
+/* Avoid large moving/blurred layers on touch devices while retaining text and card entrances. */
+@media(max-width:760px),(pointer:coarse){
+  .ambient-motion{animation:none!important}
+  .hero .hero-live-demo{filter:none}
+  #motion-toggle,dialog#project-dialog::backdrop{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .hero .hero-stage{box-shadow:0 8px 20px #3a482315}
+}

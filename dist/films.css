@@ -4,7 +4,7 @@
 .cinema .film-atmosphere{position:absolute;inset:0;overflow:hidden}.cinema .film-atmosphere i{position:absolute;width:330px;height:330px;left:335px;top:-170px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--film-accent) 24%,transparent),transparent 70%);animation:film-light 24s ease-in-out infinite}.cinema .film-atmosphere i+i{left:-150px;top:245px;animation-direction:reverse}
 .cinema .film-grid{position:absolute;inset:0;opacity:.1;background:linear-gradient(#dae7e51a 1px,transparent 1px),linear-gradient(90deg,#dae7e51a 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(140deg,black,transparent 75%)}
 .cinema .film-topline{position:absolute;top:18px;left:24px;right:24px;display:flex;justify-content:space-between;align-items:center;font-size:7px;letter-spacing:1.5px;color:#aebcbe;z-index:3}.film-topline>span:first-child{display:flex;align-items:center;gap:7px}.film-topline i{width:5px;height:5px;border-radius:50%;background:var(--film-accent);box-shadow:0 0 12px var(--film-accent)}
-.cinema .film-stage{position:absolute;left:22px;top:51px;width:576px;height:325.16px;border-radius:10px;background:#283037;box-shadow:0 26px 40px #0005,0 1px 0 #ffffff35 inset;outline:1px solid #ffffff26;overflow:hidden;transform-origin:50% 60%;animation:film-stage 24s var(--ease-film) infinite;will-change:transform,opacity}
+.cinema .film-stage{position:absolute;left:22px;top:51px;width:576px;height:325.16px;border-radius:10px;background:#283037;box-shadow:0 26px 40px #0005,0 1px 0 #ffffff35 inset;outline:1px solid #ffffff26;overflow:hidden;transform-origin:50% 60%;animation:film-stage 24s var(--ease-film) infinite;will-change:auto}
 .cinema .film-screen{width:620px;height:350px;transform:scale(.92903226);transform-origin:top left;overflow:hidden}.cinema .scene-camera{border-radius:8px}
 .cinema .film-intro{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:35px 48px;background:linear-gradient(100deg,#11191cf5,#11191cb8 70%,#11191c20);z-index:4;pointer-events:none;animation:film-intro 24s var(--ease-film) infinite}
 .cinema .film-kicker{font-size:13px;letter-spacing:.5px;color:var(--film-accent);margin-bottom:19px}.cinema .film-hook{font-weight:750;font-size:36px;line-height:1.65;letter-spacing:-1.5px}.cinema .film-hook>span{display:block;animation:film-type 24s var(--ease-film) infinite}.cinema .film-hook>span+span{color:var(--film-accent);animation-name:film-type-second}.cinema .film-intro-rule{width:64px;height:3px;background:var(--film-accent);margin:25px 0 14px;transform-origin:left;animation:film-rule 24s var(--ease-film) infinite}.cinema .film-intro>small{font-size:8px;letter-spacing:1.6px;color:#abbcbc}
@@ -61,3 +61,22 @@
 /* A legible still for reduced-motion users; no title layer hides the product. */
 @media(prefers-reduced-motion:reduce){.cinema *{animation:none!important}.cinema .film-intro,.cinema .film-outro,.cinema .film-timeline{display:none}.cinema .film-stage{opacity:1;transform:none}.cinema .film-chapter{display:none}.cinema .chapter-0{display:block;opacity:1;transform:none}.cinema .scene-camera{transform:none}.cinema .career-copy,.cinema .career-calendar,.cinema .career-toast,.cinema .career-pointer{opacity:0}.cinema .career-discover{opacity:1}.cinema .editable-title{opacity:1;transform:none}.cinema .goal-flash{opacity:0}}
 .cinema.scene-paused *{animation-play-state:paused!important}
+
+/* Keep layout stable while deferring film actors. Off-screen films retain their paused position. */
+.scene-host{aspect-ratio:620/450}
+.scene-host[data-scene-state="pending"]{position:relative;border-radius:12px;background:linear-gradient(135deg,#24332e,#151d21);overflow:hidden}
+.scene-host[data-scene-state="pending"]:before{content:"PRODUCT FILM";position:absolute;inset:0;display:grid;place-items:center;font:10px sans-serif;letter-spacing:2px;color:#afc3b2}
+.cinema{contain:layout paint;content-visibility:auto}
+@media(min-width:761px) and (hover:hover) and (pointer:fine){.cinema[data-playback="playing"] .film-stage{will-change:transform,opacity}}
+/* Mobile keeps the complete 24-second story with flatter, cheaper compositing. */
+@media(max-width:760px),(pointer:coarse){
+  .cinema .film-stage{animation-name:film-stage-mobile;will-change:auto;box-shadow:0 6px 14px #0003}
+  .cinema .film-hook>span{animation-name:film-type-mobile}
+  .cinema .film-hook>span+span{animation-name:film-type-second-mobile}
+  .cinema .film-atmosphere i,.cinema .research-sweep{animation:none!important}
+  .cinema .dc-message,.cinema .demo-cursor,.cinema .tactics-field,.cinema .robot>circle,.cinema .match-ball{filter:none}
+  .cinema .ball-trail{display:none}
+}
+@keyframes film-stage-mobile{0%,6%,100%{opacity:.12;transform:translateY(12px)}14%,87%{opacity:1;transform:none}94%{opacity:.12;transform:translateY(-8px)}}
+@keyframes film-type-mobile{0%,100%{opacity:0;transform:translateY(12px)}2.8%,94%{opacity:1;transform:none}}
+@keyframes film-type-second-mobile{0%,.8%,100%{opacity:0;transform:translateY(15px)}4%,94%{opacity:1;transform:none}}

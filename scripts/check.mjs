@@ -55,7 +55,7 @@ for(const p of projects) {
   const scene=renderDemoScene(p);
   for(const hook of ['film-intro','film-stage','film-chapters','film-outro']) assert.ok(scene.includes(hook));
 }
-assert.ok(app.includes('getAnimations({subtree:true})') && app.includes('cancelAnimationFrame(this.frame)'));
+assert.ok(app.includes('getAnimations({subtree:true})') && app.includes('clearInterval(this.clockTimer)'));
 assert.ok(filmCss.includes('prefers-reduced-motion:reduce'));
 assert.ok(renderDemoScene(projects.find(p=>p.kind==='career')).includes('ES・面接記録は公開されません'));
 
