@@ -1,3 +1,4 @@
+import { featuredIds, evidence, renderFeatured, renderTeamContext } from './product-evidence.js';
 import { renderTimeline } from './timeline.js';
 import { createPageMotion } from './page-motion.js';
 import { projects } from './projects.js';
@@ -129,15 +130,18 @@ class ScenePlayer {
 }
 
 const grid = document.querySelector('#project-grid');
-grid.innerHTML = projects.map(p => `<article class="project-card ${p.color}">
-  <div class="project-visual"><div class="visual-meta"><span>${escape(p.label)}</span><span>${p.number} / ${count}</span></div>
+const displayProjects = [...featuredIds.map(id => projects.find(p => p.id === id)), ...projects.filter(p => !featuredIds.includes(p.id))];
+grid.innerHTML = displayProjects.map(p => `<article class="project-card ${p.color}">
+  <div class="project-visual"><div class="visual-meta"><span>${escape(p.label)}</span><span>${featuredIds.includes(p.id) ? '代表作' : p.number + ' / ' + count}</span></div>
     <a class="scene-link" href="#project=${p.id}" aria-label="${escape(p.title)}の詳細とデモを見る"><div class="card-scene" data-scene="${p.id}" aria-hidden="true"></div></a>
-    <div class="card-motion-bar"><span>PRODUCT FILM · 24 SEC</span><button type="button" data-pause="${p.id}" aria-pressed="true">Ⅱ 一時停止</button></div>
+    <div class="card-motion-bar"><span>再現アニメーション · 24秒</span><button type="button" data-pause="${p.id}" aria-pressed="true">Ⅱ 一時停止</button></div>
   </div>
   <a class="project-open" href="#project=${p.id}"><div class="project-info"><div class="project-category">${p.category}</div><h3>${escape(p.title)}<span aria-hidden="true">↗</span></h3><p>${escape(p.summary)}</p><div class="tags">${p.tags.map(t=>`<span>${escape(t)}</span>`).join('')}</div><div class="audience"><span>${p.kind === 'moral' ? 'RESEARCH STATUS / 研究の現在地' : 'PEOPLE & IMPACT / 利用実績'}</span><span>${escape(p.audience)}</span></div><p class="audience-feedback">${escape(p.impact)}</p><div class="card-case-focus"><span>設計の焦点</span><p>${escape(p.caseStudy.focus)}</p><b>課題と開発プロセスを読む ↗</b></div></div></a>
 </article>`).join('');
 for (const p of projects) new ScenePlayer(document.querySelector(`[data-scene="${p.id}"]`), p, {button:document.querySelector(`[data-pause="${p.id}"]`)});
-new ScenePlayer(document.querySelector('#hero-demo'), projects[0]);
+new ScenePlayer(document.querySelector('#hero-demo'), projects.find(p => p.kind === 'career'));
+document.querySelector('#featured-grid').innerHTML = renderFeatured(projects);
+document.querySelector('#team-activity').innerHTML = renderTeamContext();
 document.querySelector('#project-timeline').innerHTML = renderTimeline(projects);
 const pageMotion = createPageMotion({paused: motionPaused, dialog});
 
@@ -159,13 +163,20 @@ function openProject(project) {
   if (!dialog.open) returnFocus = document.activeElement;
   const p = project;
   document.querySelector('#detail-content').innerHTML = `<div class="detail-heading"><div class="eyebrow">${p.number} / ${p.category}</div><h2 id="detail-title">${escape(p.title)}</h2><p>${escape(p.tagline)}</p><div class="tags">${p.tags.map(t=>`<span>${escape(t)}</span>`).join('')}</div></div>
-    <div class="detail-demo ${p.color}"><div class="demo-toolbar"><span>PRODUCT FILM</span><span id="film-playback-note">24秒のストーリー · 自動再生</span></div><div id="demo-screen" class="demo-screen" role="img" aria-label="${escape(p.title)}の機能再現アニメーション"></div><p class="demo-status">${p.steps.map(escape).join(" → ")}。ひと続きの動作として自動で繰り返します。</p><div class="demo-controls"><button id="demo-play" class="button primary" type="button">Ⅱ 一時停止</button><button id="film-restart" class="film-restart" type="button" aria-label="映像を最初から見る">↺ 最初から</button><output id="film-time" aria-label="再生時間" aria-live="off">0:00 / 0:24</output></div><label class="film-scrubber">再生位置<input id="film-seek" type="range" min="0" max="24" step="0.5" value="0" aria-label="映像の再生位置（秒）"></label><p class="demo-note">${escape(p.demoNote)}</p></div>
     ${renderCaseOverview(p)}
-    ${renderCaseStudy(p)}<div class="detail-bottom"><span>コードと詳しい仕様はこちら</span>${p.liveUrl ? `<a class="button live-link" href="${escape(p.liveUrl)}" target="_blank" rel="noopener noreferrer">アプリを開く ↗</a>` : ''}<a class="button primary" href="https://github.com/AMZ-jpcslr/${p.id}" target="_blank" rel="noopener noreferrer">GitHubを見る ↗</a></div>`;
+    <nav class="case-nav" aria-label="作品詳細の目次">${evidence[p.id] ? '<button type="button" data-case-jump="case-screens">実画面</button><button type="button" data-case-jump="case-design">情報設計</button>' : ''}<button type="button" data-case-jump="case-role">担当・AI</button><button type="button" data-case-jump="case-film">再現デモ</button></nav>
+    ${renderCaseStudy(p)}
+    <section id="case-film" tabindex="-1" class="detail-demo ${p.color}"><div class="demo-toolbar"><span>再現アニメーション（実アプリの録画ではありません）</span><span id="film-playback-note">24秒のストーリー · 自動再生</span></div><div id="demo-screen" class="demo-screen" role="img" aria-label="${escape(p.title)}の機能再現アニメーション"></div><p class="demo-status">${p.steps.map(escape).join(" → ")}。ひと続きの動作として自動で繰り返します。</p><div class="demo-controls"><button id="demo-play" class="button primary" type="button">Ⅱ 一時停止</button><button id="film-restart" class="film-restart" type="button" aria-label="映像を最初から見る">↺ 最初から</button><output id="film-time" aria-label="再生時間" aria-live="off">0:00 / 0:24</output></div><label class="film-scrubber">再生位置<input id="film-seek" type="range" min="0" max="24" step="0.5" value="0" aria-label="映像の再生位置（秒）"></label><p class="demo-note">${escape(p.demoNote)}</p></section>
+    <div class="detail-bottom"><span>コードと詳しい仕様はこちら</span>${p.liveUrl ? `<a class="button live-link" href="${escape(p.liveUrl)}" target="_blank" rel="noopener noreferrer">アプリを開く ↗</a>` : ''}<a class="button primary" href="https://github.com/AMZ-jpcslr/${p.id}" target="_blank" rel="noopener noreferrer">GitHubを見る ↗</a></div>`;
   if (!dialog.open) dialog.showModal();
   document.body.classList.add('dialog-open'); dialog.scrollTop = 0;
   detailPlayer = new ScenePlayer(document.querySelector('#demo-screen'), p, {detail:true});
   updateDetailControls();
+  dialog.querySelectorAll('[data-case-jump]').forEach(button => button.addEventListener('click', () => {
+    const section = document.getElementById(button.dataset.caseJump);
+    section?.focus({preventScroll:true});
+    section?.scrollIntoView({block:'start',behavior:'instant'});
+  }));
   document.querySelector('#demo-play').addEventListener('click',()=>detailPlayer.toggle());
   document.querySelector('#film-restart').addEventListener('click',()=>detailPlayer.seek(0));
   const seek = document.querySelector('#film-seek');

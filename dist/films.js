@@ -8,7 +8,7 @@ export const films = {
   moral: {title:'Artificial Moral Architecture',label:'AI / PERSONAL RESEARCH',accent:'#c2dda0',hook:['AIが行動する、','その前を考える。'],result:'個人研究として検証中',value:'目標の先にいる、当事者のことまで。',chapters:[['PLAN','目標と、候補となる行動を用意。'],['EVALUATE','未来と、当事者への影響を評価する。'],['DECIDE','許可された代替案を選び、Dry Runへ。']]},
   proxy: {title:'Inspection Proxy',label:'NETWORK / SECURITY',accent:'#e2c48f',hook:['見えない通信に、','見える手がかりを。'],result:'母と営む会社で利用',value:'監視から、ネットの仕組みへの理解へ。',chapters:[['CAPTURE','ブラウザの通信が、ログに現れる。'],['INSPECT','送信内容から、個人情報の形式を検出。'],['CONTROL','対象ドメインをブロックし、記録する。']]},
   soccer: {title:'SSL Robot AI',label:'SIMULATION / TEAM PLAY',accent:'#94d5b5',hook:['次の一手を、','チームの力に。'],result:'立命館大学 Ri-oneで活用',value:'位置のスコアリングを、導入に向けた試作へ。',chapters:[['SCAN','空間を評価し、パスの受け手を探す。'],['CONNECT','相手の守備を避けて、パスをつなぐ。'],['SHOOT','開いたコースへ、最後の一手。']]},
-  career: {title:'しゅうかつ手帳',label:'CAREER WORKSPACE',accent:'#9ecbd0',hook:['就活の予定も、','次の一歩も、一冊に。'],result:'友人数人が利用',value:'予定を整え、知らなかった応募先に出会う。',chapters:[['DISCOVER','みんなが公開した募集を見つける。'],['MAKE IT YOURS','引用して、自分の応募予定にする。'],['PLAN YOUR DAY','締切と選考を、カレンダーで見渡す。']]}
+  career: {title:'しゅうかつ手帳',label:'CAREER WORKSPACE',accent:'#9ecbd0',hook:['就活の予定も、','次の一歩も、一冊に。'],result:'友人約10人が利用（2026年9月）',value:'予定を整え、知らなかった応募先に出会う。',chapters:[['DISCOVER','みんなが公開した募集を見つける。'],['MAKE IT YOURS','引用して、自分の応募予定にする。'],['PLAN YOUR DAY','締切と選考を、カレンダーで見渡す。']]}
 };
 const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function renderFilm(kind,body) {

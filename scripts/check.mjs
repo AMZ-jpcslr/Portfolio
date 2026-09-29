@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { projects } from '../dist/projects.js';
 import { chronologicalProjects, renderTimeline } from '../dist/timeline.js';
+import { featuredIds, evidence, renderFeatured, renderProductEvidence, renderTeamContext } from '../dist/product-evidence.js';
 import { captions, renderDemoScene } from '../dist/demos.js';
 import { films, filmDuration } from '../dist/films.js';
 import { renderCaseOverview, renderCaseStudy } from '../dist/case-study.js';
@@ -42,7 +43,7 @@ assert.ok(!html.includes('あったらいいな'));
 assert.ok(html.includes('7つの個人開発'));
 for(const match of html.matchAll(/(?:src|href)="\.\/([^"]+)"/g))assert.ok((await stat(path.join(root,'dist',match[1]))).size>0);
 for(const match of html.matchAll(/href="#project=([^"]+)"/g))assert.ok(projects.some(p=>p.id===match[1]));
-for(const file of ['dist/app.js','dist/page-motion.js','dist/projects.js','dist/demos.js','dist/films.js','dist/case-study.js','dist/timeline.js','scripts/serve.mjs','scripts/build.mjs'])execFileSync(process.execPath,['--check',path.join(root,file)],{stdio:'pipe'});
+for(const file of ['dist/app.js','dist/page-motion.js','dist/projects.js','dist/demos.js','dist/films.js','dist/case-study.js','dist/timeline.js','dist/product-evidence.js','scripts/serve.mjs','scripts/build.mjs'])execFileSync(process.execPath,['--check',path.join(root,file)],{stdio:'pipe'});
 const vercel=JSON.parse(await readFile(path.join(root,'vercel.json'),'utf8'));
 assert.equal(vercel.outputDirectory,'dist');assert.equal(vercel.buildCommand,'npm run build');
 // The browser runs all actors on one continuous CSS clock; there are no JS step timers.
@@ -103,3 +104,26 @@ assert.equal((timelineHtml.match(/<time /g) || []).length, 7);
 for (const p of projects) assert.ok(timelineHtml.includes(`href="#project=${p.id}"`));
 assert.ok(renderTimeline([{...projects[0], title:'<script>test</script>'}]).includes('&lt;script&gt;'));
 console.log('PASS: repository chronology, same-month ordering and escaped timeline links.');
+
+// Evidence must remain identifiable and match actual local assets, without changing project URLs.
+assert.deepEqual(featuredIds, ['Syukatu-Note','Streaming-Screen']);
+const featured = renderFeatured(projects);
+for (const id of featuredIds) {
+  assert.ok(featured.includes(`href="#project=${id}"`));
+  const p = projects.find(p => p.id === id);
+  const rendered = renderProductEvidence(p);
+  assert.ok(rendered.includes('実画面') && rendered.includes('現在の実装'));
+  assert.ok(!/undefined|NaN/.test(rendered));
+  for (const asset of evidence[id].images) {
+    const data = await readFile(path.join(root,'dist',asset.src));
+    assert.equal(data.readUInt32BE(16),asset.width);
+    assert.equal(data.readUInt32BE(20),asset.height);
+    assert.ok(rendered.includes('loading="lazy"'));
+  }
+}
+assert.equal(renderProductEvidence(projects.find(p => p.kind === 'voice')), '');
+assert.ok(projects.find(p => p.kind === 'career').audience.includes('友人約10人'));
+assert.ok(!JSON.stringify(projects).includes('友人数人'));
+assert.ok(!JSON.stringify(projects).includes('本人の担当は課題設定と設計です'));
+assert.ok(renderTeamContext().includes('10年間') && renderTeamContext().includes('個人制作'));
+console.log('PASS: featured links, actual screenshot dimensions, lazy loading and content boundaries.');

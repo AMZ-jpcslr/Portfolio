@@ -1,12 +1,14 @@
 # READMEの画面キャプチャ
 
-トップページ・制作年表は2026-09-29（幅1280px）、各映像は2026-09-27、ケーススタディは2026-09-24にローカルのポートフォリオをブラウザで表示して撮影。
+トップページ・代表作・情報設計の説明は2026-09-29（幅1440px）、制作年表は同日（幅1280px）、各映像は2026-09-27にローカルのポートフォリオをブラウザで表示して撮影。
 
 | ファイル | 内容 |
 | --- | --- |
 | portfolio-home.jpg | 氏名を明示したトップページ。開発コンセプトと動作デモ |
 | project-timeline.jpg | GitHubのリポジトリ作成年月（UTC）で並ぶ制作年表 |
-| case-study-process.jpg | Streaming Screen詳細の課題・検討プロセス・設計判断 |
+| case-study-process.jpg | Streaming Screenの情報構造と操作フロー |
+| featured-case-studies.jpg | 実画面を用いた代表作2件の導線 |
+| career-information-design.jpg | しゅうかつ手帳の公開情報と個人データの関係図 |
 | demo-streaming.jpg | サイト内の配信画面エディター機能再現デモ |
 | demo-soccer.jpg | サイト内のロボットサッカーのプロモーション映像 |
 | demo-career.jpg | しゅうかつ手帳の募集引用・カレンダーのプロモーション映像 |
