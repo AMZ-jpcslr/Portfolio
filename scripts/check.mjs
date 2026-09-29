@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { projects } from '../dist/projects.js';
+import { chronologicalProjects, renderTimeline } from '../dist/timeline.js';
 import { captions, renderDemoScene } from '../dist/demos.js';
 import { films, filmDuration } from '../dist/films.js';
 import { renderCaseOverview, renderCaseStudy } from '../dist/case-study.js';
@@ -14,6 +15,8 @@ assert.deepEqual(projects.map(p=>p.id).sort(),expected.sort());
 assert.equal(new Set(projects.map(p=>p.id)).size,7);
 for(const project of projects){
   for(const field of ['title','summary','challenge','engineering','demoNote','audience','impact'])assert.ok(project[field]?.length, `${project.id}: missing ${field}`);
+  assert.match(project.repositoryCreatedAt, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/);
+  assert.ok(Number.isFinite(Date.parse(project.repositoryCreatedAt)));
   assert.equal(project.steps.length,3);
   const c = project.caseStudy;
   assert.ok(c?.focus && c.process.length === 3, `${project.id}: missing design process`);
@@ -39,7 +42,7 @@ assert.ok(!html.includes('あったらいいな'));
 assert.ok(html.includes('7つの個人開発'));
 for(const match of html.matchAll(/(?:src|href)="\.\/([^"]+)"/g))assert.ok((await stat(path.join(root,'dist',match[1]))).size>0);
 for(const match of html.matchAll(/href="#project=([^"]+)"/g))assert.ok(projects.some(p=>p.id===match[1]));
-for(const file of ['dist/app.js','dist/page-motion.js','dist/projects.js','dist/demos.js','dist/films.js','dist/case-study.js','scripts/serve.mjs','scripts/build.mjs'])execFileSync(process.execPath,['--check',path.join(root,file)],{stdio:'pipe'});
+for(const file of ['dist/app.js','dist/page-motion.js','dist/projects.js','dist/demos.js','dist/films.js','dist/case-study.js','dist/timeline.js','scripts/serve.mjs','scripts/build.mjs'])execFileSync(process.execPath,['--check',path.join(root,file)],{stdio:'pipe'});
 const vercel=JSON.parse(await readFile(path.join(root,'vercel.json'),'utf8'));
 assert.equal(vercel.outputDirectory,'dist');assert.equal(vercel.buildCommand,'npm run build');
 // The browser runs all actors on one continuous CSS clock; there are no JS step timers.
@@ -89,3 +92,14 @@ unsafe.caseStudy.decision.reason = '<img src=x onerror=alert(1)>';
 assert.ok(renderCaseStudy(unsafe).includes('&lt;img'));
 assert.ok(!renderCaseStudy(unsafe).includes('<img'));
 console.log('PASS: all case studies, design ownership, escaped content and README screenshots.');
+
+// Same-month projects must follow their exact repository timestamps without reordering the cards.
+const originalOrder = projects.map(p => p.id);
+const timeline = chronologicalProjects(projects);
+assert.deepEqual(timeline.map(p => p.id), ['Shindo_Discord_Bot','Yomiage_Discord_Bot','Streaming-Screen','SSL-DEMO','ssl-inspection-prodxy','Artificial-Moral-Architecture','Syukatu-Note']);
+assert.deepEqual(projects.map(p => p.id), originalOrder);
+const timelineHtml = renderTimeline(projects);
+assert.equal((timelineHtml.match(/<time /g) || []).length, 7);
+for (const p of projects) assert.ok(timelineHtml.includes(`href="#project=${p.id}"`));
+assert.ok(renderTimeline([{...projects[0], title:'<script>test</script>'}]).includes('&lt;script&gt;'));
+console.log('PASS: repository chronology, same-month ordering and escaped timeline links.');

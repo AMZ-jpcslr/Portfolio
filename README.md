@@ -1,10 +1,10 @@
-# AMZ — Developer Portfolio
+# Kitaoka Yoma / AMZ — Developer Portfolio
 
 **日常の不便から、社会の課題まで。個人開発から、問題解決の糸口をつくる。**
 
 [公開サイトを見る](https://portfolio-amz-jpcslr.vercel.app/) · [制作一覧](https://portfolio-amz-jpcslr.vercel.app/#work) · [GitHub](https://github.com/AMZ-jpcslr)
 
-7つの個人開発について、動作デモに加え、**課題設定・検討プロセス・意思決定の理由・担当範囲・AIの活用方法・利用者に届いた価値**を紹介するポートフォリオです。
+Kitaoka Yoma（GitHub: AMZ-jpcslr）の7つの個人開発について、動作デモに加え、**課題設定・検討プロセス・意思決定の理由・担当範囲・AIの活用方法・利用者に届いた価値**を紹介するポートフォリオです。
 
 ![ポートフォリオのトップページ。開発コンセプトと本人・AIの担当を表示](docs/images/portfolio-home.jpg)
 
@@ -19,6 +19,32 @@
 | 利用者・依頼者 | 実際の利用や依頼を通じた関わり。共同開発者とは区別して記載 |
 
 SSLの試作は、自身が参加する立命館大学Ri-oneのSSLチームで活用されました。ここでは個人制作したプロトタイプの貢献範囲を示し、チーム全体の成果と区別しています。
+
+## 開発で大切にしていること
+
+- **AIは時短のためのツール**：コーディングはAIに任せ、課題設定・必要な機能・仕様の設計は本人が担います。
+- **身近な問題から社会問題まで**：分野を限定せず、広い視野と個人の実践から解決の糸口を探します。
+- **本当に必要とされ、使われるか**：完成だけをゴールにせず、誰のどんな困りごとに役立つのかを考えます。
+- **ビジネスとしての視点**：事業化しない場合も、マネタイズや競合優位性、継続して価値を届ける方法まで考えます。
+- **ユーザーフィードバック**：便利な点も使いにくい点も受け止め、次の判断や改善につなげることを大切にします。
+
+## 制作の歩み
+
+[サイトの制作年表](https://portfolio-amz-jpcslr.vercel.app/#timeline)は、GitHub APIの `created_at` を基準に古い順で表示します。年月はUTCです。開発開始日・完成日・製品の公開日を示すものではありません。同月の作品も正確なタイムスタンプで並べています。
+
+| リポジトリ作成年月（UTC） | プロジェクト |
+| --- | --- |
+| 2025.06 | [Shindo Bot](https://github.com/AMZ-jpcslr/Shindo_Discord_Bot) |
+| 2025.06 | [Yomiage Bot](https://github.com/AMZ-jpcslr/Yomiage_Discord_Bot) |
+| 2025.12 | [Streaming Screen](https://github.com/AMZ-jpcslr/Streaming-Screen) |
+| 2026.01 | [SSL Robot AI](https://github.com/AMZ-jpcslr/SSL-DEMO) |
+| 2026.05 | [Inspection Proxy](https://github.com/AMZ-jpcslr/ssl-inspection-prodxy) |
+| 2026.09 | [Artificial Moral Architecture](https://github.com/AMZ-jpcslr/Artificial-Moral-Architecture) |
+| 2026.09 | [しゅうかつ手帳](https://github.com/AMZ-jpcslr/Syukatu-Note) |
+
+![リポジトリ作成年月順で並ぶ制作年表](docs/images/project-timeline.jpg)
+
+表示名は[GitHubプロフィール](https://github.com/AMZ-jpcslr)、作成日時は[公開リポジトリAPI](https://api.github.com/users/AMZ-jpcslr/repos?per_page=100)で2026-09-29に確認しています。
 
 ## 完成までの考え方を読む
 
@@ -103,6 +129,7 @@ node scripts/build.mjs
 
 | 項目 | 内容 |
 | --- | --- |
+| `repositoryCreatedAt` | GitHub APIの `created_at`（UTCのISO日時）。年表の順序と年月に使用 |
 | `summary` / `challenge` | 一覧の概要 / 解決したい課題 |
 | `caseStudy.focus` | 設計の焦点。一覧と詳細冒頭に表示 |
 | `caseStudy.process` | 課題から機能・実装へ至る説明。`title` と `body` の配列 |
@@ -121,7 +148,7 @@ PVとページの動きを揃え、淡いペーパー色・セージグリーン
 
 - **トップ**：2行の見出しがマスクから現れ、キーワードの下線と説明が順に登場。背景の軌道とスクロールに連動する小さな奥行きで、デモを引き立てます。
 - **作品一覧**：大きなタイポグラフィ、同じ行の上下端と高さを揃えたカード、画面に入ったときの登場演出。マウスを動かすとカード上の光が控えめに追従します。カードの外枠は動かさず、グリッドの整列を保ちます。
-- **開発姿勢・結び**：線が伸びる3つの視点と、軌道のモチーフを再び使ったクロージング。詳細のケーススタディにも登場演出があります。
+- **開発姿勢・結び**：線が伸びる5つの開発方針と、軌道のモチーフを再び使ったクロージング。詳細のケーススタディにも登場演出があります。
 - **操作**：ページ上部の読了プログレス、表示位置に応じたナビゲーション、ボタンの色と矢印の動き、詳細画面の登場演出。
 
 画面右下と詳細画面上部の停止ボタンは、ページ演出とPVの両方に適用されます。停止状態で詳細を開いた場合は、操作場面の静止画を表示します。OSの「視差効果を減らす」設定にも対応し、停止時はすべての本文を表示します。スマートフォンではスクロールによる奥行きを抑えます。通常のスクロール操作は変更していません。

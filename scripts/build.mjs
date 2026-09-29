@@ -12,9 +12,9 @@ export function siteOrigin(env = process.env) {
 
 export function socialMetadata(origin) {
   const escape = value => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-  const title = 'AMZ — Developer Portfolio';
+  const title = 'Kitaoka Yoma / AMZ — Developer Portfolio';
   const description = '日常の不便から、社会の課題まで。個人開発で問題解決の糸口をつくる。';
-  const alt = 'AMZの開発ポートフォリオ。日常の不便から社会の課題まで、Discord Bot・防災・配信ツール・AI研究・通信・ロボットサッカー・就活支援の7分野。';
+  const alt = 'Kitaoka Yomaの開発ポートフォリオ。日常の不便から社会の課題まで、Discord Bot・防災・配信ツール・AI研究・通信・ロボットサッカー・就活支援の7分野。';
   const image = `${origin}/og-image.png`;
   const og = { title, description, type: 'website', site_name: title, locale: 'ja_JP', url: `${origin}/`, image, 'image:type': 'image/png', 'image:width': '1200', 'image:height': '630', 'image:alt': alt };
   const twitter = { card: 'summary_large_image', title, description, image, 'image:alt': alt };

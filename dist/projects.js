@@ -1,7 +1,9 @@
+// repositoryCreatedAt: GitHub REST API created_at (UTC), verified 2026-09-29.
 // 利用実績・担当範囲・AI利用は本人の申告。設計の狙いは課題と公開仕様から整理。
 export const projects = [
   {
     "id": "Yomiage_Discord_Bot",
+    "repositoryCreatedAt": "2025-06-30T15:01:25Z",
     "title": "Yomiage Bot",
     "category": "COMMUNICATION",
     "kind": "voice",
@@ -63,6 +65,7 @@ export const projects = [
   },
   {
     "id": "Shindo_Discord_Bot",
+    "repositoryCreatedAt": "2025-06-19T03:48:02Z",
     "title": "Shindo Bot",
     "category": "DISASTER INFORMATION",
     "kind": "weather",
@@ -124,6 +127,7 @@ export const projects = [
   },
   {
     "id": "Streaming-Screen",
+    "repositoryCreatedAt": "2025-12-16T09:40:31Z",
     "title": "Streaming Screen",
     "category": "CREATOR TOOLS",
     "kind": "stream",
@@ -185,6 +189,7 @@ export const projects = [
   },
   {
     "id": "Artificial-Moral-Architecture",
+    "repositoryCreatedAt": "2026-09-21T15:17:22Z",
     "title": "Artificial Moral Architecture",
     "category": "AI / RESEARCH",
     "kind": "moral",
@@ -247,6 +252,7 @@ export const projects = [
   },
   {
     "id": "ssl-inspection-prodxy",
+    "repositoryCreatedAt": "2026-05-26T02:43:42Z",
     "title": "Inspection Proxy",
     "category": "NETWORK / SECURITY",
     "kind": "proxy",
@@ -308,6 +314,7 @@ export const projects = [
   },
   {
     "id": "SSL-DEMO",
+    "repositoryCreatedAt": "2026-01-26T23:03:03Z",
     "title": "SSL Robot AI",
     "category": "SIMULATION / AI",
     "kind": "soccer",
@@ -369,6 +376,7 @@ export const projects = [
   },
   {
     "id": "Syukatu-Note",
+    "repositoryCreatedAt": "2026-09-22T11:46:39Z",
     "title": "しゅうかつ手帳",
     "category": "CAREER / PRODUCTIVITY",
     "kind": "career",

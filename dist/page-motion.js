@@ -40,8 +40,8 @@ export function createPageMotion({ paused = false, dialog }) {
   mark(document.querySelector('.hero-bottom'), 360);
   mark(document.querySelector('.editorial-title'));
   document.querySelectorAll('.section-heading').forEach(element => mark(element));
-  document.querySelectorAll('.project-card').forEach(element => mark(element));
-  document.querySelectorAll('.approach-grid article').forEach((element, index) => mark(element, index * 110));
+  document.querySelectorAll('.project-card, .timeline-item').forEach(element => mark(element));
+  document.querySelectorAll('.approach-grid article').forEach((element, index) => mark(element, (index % 2) * 80));
   document.querySelectorAll('.closing > :not(.closing-orbit)').forEach((element, index) => mark(element, index * 90));
   // Register targets before enabling concealment; an initialization failure keeps the page readable.
   root.classList.add('motion-ready');
@@ -131,7 +131,7 @@ export function createPageMotion({ paused = false, dialog }) {
         });
       }
     }, { rootMargin: `-${Math.round(innerHeight * .12)}px 0px -${Math.round(innerHeight * .75)}px 0px` });
-    document.querySelectorAll('#work, #approach, .hero').forEach(section => sections.observe(section));
+    document.querySelectorAll('#work, #timeline, #approach, .hero').forEach(section => sections.observe(section));
   }
   observeNavigation();
   addEventListener('resize', observeNavigation, { passive: true });
