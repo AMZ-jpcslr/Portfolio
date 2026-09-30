@@ -89,9 +89,11 @@ for (const [,imagePath] of images) {
   assert.ok(data.length > 1024);
 }
 const unsafe = structuredClone(projects[0]);
-unsafe.caseStudy.decision.reason = '<img src=x onerror=alert(1)>';
-assert.ok(renderCaseStudy(unsafe).includes('&lt;img'));
-assert.ok(!renderCaseStudy(unsafe).includes('<img'));
+const injection = '<img src=x onerror=alert(1)>';
+unsafe.caseStudy.decision.reason = injection;
+const escapedCase = renderCaseStudy(unsafe);
+assert.ok(escapedCase.includes('&lt;img src=x onerror=alert(1)&gt;'));
+assert.ok(!escapedCase.includes(injection));
 console.log('PASS: all case studies, design ownership, escaped content and README screenshots.');
 
 // Same-month projects must follow their exact repository timestamps without reordering the cards.
@@ -107,10 +109,13 @@ console.log('PASS: repository chronology, same-month ordering and escaped timeli
 
 // Evidence must remain identifiable and match actual local assets, without changing project URLs.
 assert.deepEqual(featuredIds, ['Syukatu-Note','Streaming-Screen']);
+assert.deepEqual(projects.map(p => p.number), ['01','02','03','04','05','06','07']);
+assert.deepEqual(projects.slice(0, 2).map(p => p.id), featuredIds);
 const featured = renderFeatured(projects);
 for (const id of featuredIds) {
   assert.ok(featured.includes(`href="#project=${id}"`));
   const p = projects.find(p => p.id === id);
+  assert.ok(featured.includes(`${p.number} / 07`));
   const rendered = renderProductEvidence(p);
   assert.ok(rendered.includes('実画面') && rendered.includes('現在の実装'));
   assert.ok(!/undefined|NaN/.test(rendered));

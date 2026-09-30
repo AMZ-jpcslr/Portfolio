@@ -1,4 +1,4 @@
-import { featuredIds, evidence, renderFeatured, renderTeamContext } from './product-evidence.js';
+import { evidence, renderFeatured, renderTeamContext } from './product-evidence.js';
 import { renderTimeline } from './timeline.js';
 import { createPageMotion } from './page-motion.js';
 import { projects } from './projects.js';
@@ -130,9 +130,8 @@ class ScenePlayer {
 }
 
 const grid = document.querySelector('#project-grid');
-const displayProjects = [...featuredIds.map(id => projects.find(p => p.id === id)), ...projects.filter(p => !featuredIds.includes(p.id))];
-grid.innerHTML = displayProjects.map(p => `<article class="project-card ${p.color}">
-  <div class="project-visual"><div class="visual-meta"><span>${escape(p.label)}</span><span>${featuredIds.includes(p.id) ? '代表作' : p.number + ' / ' + count}</span></div>
+grid.innerHTML = projects.map(p => `<article class="project-card ${p.color}">
+  <div class="project-visual"><div class="visual-meta"><span>${escape(p.label)}</span><span>${p.number} / ${count}${p.featured ? ' · 代表作' : ''}</span></div>
     <a class="scene-link" href="#project=${p.id}" aria-label="${escape(p.title)}の詳細とデモを見る"><div class="card-scene" data-scene="${p.id}" aria-hidden="true"></div></a>
     <div class="card-motion-bar"><span>再現アニメーション · 24秒</span><button type="button" data-pause="${p.id}" aria-pressed="true">Ⅱ 一時停止</button></div>
   </div>
@@ -162,7 +161,7 @@ function openProject(project) {
   activeProject = project;
   if (!dialog.open) returnFocus = document.activeElement;
   const p = project;
-  document.querySelector('#detail-content').innerHTML = `<div class="detail-heading"><div class="eyebrow">${p.number} / ${p.category}</div><h2 id="detail-title">${escape(p.title)}</h2><p>${escape(p.tagline)}</p><div class="tags">${p.tags.map(t=>`<span>${escape(t)}</span>`).join('')}</div></div>
+  document.querySelector('#detail-content').innerHTML = `<div class="detail-heading"><div class="eyebrow">${p.number} / ${count} · ${p.category}</div><h2 id="detail-title">${escape(p.title)}</h2><p>${escape(p.tagline)}</p><div class="tags">${p.tags.map(t=>`<span>${escape(t)}</span>`).join('')}</div></div>
     ${renderCaseOverview(p)}
     <nav class="case-nav" aria-label="作品詳細の目次">${evidence[p.id] ? '<button type="button" data-case-jump="case-screens">実画面</button><button type="button" data-case-jump="case-design">情報設計</button>' : ''}<button type="button" data-case-jump="case-role">担当・AI</button><button type="button" data-case-jump="case-film">再現デモ</button></nav>
     ${renderCaseStudy(p)}
