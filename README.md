@@ -52,7 +52,7 @@ SSLの試作は、私が所属する立命館大学Ri-oneのSSLチームで活�
 
 トップから**しゅうかつ手帳とStreaming Screen**を代表作として開けます。7作品はすべて残し、一覧の先頭にも代表作を置いています。既存の `#project=リポジトリ名` の直接リンクは維持しています。
 
-詳細は課題・担当から読み始め、代表作には実画面と情報の関係図を追加しました。目次で「実画面」「情報設計」「担当・AI」「再現デモ」へ移動できます。再現アニメーションは詳細の後半にあり、実アプリの録画とは明確に区別しています。
+詳細は課題から読み始め、代表作には実画面と情報の関係図を追加しました。追従する目次で「課題」「実画面」「情報設計」「検討」「設計判断」「担当・AI」「反応・結果」「再現デモ」へ移動できます。再現アニメーションは詳細の後半にあり、実アプリの録画とは明確に区別しています。
 
 - **私の経験**：担当したこと、利用者から聞いた感想、引用機能の追加時に気づいた問題。
 - **現在の仕様**：公開募集と個人コピー、通常のレイアウト保存と出力反映の関係。ソースコードへのリンクを併記。
@@ -67,7 +67,7 @@ Ri-oneの戦略班での活動、10年間のゴールキーパー経験、Java�
 
 ## 掲載プロジェクト
 
-作品一覧と代表作のカードには「PAIN POINT / 制作のきっかけ」を掲載し、解決したかった困りごとから利用者の反応へ読み進められるようにしています。文章は `dist/projects.js` の `painPoint` で編集できます。
+作品一覧と代表作のカードには「作った理由 / Pain point」を掲載し、解決したかった困りごとから利用者の反応へ読み進められるようにしています。文章は `dist/projects.js` の `painPoint` で編集できます。
 
 | プロジェクト | 課題と設計上の判断 | 利用・活用先 |
 | --- | --- | --- |
@@ -244,3 +244,15 @@ vercel.json           Vercel公開設定
 - [SSL Robot AIのREADME](https://github.com/AMZ-jpcslr/SSL-DEMO/blob/master/ssl-robot-ai/README.md)
 - [しゅうかつ手帳のREADME](https://github.com/AMZ-jpcslr/Syukatu-Note/blob/master/README.md)（2026-09-27確認）
 - [Vercelの公開設定](https://vercel.com/docs/project-configuration) / [公開URL環境変数](https://vercel.com/docs/environment-variables/system-environment-variables#vercel_project_production_url) / [Open Graph](https://ogp.me/)
+
+## 公開前の改善プロトタイプ
+
+2026年10月6日の全体レビューでは、一覧の重複する説明、文字サイズ、詳細の目次、停止時の状態表示、詳細を連続して開閉した際のリンク処理を見直しました。[レビュー記録](docs/site-review-2026-10-06.md)に問題と対応をまとめています。
+
+変更前のローカル保存が `.review/before/` にある環境では、以下で比較ページを開けます。`.review/` は公開対象・Git管理から除外しています。
+
+```sh
+node scripts/review-preview.mjs
+```
+
+`http://127.0.0.1:4175/` に比較ページ、`/after/` に改善案、`/before/` に変更前を表示します。通常のプレビューは従来どおり `node scripts/serve.mjs` です。

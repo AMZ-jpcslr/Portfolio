@@ -80,3 +80,5 @@
 @keyframes film-stage-mobile{0%,6%,100%{opacity:.12;transform:translateY(12px)}14%,87%{opacity:1;transform:none}94%{opacity:.12;transform:translateY(-8px)}}
 @keyframes film-type-mobile{0%,100%{opacity:0;transform:translateY(12px)}2.8%,94%{opacity:1;transform:none}}
 @keyframes film-type-second-mobile{0%,.8%,100%{opacity:0;transform:translateY(15px)}4%,94%{opacity:1;transform:none}}
+
+@media(prefers-reduced-motion:reduce){.cinema .saved-status,.cinema .demo-cursor,.cinema .cursor-click{display:none!important}.cinema .unsaved-status{opacity:1}.cinema .weather-process,.cinema .research-sweep,.cinema .request-packet,.cinema .ball-trail{display:none}}

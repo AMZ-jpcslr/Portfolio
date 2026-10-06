@@ -1,0 +1,60 @@
+/* Review prototype: clear reading order, readable text, and persistent detail navigation. */
+:root{--muted:#58635b}
+.header nav a{min-height:44px;display:inline-flex;align-items:center}
+.hero-description{color:#536052}.authorship-note{font-size:13px;color:#53634b}
+.work{padding-top:60px}.work .section-heading h2{font-size:34px}.section-heading>p{font-size:14px;color:#52614a}
+.project-card .project-visual{padding:18px 22px 15px}.project-card .card-scene{max-width:450px;margin-inline:auto}
+.visual-meta{font-size:12px;align-items:center;margin-bottom:15px}.visual-meta>span:last-child{font-size:12px}
+.card-motion-bar{color:#495b40}.card-motion-bar>span{font-size:12px;letter-spacing:0}.card-motion-bar button{min-height:44px;font-size:12px;padding:6px 12px;border-color:#c9d2c2;background:#fff}
+.project-card .project-open{flex:1}.project-card .project-info{padding:25px 28px;display:flex;flex-direction:column}
+.project-info h3{font-size:26px;line-height:1.5;margin:0 0 20px;overflow-wrap:anywhere;letter-spacing:-.5px}
+.card-story{margin:0 0 20px}.card-story>div{padding:15px 0;border-bottom:1px solid #e1e7da}
+.card-story>div:first-child{margin:0;padding:15px 17px;border-left:3px solid #7c985f;border-bottom:0;border-radius:0 8px 8px 0;background:#f1f5eb}
+.card-story dt{font-size:12px;font-weight:650;color:#3f5b2c;margin-bottom:6px;line-height:1.7}
+.card-story dt span{font-size:11px;font-weight:400;color:#526c42;margin-left:6px}
+.card-story dd{margin:0;font-size:14px;line-height:1.85;color:#44503c;overflow-wrap:anywhere}
+.card-story dd strong{display:block;font-size:13px;font-weight:650;color:#31462a;margin-bottom:5px}
+.project-info>.tags{margin-top:auto}.tags>span{font-size:12px;color:#46523f;background:#fafcf7;border-color:#d5dccd}
+.project-card .card-case-focus{margin-top:18px;padding-top:16px}.card-case-focus>b{font-size:13px;color:#365724;font-weight:600}
+.featured .section-heading h2{font-size:30px}.featured-copy>span,.featured-copy small{font-size:12px;color:#526445}.featured-copy b{font-size:13px}
+.featured-copy .card-pain-point>span{font-size:12px;color:#3f5b2c}.featured-copy .card-pain-point>p{font-size:14px;color:#44503c}
+.featured-copy p{color:#44503c}.featured-copy .card-pain-point{padding:14px 16px}.featured-copy small{margin-top:auto}
+.repository-note,.timeline-note{font-size:12px;color:#55674b;line-height:1.9}.timeline-category{color:#4e663b!important}.timeline-item p{font-size:14px!important;color:#52614a!important}
+.detail-heading h2{line-height:1.5}.detail-heading>p{font-size:16px;color:#4a5941}
+.case-overview>div>span,.case-overview dt{font-size:12px;color:#4d643d}.case-overview dd{font-size:13px;color:#3f5135}
+.case-overview .overview-role{font-size:13px;color:#4d603f;line-height:1.9}
+.case-nav{position:sticky;top:var(--dialog-header-height,72px);z-index:2;margin:0;padding:10px 30px;gap:12px;align-items:center;border-block:1px solid #d9e2ce;background:#f2f6edf5;backdrop-filter:blur(8px)}
+.case-nav>span{font-size:12px;font-weight:600;color:#4d623e;flex-shrink:0}.case-nav-items{display:flex;gap:7px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:thin;padding:3px}
+.case-nav button{flex-shrink:0;min-height:44px;font-size:13px;padding:8px 13px;white-space:nowrap}.case-nav button:focus-visible{outline-offset:-2px}
+.case-study{padding-top:28px}.case-study section{scroll-margin-top:calc(var(--dialog-header-height,72px) + var(--case-nav-height,74px) + 18px)!important}
+.case-study .eyebrow{font-size:11px;color:#526942}.case-study h3{font-size:22px;line-height:1.6}.case-study h4{font-size:15px;line-height:1.8}
+.case-study p,.case-study ul,.ai-responsibilities dd{font-size:15px;line-height:1.95;color:#48563e}.case-study .process-list p{font-size:14px;color:#48563e}
+.case-study .case-source-note,.case-study .diagram-caption{font-size:12px;color:#55664a;line-height:1.9}
+.ai-responsibilities dt,.model-node>span,.zone-label{font-size:12px}.evidence-links{font-size:13px;line-height:1.9}
+.case-study .evidence-gallery p{font-size:13px;color:#52614a}.evidence-gallery figcaption>span{font-size:12px;color:#456332}
+.case-study .model-node p,.case-study .information-model p{font-size:14px;color:#48563e}.case-study .operation-flow li{font-size:14px}
+.dialog-top{letter-spacing:0;color:#425439}.dialog-top>span{font-size:13px}.dialog-top .close-button,#dialog-motion-toggle{min-height:44px;font-size:13px}
+#case-film{scroll-margin-top:calc(var(--dialog-header-height,72px) + var(--case-nav-height,74px) + 18px)}
+dialog#project-dialog{scroll-padding-top:calc(var(--dialog-header-height,72px) + var(--case-nav-height,74px) + 18px)}
+.demo-toolbar>span:first-child{font-size:12px}.demo-note{font-size:13px;color:#4d603f}.demo-status{font-size:14px;line-height:1.9}
+.detail-bottom{font-size:13px}.detail-bottom .button{min-height:44px}#motion-toggle{font-size:12px;min-height:44px;border-color:#b9c8aa;color:#36502c}
+.approach-grid p{color:#d2ddca}.approach-role{font-size:12px}.footer>span{color:#53624b}.footer>a:last-of-type{font-size:12px}
+@media(min-width:761px){.project-grid{grid-auto-rows:auto}.project-card:last-child .project-info{padding:30px}.project-card:last-child .card-scene{max-width:450px}}
+@media(max-width:1000px){.header nav{gap:18px}.header nav a{font-size:12px}.brand-sub{margin-left:15px}.case-nav{padding-inline:18px}}
+@media(max-width:760px){
+ .header nav{gap:13px}.header nav a{font-size:11px}.header nav .nav-github{padding:5px 9px}.brand-sub{display:none}
+ .work{padding-block:42px 55px}.work .section-heading h2{font-size:29px}.featured .section-heading h2{font-size:25px}.section-heading>p{font-size:14px}
+ .project-card .project-visual{padding:16px}.project-card .project-info{padding:23px 21px}.project-info h3{font-size:24px}.card-story dd{font-size:14px}
+ .card-motion-bar>span{font-size:11px}.card-motion-bar button{font-size:12px}.visual-meta{font-size:11px}.visual-meta>span:last-child{font-size:11px}
+ .case-nav{padding:8px 12px;gap:8px}.case-nav button{font-size:12px;padding:7px 11px}.case-nav>span{font-size:11px}
+ .case-overview{margin-inline:20px}.case-study h3{font-size:21px}.case-study .process-list p{font-size:14px}.case-study p{font-size:15px}
+ .dialog-top{padding:10px 14px;gap:10px;flex-wrap:nowrap}.dialog-actions{gap:8px;width:auto}.dialog-top .close-button{padding:6px 10px;gap:9px}
+ #dialog-motion-toggle{font-size:12px;padding:6px 10px}.case-overview .overview-role{font-size:13px}
+ .featured-copy{padding:21px}.featured-copy .card-pain-point>p{font-size:14px}.repository-note{text-align:left}
+}
+@media(max-width:480px){.dialog-top>span{display:none}.dialog-actions{width:100%;justify-content:space-between}.header nav{gap:11px}.header nav a{font-size:11px}.header nav .nav-github span{display:none}.header .brand{font-size:34px}#motion-toggle{font-size:11px;padding:9px 12px;max-width:calc(100% - 24px)}}
+@media(max-width:360px){.header nav{gap:8px}.header nav a{font-size:10px}.header .brand{font-size:30px}.header nav .nav-github{padding:5px 6px}.visual-meta>span:first-child{padding:3px 7px}.featured-copy h3{font-size:22px}}
+
+/* Jump offsets are counted once by the scroll container. */
+.case-study{grid-template-columns:1fr}.case-study [tabindex="-1"],#case-film{scroll-margin-top:0!important}
+#case-role .case-overview{margin:0 0 20px;padding:20px}.case-overview .overview-role{line-height:1.85}

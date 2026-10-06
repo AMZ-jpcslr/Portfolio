@@ -1,4 +1,4 @@
-:root{--bg:#f7f8fa;--ink:#242824;--muted:#6b706f;--line:#dedfdc;--lime:#c0f95a;--paper:#fff;--font:'DM Sans','Noto Sans JP',sans-serif}
+:root{--bg:#f7f8fa;--ink:#242824;--muted:#6b706f;--line:#dedfdc;--lime:#c0f95a;--paper:#fff;--font:'DM Sans','Noto Sans JP','Yu Gothic UI','Yu Gothic','Meiryo',system-ui,sans-serif}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:100px}

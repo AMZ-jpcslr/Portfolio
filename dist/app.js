@@ -4,7 +4,7 @@ import { createPageMotion } from './page-motion.js';
 import { projects } from './projects.js';
 import { renderDemoScene } from './demos.js';
 import { filmDuration } from './films.js';
-import { renderCaseOverview, renderCaseStudy } from './case-study.js';
+import { renderCaseStudy } from './case-study.js';
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const count = String(projects.length).padStart(2, '0');
 const preference = matchMedia('(prefers-reduced-motion: reduce)');
@@ -13,6 +13,7 @@ const dialog = document.querySelector('#project-dialog');
 const motionButtons = [...document.querySelectorAll('[data-motion-toggle]')];
 const players = new Set();
 let detailPlayer = null;
+let detailNavigationObserver = null;
 let activeProject = null;
 let returnFocus = null;
 let pageHash = location.hash.startsWith('#project=') ? '#work' : location.hash || '#top';
@@ -133,9 +134,11 @@ const grid = document.querySelector('#project-grid');
 grid.innerHTML = projects.map(p => `<article class="project-card ${p.color}">
   <div class="project-visual"><div class="visual-meta"><span>${escape(p.label)}</span><span>${p.number} / ${count}${p.featured ? ' · 代表作' : ''}</span></div>
     <a class="scene-link" href="#project=${p.id}" aria-label="${escape(p.title)}の詳細とデモを見る"><div class="card-scene" data-scene="${p.id}" aria-hidden="true"></div></a>
-    <div class="card-motion-bar"><span>再現アニメーション · 24秒</span><button type="button" data-pause="${p.id}" aria-pressed="true">Ⅱ 一時停止</button></div>
+    <div class="card-motion-bar"><span>動作の再現 · 24秒</span><button type="button" data-pause="${p.id}" aria-pressed="true">Ⅱ 一時停止</button></div>
   </div>
-  <a class="project-open" href="#project=${p.id}"><div class="project-info"><div class="project-category">${p.category}</div><h3>${escape(p.title)}<span aria-hidden="true">↗</span></h3><p>${escape(p.summary)}</p><div class="tags">${p.tags.map(t=>`<span>${escape(t)}</span>`).join('')}</div><div class="card-pain-point"><span>PAIN POINT / 制作のきっかけ</span><p>${escape(p.painPoint)}</p></div><div class="audience"><span>${p.kind === 'moral' ? 'RESEARCH STATUS / 研究の現在地' : 'PEOPLE & IMPACT / 利用実績'}</span><span>${escape(p.audience)}</span></div><p class="audience-feedback">${escape(p.impact)}</p><div class="card-case-focus"><span>設計の焦点</span><p>${escape(p.caseStudy.focus)}</p><b>課題と開発プロセスを読む ↗</b></div></div></a>
+  <a class="project-open" href="#project=${p.id}" aria-label="${escape(p.title)}の制作の背景と設計を見る"><div class="project-info"><h3>${escape(p.title)}<span aria-hidden="true">↗</span></h3>
+    <dl class="card-story"><div class="card-pain-point"><dt>作った理由 <span lang="en">Pain point</span></dt><dd>${escape(p.painPoint)}</dd></div><div><dt>実装したこと</dt><dd>${escape(p.summary)}</dd></div><div><dt>${p.kind === 'moral' ? '研究の現在地' : '利用者の反応'}</dt><dd><strong>${escape(p.audience)}</strong>${escape(p.cardFeedback)}</dd></div></dl>
+    <div class="tags" aria-label="使用技術">${p.tags.map(t=>`<span>${escape(t)}</span>`).join('')}</div><div class="card-case-focus"><b>課題・設計・担当を詳しく見る <span aria-hidden="true">↗</span></b></div></div></a>
 </article>`).join('');
 for (const p of projects) new ScenePlayer(document.querySelector(`[data-scene="${p.id}"]`), p, {button:document.querySelector(`[data-pause="${p.id}"]`)});
 new ScenePlayer(document.querySelector('#hero-demo'), projects.find(p => p.kind === 'career'));
@@ -158,12 +161,12 @@ function updateDetailControls() {
 }
 function openProject(project) {
   detailPlayer?.destroy(); detailPlayer = null;
+  detailNavigationObserver?.disconnect();
   activeProject = project;
   if (!dialog.open) returnFocus = document.activeElement;
   const p = project;
   document.querySelector('#detail-content').innerHTML = `<div class="detail-heading"><div class="eyebrow">${p.number} / ${count} · ${p.category}</div><h2 id="detail-title">${escape(p.title)}</h2><p>${escape(p.tagline)}</p><div class="tags">${p.tags.map(t=>`<span>${escape(t)}</span>`).join('')}</div></div>
-    ${renderCaseOverview(p)}
-    <nav class="case-nav" aria-label="作品詳細の目次">${evidence[p.id] ? '<button type="button" data-case-jump="case-screens">実画面</button><button type="button" data-case-jump="case-design">情報設計</button>' : ''}<button type="button" data-case-jump="case-role">担当・AI</button><button type="button" data-case-jump="case-film">再現デモ</button></nav>
+    <nav class="case-nav" aria-label="作品詳細の目次"><span>目次</span><div class="case-nav-items"><button type="button" data-case-jump="case-problem">課題</button>${evidence[p.id] ? '<button type="button" data-case-jump="case-screens">実画面</button><button type="button" data-case-jump="case-design">情報設計</button>' : ''}<button type="button" data-case-jump="case-process">検討</button><button type="button" data-case-jump="case-decision">設計判断</button><button type="button" data-case-jump="case-role">担当・AI</button><button type="button" data-case-jump="case-outcome">反応・結果</button><button type="button" data-case-jump="case-film">再現デモ</button></div></nav>
     ${renderCaseStudy(p)}
     <section id="case-film" tabindex="-1" class="detail-demo ${p.color}"><div class="demo-toolbar"><span>再現アニメーション（実アプリの録画ではありません）</span><span id="film-playback-note">24秒のストーリー · 自動再生</span></div><div id="demo-screen" class="demo-screen" role="img" aria-label="${escape(p.title)}の機能再現アニメーション"></div><p class="demo-status">${p.steps.map(escape).join(" → ")}。ひと続きの動作として自動で繰り返します。</p><div class="demo-controls"><button id="demo-play" class="button primary" type="button">Ⅱ 一時停止</button><button id="film-restart" class="film-restart" type="button" aria-label="映像を最初から見る">↺ 最初から</button><output id="film-time" aria-label="再生時間" aria-live="off">0:00 / 0:24</output></div><label class="film-scrubber">再生位置<input id="film-seek" type="range" min="0" max="24" step="0.5" value="0" aria-label="映像の再生位置（秒）"></label><p class="demo-note">${escape(p.demoNote)}</p></section>
     <div class="detail-bottom"><span>コードと詳しい仕様はこちら</span>${p.liveUrl ? `<a class="button live-link" href="${escape(p.liveUrl)}" target="_blank" rel="noopener noreferrer">アプリを開く ↗</a>` : ''}<a class="button primary" href="https://github.com/AMZ-jpcslr/${p.id}" target="_blank" rel="noopener noreferrer">GitHubを見る ↗</a></div>`;
@@ -171,6 +174,15 @@ function openProject(project) {
   document.body.classList.add('dialog-open'); dialog.scrollTop = 0;
   detailPlayer = new ScenePlayer(document.querySelector('#demo-screen'), p, {detail:true});
   updateDetailControls();
+  const nav = dialog.querySelector('.case-nav');
+  const measureNavigation = () => {
+    dialog.style.setProperty('--dialog-header-height', `${dialog.querySelector('.dialog-top').offsetHeight}px`);
+    dialog.style.setProperty('--case-nav-height', `${nav.offsetHeight}px`);
+  };
+  detailNavigationObserver = new ResizeObserver(measureNavigation);
+  detailNavigationObserver.observe(dialog.querySelector('.dialog-top'));
+  detailNavigationObserver.observe(nav);
+  measureNavigation();
   dialog.querySelectorAll('[data-case-jump]').forEach(button => button.addEventListener('click', () => {
     const section = document.getElementById(button.dataset.caseJump);
     section?.focus({preventScroll:true});
@@ -204,9 +216,12 @@ dialog.addEventListener('click',event=>{
   if(event.clientX<r.left || event.clientX>r.right || event.clientY<r.top || event.clientY>r.bottom)dialog.close();
 });
 dialog.addEventListener('close',()=>{
+  // A queued close must not clean up a newer dialog or erase its incoming URL.
+  if (dialog.open) return;
   detailPlayer?.destroy(); detailPlayer=null;
+  detailNavigationObserver?.disconnect(); detailNavigationObserver=null;
   document.body.classList.remove('dialog-open');
-  if(location.hash.startsWith('#project='))history.replaceState(null,'',pageHash);
+  if(location.hash === `#project=${activeProject?.id}`)history.replaceState(null,'',pageHash);
   syncPlayers();
   if (returnFocus instanceof HTMLElement && returnFocus !== document.body && !dialog.contains(returnFocus)) {
     returnFocus.focus({preventScroll:true});

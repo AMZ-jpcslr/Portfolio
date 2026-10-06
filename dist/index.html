@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="./films.css">
   <link rel="stylesheet" href="./page-motion.css">
   <link rel="stylesheet" href="./case-evidence.css">
+  <link rel="stylesheet" href="./review-prototype.css">
   <script type="module" src="./app.js"></script>
 </head>
 <body>
@@ -41,7 +42,7 @@
   <a class="skip-link" href="#work">プロジェクト一覧へ移動</a>
   <header class="header">
     <a class="brand" href="#top" aria-label="Kitaoka Yoma / AMZ ホーム">amz<span class="brand-dot">.</span><span class="brand-sub">DEVELOPER PORTFOLIO</span></a>
-    <nav aria-label="メインナビゲーション"><a href="#work">Works <span>07</span></a><a href="#timeline">Timeline</a><a href="#approach">Approach</a><a class="nav-github" href="https://github.com/AMZ-jpcslr" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></nav>
+    <nav aria-label="メインナビゲーション"><a href="#work">作品 <span>07</span></a><a href="#timeline">制作の歩み</a><a href="#approach">考え方</a><a class="nav-github" href="https://github.com/AMZ-jpcslr" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></nav>
   </header>
   <main id="top">
     <section class="hero wrap" aria-labelledby="hero-title">
@@ -49,7 +50,7 @@
         <div class="eyebrow"><span class="tiny-line"></span> A WIDER VIEW. A PERSONAL APPROACH.</div>
         <div class="hero-identity"><strong>Kitaoka Yoma</strong><span>AMZ-jpcslr · 個人開発 / 設計・検証</span></div>
         <h1 id="hero-title"><span class="title-line"><span>日常の不便から、</span></span><span class="title-line"><span><span class="hero-emphasis">社会の課題</span>まで<span class="period">.</span></span></span></h1>
-        <p class="hero-description">身近な困りごとにも、社会が抱える問題にも。<br>使う人の場面から機能と操作を考え、<br>AIも活用しながら、設計と動作の確認に取り組みます。</p>
+        <p class="hero-description">身近な困りごとから社会の課題まで、幅広く関心を持ち、<br>利用する場面から機能と操作を考えています。<br>AIを実装支援に使いながら、設計と検証は私が担います。</p>
         <a class="button primary" href="#featured">代表作から見る <span aria-hidden="true">↘</span></a>
         <p class="authorship-note">私：課題設定・要件定義・設計・レビュー・検証<br>AI：コーディングを中心とした実装支援</p><div class="hero-project-links"><a href="#project=Syukatu-Note">しゅうかつ手帳 ↗</a><a href="#project=Streaming-Screen">Streaming Screen ↗</a></div>
         <div class="hero-meta"><a href="#approach">開発で大切にすること ↗</a><span class="meta-divider"></span><a href="#timeline">制作の歩み ↘</a><a href="#activity">Ri-oneでの活動 ↗</a></div>
@@ -67,35 +68,35 @@
       </div>
       <div class="hero-bottom"><span>PERSONAL PROJECTS. REAL PEOPLE.</span><a href="#work">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a></div>
     </section>
-    <section id="featured" class="featured wrap" aria-labelledby="featured-title"><div class="section-heading"><div><div class="eyebrow">FEATURED CASE STUDIES</div><h2 id="featured-title">操作と情報設計を、2つの制作から。</h2></div><p>実画面、情報の関係、判断の理由を紹介します。</p></div><div id="featured-grid" class="featured-grid"></div></section>
-    <div class="tech-strip"><div class="wrap"><span class="strip-label">MY TOOLBOX</span><span>TypeScript</span><b>／</b><span>JavaScript</span><b>／</b><span>Python</span><b>／</b><span>Java</span><b>／</b><span>Discord.js</span><b>／</b><span>Node.js</span></div></div>
+    <section id="featured" class="featured wrap" aria-labelledby="featured-title"><div class="section-heading"><div><div class="eyebrow">FEATURED CASE STUDIES</div><h2 id="featured-title">代表作から、設計を知る。</h2></div><p>実際の画面と情報設計を詳しく紹介する2作品です。</p></div><div id="featured-grid" class="featured-grid"></div></section>
+    <div class="tech-strip"><div class="wrap"><span class="strip-label">実装で使う技術</span><span>TypeScript</span><b>／</b><span>JavaScript</span><b>／</b><span>Python</span><b>／</b><span>Java</span><b>／</b><span>Discord.js</span><b>／</b><span>Node.js</span></div></div>
     <section id="work" class="work wrap" aria-labelledby="work-title">
-      <div class="editorial-title" aria-hidden="true"><span>Selected</span> <em>works.</em><span class="editorial-index">01 — 07</span></div>
-      <div class="section-heading"><div><div class="eyebrow">01 — SELECTED & EXPERIMENTAL</div><h2 id="work-title">つくったもの<span class="heading-count">07</span></h2></div><p>身近な人への支援から、社会課題への探究まで。<br>課題・設計の理由・担当範囲・AI活用を紹介します。</p></div>
+
+      <div class="section-heading"><div><div class="eyebrow">WORKS / 全7作品</div><h2 id="work-title">作品一覧<span class="heading-count">07</span></h2></div><p>身近な人への支援から、社会課題への探究まで。<br>課題・設計の理由・担当範囲・AI活用を紹介します。</p></div>
       <div id="project-grid" class="project-grid"></div>
       <p class="repository-note">7つの個人開発 · 課題設定から設計判断、利用者に届いた価値まで</p>
     </section>
-    <section id="activity" class="activity wrap" aria-labelledby="activity-title"><div class="section-heading"><div><div class="eyebrow">ACTIVITY & ROLE</div><h2 id="activity-title">Ri-oneでの活動と、自分の担当。</h2></div></div><div id="team-activity"></div><a class="activity-link" href="#project=SSL-DEMO">個人制作の試作を見る ↗</a></section>
+    <section id="activity" class="activity wrap" aria-labelledby="activity-title"><div class="section-heading"><div><div class="eyebrow">ACTIVITY & ROLE</div><h2 id="activity-title">Ri-oneでの活動と、私の担当。</h2></div></div><div id="team-activity"></div><a class="activity-link" href="#project=SSL-DEMO">個人制作の試作を見る ↗</a></section>
     <section id="timeline" class="timeline wrap" aria-labelledby="timeline-title">
-      <div class="section-heading"><div><div class="eyebrow">02 — PROJECT TIMELINE</div><h2 id="timeline-title">つくってきた、その歩み。</h2></div><p>会話・防災から、研究・就活支援まで。<br>関心を広げながら重ねてきた個人開発。</p></div>
-      <p class="timeline-note">GitHubのリポジトリ作成年月（UTC）順。開発開始・完成の時期を示すものではありません。</p>
+      <div class="section-heading"><div><div class="eyebrow">02 — PROJECT TIMELINE</div><h2 id="timeline-title">制作の歩み</h2></div><p>会話・防災から、研究・就活支援まで。<br>関心を広げながら重ねてきた個人開発。</p></div>
+      <p class="timeline-note">GitHubにリポジトリを作成した年月順です（UTC）。開発開始日や完成日とは異なります。</p>
       <ol id="project-timeline" class="project-timeline" aria-label="リポジトリ作成年月順の制作一覧"></ol>
     </section>
     <section id="approach" class="approach" aria-labelledby="approach-title"><div class="wrap">
       <div class="approach-orbit ambient-motion" aria-hidden="true"><i></i><i></i></div>
       <div class="section-heading"><div><div class="eyebrow">03 — HOW I BUILD</div><h2 id="approach-title">つくるときに、<br>大切にしていること。</h2></div><p>何をつくるか。なぜつくるか。誰に届くか。<br>技術だけでなく、使われる理由まで考える。</p></div>
       <div class="approach-grid">
-        <article class="approach-lead"><span class="approach-number">01 / AI AS A TOOL</span><h3>AIで実装を進める。<br>設計と確認は、自分の仕事。</h3><p>コーディングには生成AIを大きく活用しています。AIは時間を短縮するための道具で、課題設定・要件定義・機能や構成の設計は自分が担います。評価の仕方を考え、生成コードのレビュー、デバッグ、修正、テスト、実行結果の確認も行っています。</p><span class="approach-role">私：要件・設計・レビュー・検証 <span aria-hidden="true">／</span> AI：実装支援</span></article>
+        <article class="approach-lead"><span class="approach-number">01 / AI AS A TOOL</span><h3>AIで実装を進める。<br>設計と確認は、私の仕事。</h3><p>コーディングには生成AIを大きく活用しています。AIは時間を短縮するための道具で、課題設定・要件定義・機能や構成の設計は私が担います。評価の仕方を考え、生成コードのレビュー、デバッグ、修正、テスト、実行結果の確認も行っています。</p><span class="approach-role">私：要件・設計・レビュー・検証 <span aria-hidden="true">／</span> AI：実装支援</span></article>
         <article><span class="approach-number">02 / A WIDER VIEW</span><h3>身近な問題から、社会問題まで。</h3><p>友人との会話で感じる不便も、防災やAIの行動判断といった社会の課題も。分野を限定せずに広く関心を持ち、個人の視点と実践から、問題解決の糸口を探します。</p><a href="#project=Artificial-Moral-Architecture">AIの行動判断を探究する ↗</a></article>
         <article><span class="approach-number">03 / REAL NEEDS</span><h3>本当に必要とされ、使われるか。</h3><p>完成させることだけをゴールにしません。誰の、どんな困りごとに必要なのか。実際に使ってもらってこそ意味があると考え、利用する人の場面から機能を設計します。</p><a href="#project=Yomiage_Discord_Bot">声を出せない人の会話参加を支える ↗</a></article>
         <article><span class="approach-number">04 / BUSINESS PERSPECTIVE</span><h3>収益化と、選ばれる理由まで。</h3><p>実際に事業として運営しない開発でも、マネタイズの方法や、競合・既存の手段と比べた優位性まで考えます。つくれるかに加えて、なぜ選ばれるのか、継続して価値を届けられるかを問い続けます。</p></article>
-        <article><span class="approach-number">05 / LISTEN & IMPROVE</span><h3>使ってくれた人の声を、次へ。</h3><p>ユーザーフィードバックを大切にしています。便利だった点も、使いにくかった点も、次の判断の手がかり。自分の想定だけで完結せず、実際に使った人の声を受け止め、改善につなげることを目指します。</p><a href="#project=Syukatu-Note">しゅうかつ手帳に届いた声を読む ↗</a></article>
+        <article><span class="approach-number">05 / LISTEN & IMPROVE</span><h3>使ってくれた人の声を、次へ。</h3><p>ユーザーフィードバックを大切にしています。便利だった点も使いにくかった点も、次の判断の手がかりにしています。自分の想定だけで完結せず、実際に使った人の声を受け止め、改善につなげることを目指します。</p><a href="#project=Syukatu-Note">しゅうかつ手帳に届いた声を読む ↗</a></article>
       </div>
     </div></section>
     <section class="closing wrap"><div class="closing-orbit ambient-motion" aria-hidden="true"><i></i><i></i><span>↗</span></div><div class="eyebrow">ALWAYS A WORK IN PROGRESS</div><p>個人の一歩を、<br><span>問題解決の糸口に。</span></p><a href="https://github.com/AMZ-jpcslr" target="_blank" rel="noopener noreferrer" class="button primary">GitHubで開発を見る <span aria-hidden="true">↗</span></a><div class="closing-signature" aria-hidden="true">Keep asking. Keep building.</div></section>
   </main>
-  <footer class="footer wrap"><a class="brand" href="#top">amz<span class="brand-dot">.</span></a><span>© 2026 Kitaoka Yoma / AMZ-jpcslr</span><a href="#top">BACK TO TOP ↑</a><button id="motion-toggle" data-motion-toggle type="button" aria-pressed="false">アニメーションを停止</button></footer>
-  <dialog id="project-dialog" aria-labelledby="detail-title"><div class="dialog-top"><span>PROJECT DETAILS</span><div class="dialog-actions"><button id="dialog-motion-toggle" data-motion-toggle type="button" aria-pressed="false">全体の動きを停止</button><button class="close-button" id="close-dialog" aria-label="詳細を閉じる">閉じる <span aria-hidden="true">×</span></button></div></div><div id="detail-content"></div></dialog>
+  <footer class="footer wrap"><a class="brand" href="#top">amz<span class="brand-dot">.</span></a><span>© 2026 Kitaoka Yoma / AMZ-jpcslr</span><a href="#top">ページの先頭へ ↑</a><button id="motion-toggle" data-motion-toggle type="button" aria-pressed="false">アニメーションを停止</button></footer>
+  <dialog id="project-dialog" aria-labelledby="detail-title"><div class="dialog-top"><span>作品詳細</span><div class="dialog-actions"><button id="dialog-motion-toggle" data-motion-toggle type="button" aria-pressed="false">全体の動きを停止</button><button class="close-button" id="close-dialog" aria-label="詳細を閉じる">閉じる <span aria-hidden="true">×</span></button></div></div><div id="detail-content"></div></dialog>
   <noscript><p class="wrap">プロジェクトの一覧とデモを表示するにはJavaScriptを有効にしてください。<a href="https://github.com/AMZ-jpcslr?tab=repositories">公開リポジトリを見る</a></p></noscript>
 </body>
 </html>
