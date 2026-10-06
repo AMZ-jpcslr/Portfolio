@@ -48,7 +48,7 @@ export const evidence = {
 export function renderFeatured(projects) {
   return featuredIds.map(id => {
     const p=projects.find(p=>p.id===id), e=evidence[id], shot=e.images[0];
-    return `<a class="featured-card" href="#project=${p.id}"><div class="featured-image"><img src="${shot.src}" width="${shot.width}" height="${shot.height}" alt="${escape(shot.alt)}" loading="lazy" decoding="async"><span>実画面 / デモデータ</span></div><div class="featured-copy"><span>${p.number} / ${String(projects.length).padStart(2, '0')} · ${escape(p.label)} · 個人開発</span><h3>${escape(p.title)} <span aria-hidden="true">↗</span></h3><p>${escape(e.summary)}</p><small>${escape(p.audience)}</small><b>課題・操作・情報設計を読む</b></div></a>`;
+    return `<a class="featured-card" href="#project=${p.id}"><div class="featured-image"><img src="${shot.src}" width="${shot.width}" height="${shot.height}" alt="${escape(shot.alt)}" loading="lazy" decoding="async"><span>実画面 / デモデータ</span></div><div class="featured-copy"><span>${p.number} / ${String(projects.length).padStart(2, '0')} · ${escape(p.label)} · 個人開発</span><h3>${escape(p.title)} <span aria-hidden="true">↗</span></h3><p>${escape(e.summary)}</p><div class="card-pain-point"><span>PAIN POINT / 制作のきっかけ</span><p>${escape(p.painPoint)}</p></div><small>${escape(p.audience)}</small><b>課題・操作・情報設計を読む</b></div></a>`;
   }).join('');
 }
 

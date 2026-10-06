@@ -4,6 +4,7 @@
 export const projects = [
   {
     "id": "Syukatu-Note",
+    "painPoint": "企業ごとに応募日程や締切が分散し、次に何をするか把握しにくい。予定をまとめて管理し、ほかの人が見つけた募集にも触れられるようにしたいと考えました。",
     "repositoryCreatedAt": "2026-09-22T11:46:39Z",
     "title": "しゅうかつ手帳",
     "category": "CAREER / PRODUCTIVITY",
@@ -67,6 +68,7 @@ export const projects = [
   },
   {
     "id": "Streaming-Screen",
+    "painPoint": "配信画面の知識がない人でも、自分でレイアウトを調整できるようにしたい。小規模YouTuberからの依頼を受け、要素を選んで配置できる編集画面を作りました。",
     "repositoryCreatedAt": "2025-12-16T09:40:31Z",
     "title": "Streaming Screen",
     "category": "CREATOR TOOLS",
@@ -129,6 +131,7 @@ export const projects = [
   },
   {
     "id": "Yomiage_Discord_Bot",
+    "painPoint": "家庭の事情などで声を出せない人は、友人とのボイスチャットに参加しにくい。テキスト入力でも同じ会話に参加できるようにしたいと考えました。",
     "repositoryCreatedAt": "2025-06-30T15:01:25Z",
     "title": "Yomiage Bot",
     "category": "COMMUNICATION",
@@ -190,6 +193,7 @@ export const projects = [
   },
   {
     "id": "Shindo_Discord_Bot",
+    "painPoint": "PC作業に集中しているときも、地震の知らせを受け取りたい。普段開いているDiscordで速報に気づける仕組みを作ろうと考えました。",
     "repositoryCreatedAt": "2025-06-19T03:48:02Z",
     "title": "Shindo Bot",
     "category": "DISASTER INFORMATION",
@@ -251,6 +255,7 @@ export const projects = [
   },
   {
     "id": "Artificial-Moral-Architecture",
+    "painPoint": "AIの行動を目標達成だけで評価すると、周囲への被害や権利への影響を見落とす可能性があります。当事者への影響も判断に組み込めるか、個人研究として探究しています。",
     "repositoryCreatedAt": "2026-09-21T15:17:22Z",
     "title": "Artificial Moral Architecture",
     "category": "AI / RESEARCH",
@@ -313,6 +318,7 @@ export const projects = [
   },
   {
     "id": "ssl-inspection-prodxy",
+    "painPoint": "普段は通信の内容が見えず、どのような情報がやり取りされているか分かりにくい。母と営む会社で、通信を確認し、ネット利用への理解にも役立てたいと考えました。",
     "repositoryCreatedAt": "2026-05-26T02:43:42Z",
     "title": "Inspection Proxy",
     "category": "NETWORK / SECURITY",
@@ -374,6 +380,7 @@ export const projects = [
   },
   {
     "id": "SSL-DEMO",
+    "painPoint": "ロボットがどこへ動き、誰にパスするかを考えるには、候補位置とチーム全体の動きを比較する仕組みが必要です。戦術を試せる2D環境を個人で制作しました。",
     "repositoryCreatedAt": "2026-01-26T23:03:03Z",
     "title": "SSL Robot AI",
     "category": "SIMULATION / AI",

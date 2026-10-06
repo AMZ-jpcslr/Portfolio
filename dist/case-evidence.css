@@ -58,3 +58,10 @@
 .model-node{border:1px solid #d2ddc9;background:#fff;border-radius:8px;padding:17px 19px}.model-node>span{font-size:10px;color:#617453}.case-study .model-node h4{font-size:17px;margin:5px 0 8px}.case-study .model-node p{font-size:13px;margin:0;line-height:1.8}
 .model-branches{display:grid;grid-template-columns:1fr 1fr;gap:16px}.case-study .model-connector{font-size:12px;text-align:center;color:#4c633b;margin:12px 0}
 @media(max-width:760px){.model-branches{grid-template-columns:1fr}.shared-zone,.private-zone{padding:15px}.model-node{padding:15px}}
+
+/* Show the reason for making each project before its usage and feedback. */
+.card-pain-point{margin-top:20px;padding:16px 18px;border-left:3px solid #829e65;border-radius:0 8px 8px 0;background:#f2f5ee;min-width:0}
+.card-pain-point>span{display:block;font-size:10px;font-weight:600;letter-spacing:.06em;color:#526b3e;line-height:1.7}
+.card-pain-point>p{margin:8px 0 0;font-size:13px;line-height:1.9;color:#3e4f36;overflow-wrap:anywhere}
+.featured-copy .card-pain-point{margin:0 0 20px}.featured-copy .card-pain-point>p{margin:8px 0 0;font-size:13px}
+@media(max-width:760px){.card-pain-point{padding:14px 16px}}
