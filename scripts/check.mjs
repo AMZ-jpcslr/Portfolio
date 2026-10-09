@@ -132,3 +132,13 @@ assert.ok(!JSON.stringify(projects).includes('友人数人'));
 assert.ok(!JSON.stringify(projects).includes('本人の担当は課題設定と設計です'));
 assert.ok(renderTeamContext().includes('10年間') && renderTeamContext().includes('個人制作'));
 console.log('PASS: featured links, actual screenshot dimensions, lazy loading and content boundaries.');
+
+// Nested stylesheet font URLs must resolve in the deployed static output.
+for (const cssName of ['fonts.css', 'design-system.css']) {
+  const source = await readFile(path.join(root, 'dist', cssName), 'utf8');
+  for (const [,asset] of source.matchAll(/url\(['"](\.\/assets\/fonts\/[^'"]+\.woff2)['"]\)/g)) {
+    const file = await readFile(path.join(root, 'dist', asset));
+    assert.equal(file.subarray(0,4).toString(), 'wOF2');
+  }
+}
+console.log('PASS: self-hosted WOFF2 assets referenced by the design system.');

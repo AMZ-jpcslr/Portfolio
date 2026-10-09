@@ -4,7 +4,7 @@
 
 [公開サイトを見る](https://portfolio-amz-jpcslr.vercel.app/) · [制作一覧](https://portfolio-amz-jpcslr.vercel.app/#work) · [GitHub](https://github.com/AMZ-jpcslr)
 
-Kitaoka Yoma（GitHub: AMZ-jpcslr）の7つの個人開発について、動作デモに加え、**課題設定・検討プロセス・意思決定の理由・担当範囲・AIの活用方法・利用者に届いた価値**を紹介するポートフォリオです。
+北岡英磨（Yoma Kitaoka / GitHub: AMZ-jpcslr）の7つの個人開発について、動作デモに加え、**課題設定・検討プロセス・意思決定の理由・担当範囲・AIの活用方法・利用者に届いた価値**を紹介するポートフォリオです。
 
 ![ポートフォリオのトップページ。開発コンセプトと私・AIの担当を表示](docs/images/portfolio-home.jpg)
 
@@ -218,8 +218,10 @@ dist/
   case-evidence.css   上記のレスポンシブ表示
   assets/             デモ環境の実画面PNG
   app.js              一覧・詳細・デモ制御
-  styles.css          サイト全体とケーススタディのレイアウト
-  page-motion.js / page-motion.css ページ演出・新レイアウト・停止制御
+  styles.css          基本レイアウトとケーススタディ
+  design-system.css   全ページ共通の配置・文字・配色
+  fonts.css / assets/fonts/ ローカルのWOFF2とフォントライセンス
+  page-motion.js / page-motion.css 登場演出・停止制御
   demos.js / demos.css 機能再現デモとCSSアニメーション
   films.js / films.css 7作品の構成・字幕・カメラ・映像演出
   og-image.png        リンク共有用サムネイル
@@ -256,3 +258,9 @@ node scripts/review-preview.mjs
 ```
 
 `http://127.0.0.1:4175/` に比較ページ、`/after/` に改善案、`/before/` に変更前を表示します。通常のプレビューは従来どおり `node scripts/serve.mjs` です。
+
+## 2026年10月9日のデザイン刷新
+
+frontend-designスキルを使い、明朝体の見出しとゴシック体の本文、インク色と朱色、細い罫線を軸に配置・文字・配色を刷新しました。代表作は横長に配置し、全7作品のPain point・担当・利用状況と、作品ごとの再現アニメーションは維持しています。READMEの主要な画面キャプチャも更新しました。
+
+[デザインレビューと確認結果](docs/design-review-2026-10-09.md)に、変更理由・配色・フォント・動きの方針をまとめています。通常のプレビューは `npm run dev`、今回の改善前後の比較は同記録の手順で起動できます。

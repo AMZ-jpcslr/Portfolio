@@ -4,8 +4,8 @@ import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 const workspace=path.resolve(fileURLToPath(new URL('../',import.meta.url)));
-const review=path.join(workspace,'.review');
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml'};
+const review=path.resolve(workspace,process.env.REVIEW_DIR||'.review');
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml','.woff2':'font/woff2'};
 const port=Number(process.env.PORT||4175);
 createServer(async(req,res)=>{
  try{

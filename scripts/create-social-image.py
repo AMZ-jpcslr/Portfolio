@@ -1,47 +1,43 @@
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
-# Code-drawn social card; no external assets or network calls are needed.
+# Code-drawn social card that shares the site's editorial palette and display font.
+ROOT = Path(__file__).resolve().parent.parent
 S = 2
-im = Image.new('RGB', (1200*S,630*S), '#f7f8fa')
+INK, PAPER, ACCENT, MUTED, LINE = '#1d2b32', '#f3f2ee', '#bb3c20', '#566269', '#c8cdc9'
+im = Image.new('RGB', (1200*S, 630*S), PAPER)
 d = ImageDraw.Draw(im)
-fonts = Path('C:/Windows/Fonts')
-def font(size,bold=False,jp=False):
-    name = ('YuGothB.ttc' if bold else 'YuGothM.ttc') if jp else ('arialbd.ttf' if bold else 'arial.ttf')
-    return ImageFont.truetype(str(fonts/name),size*S)
-def text(x,y,t,size=20,color='#242824',bold=False,jp=False):
-    d.text((x*S,y*S),t,font=font(size,bold,jp),fill=color,anchor='lt')
-def box(x,y,w,h,color,r=0,stroke=None):
-    d.rounded_rectangle((x*S,y*S,(x+w)*S,(y+h)*S),radius=r*S,fill=color,outline=stroke,width=S)
-def line(points,color,width=2):
-    d.line([(x*S,y*S) for x,y in points],fill=color,width=width*S)
 
-box(0,0,1200,9,'#c0f95a')
-text(58,42,'amz',52,bold=True)
-box(166,78,10,10,'#a9e34e',5)
-text(198,57,'DEVELOPER PORTFOLIO',15,color='#6b706f',bold=True)
-text(60,167,'A WIDER VIEW. A PERSONAL APPROACH.',14,color='#66735e',bold=True)
-text(55,220,'日常の不便から、',53,bold=True,jp=True)
-box(59,345,285,16,'#c0f95a')
-text(55,293,'社会の課題まで。',53,bold=True,jp=True)
-text(60,402,'個人開発から、問題解決の糸口をつくる。',23,color='#5e655f',jp=True)
-line([(60,521),(1140,521)],'#daded7',1)
-text(60,554,'Kitaoka Yoma',26,bold=True)
-text(267,562,'/ AMZ-jpcslr',16,color='#57634e')
-text(915,562,'BUILD. LEARN. REPEAT.',16,color='#57634e',bold=True)
+def font(size, heading=False):
+    source = str(ROOT/'dist/assets/fonts/shippori-display.woff2') if heading else 'C:/Windows/Fonts/YuGothM.ttc'
+    return ImageFont.truetype(source, size*S)
 
-box(674,110,467,380,'#eaf0e4',22)
-text(697,130,'SELECTED WORKS',12,color='#65765c',bold=True)
-text(1089,128,'07',18,color='#65765c',bold=True)
-items=[('DISCORD','Voice Bot','#e7def2'),('DISASTER','Earthquake Bot','#dbe9f6'),('CREATOR','Streaming Screen','#f1e0e8'),('AI / RESEARCH','Moral Architecture','#e2ecd4'),('NETWORK','Inspection Proxy','#ede8dc'),('SIMULATION','Robot Soccer','#d9eee2'),('CAREER','しゅうかつ手帳','#dceef0')]
-for i,(tag,title,color) in enumerate(items):
-    x=692+(i%2)*222; y=166+(i//2)*77
-    box(x,y,431 if i==6 else 209,67,color,10)
-    text(x+13,y+13,tag,10,color='#617064',bold=True)
-    text(x+13,y+33,title,16,bold=True,jp=i==6)
-    line([(x+185,y+16),(x+193,y+16),(x+193,y+24)],'#617064',1)
-    line([(x+186,y+23),(x+193,y+16)],'#617064',1)
+def text(x, y, content, size=20, color=INK, heading=False):
+    d.text((x*S,y*S), content, font=font(size,heading), fill=color, anchor='lt')
 
-out=Path(__file__).resolve().parent.parent/'dist'/'og-image.png'
+def line(x1,y1,x2,y2,color=LINE,width=1):
+    d.line((x1*S,y1*S,x2*S,y2*S), fill=color, width=width*S)
+
+text(58,40,'amz',42)
+text(151,48,'.',34,color=ACCENT,heading=True)
+text(198,49,'DESIGN & DEVELOPMENT',14,color=MUTED)
+text(957,49,'PORTFOLIO / 2026',12,color=MUTED)
+line(58,104,1142,104)
+text(58,153,'北岡 英磨',18)
+text(200,158,'Yoma Kitaoka / AMZ-jpcslr',13,color=MUTED)
+text(55,223,'日常の不便から、',57,heading=True)
+text(55,313,'社会の課題まで。',57,color=ACCENT,heading=True)
+text(58,425,'個人開発から、問題解決の糸口をつくる。',20,color=MUTED)
+line(733,152,733,461)
+text(781,155,'SELECTED PROJECTS',12,color=MUTED)
+items=['しゅうかつ手帳','Streaming Screen','Discord Bot','Artificial Moral Architecture','Inspection Proxy / SSL Robot AI']
+for i,title in enumerate(items):
+    y=204+i*49
+    text(781,y,title,20 if i<2 else 15,heading=i<2)
+    line(781,y+34,1139,y+34)
+line(58,529,1142,529)
+text(58,562,'課題設定 / 設計 / レビュー / 検証',16,color=MUTED)
+text(951,555,'07 PROJECTS',20)
+out=ROOT/'dist/og-image.png'
 im.resize((1200,630),Image.Resampling.LANCZOS).save(out,optimize=True)
 print(f'Created {out.name}: 1200 x 630')

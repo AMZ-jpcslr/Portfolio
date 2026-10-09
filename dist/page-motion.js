@@ -3,14 +3,10 @@ export function createPageMotion({ paused = false, dialog }) {
   const root = document.documentElement;
   const heroArt = document.querySelector('.hero-art');
   const progress = document.querySelector('.reading-progress');
-  const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
   const pending = new Set();
   let stopped = paused;
   let suspended = false;
   let paintFrame = 0;
-  let pointerFrame = 0;
-  let activeCard = null;
-  let pointer = null;
   let scrollable = 0;
   let lastProgress = -1;
   let lastDrift = null;
@@ -38,18 +34,12 @@ export function createPageMotion({ paused = false, dialog }) {
   mark(document.querySelector('.hero-stage'), 180);
   mark(document.querySelector('.hero-art-index'), 360);
   mark(document.querySelector('.hero-bottom'), 360);
-  mark(document.querySelector('.editorial-title'));
   document.querySelectorAll('.section-heading').forEach(element => mark(element));
   document.querySelectorAll('.project-card, .timeline-item, .featured-card, #team-activity').forEach(element => mark(element));
   document.querySelectorAll('.approach-grid article').forEach((element, index) => mark(element, (index % 2) * 80));
-  document.querySelectorAll('.closing > :not(.closing-orbit)').forEach((element, index) => mark(element, index * 90));
+  document.querySelectorAll('.closing > *').forEach((element, index) => mark(element, index * 90));
   // Register targets before enabling concealment; an initialization failure keeps the page readable.
   root.classList.add('motion-ready');
-
-  const ambient = new IntersectionObserver(entries => {
-    for (const entry of entries) entry.target.classList.toggle('is-in-view', entry.isIntersecting);
-  });
-  document.querySelectorAll('.ambient-motion').forEach(element => ambient.observe(element));
 
   function paint() {
     paintFrame = 0;
@@ -77,37 +67,6 @@ export function createPageMotion({ paused = false, dialog }) {
   // Re-measure when layout changes, rather than reading layout on every scroll frame.
   new ResizeObserver(measurePage).observe(document.body);
   measurePage();
-
-  function resetPointer() {
-    cancelAnimationFrame(pointerFrame);
-    pointerFrame = 0;
-    if (activeCard) {
-      activeCard.style.removeProperty('--light-x');
-      activeCard.style.removeProperty('--light-y');
-    }
-    activeCard = null;
-  }
-  function paintPointer() {
-    pointerFrame = 0;
-    if (!activeCard || suspended) return;
-    const bounds = activeCard.getBoundingClientRect();
-    const x = Math.max(0, Math.min(1, (pointer.x - bounds.left) / bounds.width));
-    const y = Math.max(0, Math.min(1, (pointer.y - bounds.top) / bounds.height));
-    activeCard.style.setProperty('--light-x', `${x * 100}%`);
-    activeCard.style.setProperty('--light-y', `${y * 100}%`);
-  }
-  document.querySelectorAll('.project-card').forEach(card => {
-    card.addEventListener('pointermove', event => {
-      if (suspended || !finePointer.matches || event.pointerType === 'touch') return;
-      if (activeCard !== card) resetPointer();
-      activeCard = card;
-      pointer = { x: event.clientX, y: event.clientY };
-      if (!pointerFrame) pointerFrame = requestAnimationFrame(paintPointer);
-    }, { passive: true });
-    card.addEventListener('pointerleave', resetPointer);
-    card.addEventListener('pointercancel', resetPointer);
-  });
-  finePointer.addEventListener('change', resetPointer);
 
   // Keyboard focus must never land on a visually concealed link.
   document.addEventListener('focusin', event => {
@@ -139,7 +98,6 @@ export function createPageMotion({ paused = false, dialog }) {
   function syncSuspended() {
     suspended = stopped || document.hidden || dialog.open;
     root.classList.toggle('page-motion-idle', suspended);
-    if (suspended) resetPointer();
     queuePaint();
   }
   function observeDetail() {
