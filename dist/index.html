@@ -34,6 +34,8 @@
   <link rel="stylesheet" href="./case-evidence.css">
   <link rel="preload" href="./assets/fonts/shippori-display.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./design-system.css">
+  <link rel="stylesheet" href="./editorial-films.css">
+  <link rel="stylesheet" href="./spatial-gallery.css">
   <script type="module" src="./app.js"></script>
 </head>
 <body id="top">
@@ -50,7 +52,7 @@
         <div class="hero-identity"><strong>北岡 英磨</strong><span>Yoma Kitaoka / AMZ-jpcslr</span></div>
         <h1 id="hero-title"><span class="title-line"><span>日常の不便から、</span></span><span class="title-line"><span><span class="hero-emphasis">社会の課題</span>まで<span class="period">.</span></span></span></h1>
         <p class="hero-description">身近な困りごとから社会の課題まで、幅広く関心を持ち、<br>利用する場面から機能と操作を考えています。<br>AIを実装支援に使いながら、設計と検証は私が担います。</p>
-        <div class="hero-actions"><a class="button primary" href="#featured">代表作から見る <span aria-hidden="true">↘</span></a><a class="hero-all-link" href="#work">全7作品を見る <span aria-hidden="true">↗</span></a></div>
+        <div class="hero-actions"><a class="button primary" href="#featured">代表作から見る <span aria-hidden="true">↘</span></a><a class="hero-all-link" href="#spatial">3Dで作品を見る <span aria-hidden="true">↗</span></a></div>
         <dl class="authorship-note"><div><dt>私の担当</dt><dd>課題設定・要件定義・設計・レビュー・検証</dd></div><div><dt>AIの担当</dt><dd>コーディングを中心とした実装支援</dd></div></dl>
         <div class="hero-meta"><a href="#approach">開発で大切にすること ↗</a><span class="meta-divider"></span><a href="#timeline">制作の歩み ↘</a><a href="#activity">Ri-oneでの活動 ↗</a></div>
       </div>
@@ -63,6 +65,28 @@
         <div class="hero-process" aria-label="課題を捉え、設計し、使う人の声を聞く"><span>課題を捉える</span><i aria-hidden="true"></i><span>設計する</span><i aria-hidden="true"></i><span>使う人の声を聞く</span></div>
       </div>
       <div class="hero-bottom"><span>DESIGNING FOR EVERYDAY LIFE.</span><a href="#featured">作品と、その背景へ <span aria-hidden="true">↓</span></a></div>
+    </section>
+    <section id="spatial" class="spatial wrap" aria-labelledby="spatial-title">
+      <div class="section-heading"><div><div class="eyebrow">PROJECT ATLAS / INTERACTIVE 3D</div><h2 id="spatial-title">作品一覧</h2></div><p>会話、防災、配信、研究。<br>それぞれの関心から生まれた作品を見渡す。</p></div>
+      <div id="spatial-gallery" class="spatial-gallery" data-state="pending">
+        <div class="spatial-visual">
+          <div class="spatial-stage" tabindex="0" role="group" aria-label="7作品の3Dギャラリー" aria-describedby="spatial-help">
+            <picture class="spatial-fallback"><source media="(max-width:760px)" srcset="./assets/spatial-fallback-mobile.png"><img src="./assets/spatial-fallback.png" width="970" height="520" alt="7つの作品パネルが円形に並ぶ3Dギャラリーの静止画"></picture>
+            <div class="spatial-canvas" aria-hidden="true"></div>
+            <span class="spatial-corner" aria-hidden="true">AMZ / PROJECT ATLAS</span>
+            <span class="spatial-coordinate" aria-hidden="true">07 PERSPECTIVES</span>
+          </div>
+          <div class="spatial-toolbar"><span id="spatial-help">ドラッグで回転・クリックで詳細</span><button id="spatial-pause" type="button" aria-pressed="false">3Dを一時停止</button></div>
+          <p id="spatial-status" class="spatial-status" role="status">3Dを準備しています</p>
+        </div>
+        <div class="spatial-info">
+          <div class="spatial-selected" aria-live="polite" aria-atomic="true"><span id="spatial-number">01 / 07</span><h3 id="spatial-project-title">しゅうかつ手帳</h3><p id="spatial-project-summary">公開募集を自分用に引用し、応募・締切・選考をまとめて管理するWebアプリです。</p></div>
+          <a id="spatial-detail" class="spatial-detail" href="#project=Syukatu-Note">制作の背景と設計を見る <span aria-hidden="true">↗</span></a>
+          <div class="spatial-navigation" aria-label="表示する作品を選ぶ"><button id="spatial-prev" type="button" aria-label="前の作品">←</button><span>SELECT A PROJECT</span><button id="spatial-next" type="button" aria-label="次の作品">→</button></div>
+          <div id="spatial-projects" class="spatial-projects" role="group" aria-label="7作品の選択"></div>
+        </div>
+      </div>
+      <p class="spatial-caption">作品を紹介するための3D表現です。実際の画面や動作の説明は、各作品の詳細で紹介しています。</p>
     </section>
     <section id="featured" class="featured wrap" aria-labelledby="featured-title"><div class="section-heading"><div><div class="eyebrow">01 / SELECTED CASE STUDIES</div><h2 id="featured-title">代表作から、設計を知る。</h2></div><p>実際の画面と情報設計を詳しく紹介する2作品です。</p></div><div id="featured-grid" class="featured-grid"></div></section>
     <div class="tech-strip"><div class="wrap"><span class="strip-label">実装で使う技術</span><span>TypeScript</span><b>／</b><span>JavaScript</span><b>／</b><span>Python</span><b>／</b><span>Java</span><b>／</b><span>Discord.js</span><b>／</b><span>Node.js</span></div></div>

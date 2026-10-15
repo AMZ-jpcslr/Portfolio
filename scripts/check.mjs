@@ -43,10 +43,10 @@ assert.ok(!html.includes('あったらいいな'));
 assert.ok(html.includes('7つの個人開発'));
 for(const match of html.matchAll(/(?:src|href)="\.\/([^"]+)"/g))assert.ok((await stat(path.join(root,'dist',match[1]))).size>0);
 for(const match of html.matchAll(/href="#project=([^"]+)"/g))assert.ok(projects.some(p=>p.id===match[1]));
-for(const file of ['dist/app.js','dist/page-motion.js','dist/projects.js','dist/demos.js','dist/films.js','dist/case-study.js','dist/timeline.js','dist/product-evidence.js','scripts/serve.mjs','scripts/review-preview.mjs','scripts/build.mjs'])execFileSync(process.execPath,['--check',path.join(root,file)],{stdio:'pipe'});
+for(const file of ['dist/app.js','dist/page-motion.js','dist/projects.js','dist/demos.js','dist/films.js','dist/case-study.js','dist/timeline.js','dist/product-evidence.js','dist/spatial-gallery.js','dist/spatial-scene.js','scripts/serve.mjs','scripts/review-preview.mjs','scripts/build.mjs'])execFileSync(process.execPath,['--check',path.join(root,file)],{stdio:'pipe'});
 const vercel=JSON.parse(await readFile(path.join(root,'vercel.json'),'utf8'));
 assert.equal(vercel.outputDirectory,'dist');assert.equal(vercel.buildCommand,'npm run build');
-// The browser runs all actors on one continuous CSS clock; there are no JS step timers.
+// Rendered videos share one continuous timeline; live actors remain as a fallback.
 const app = await readFile(path.join(root,'dist/app.js'),'utf8');
 const css = await readFile(path.join(root,'dist/demos.css'),'utf8');
 assert.ok(!app.includes('demo-next') && !app.includes('DemoTimeline'));
@@ -142,3 +142,19 @@ for (const cssName of ['fonts.css', 'design-system.css']) {
   }
 }
 console.log('PASS: self-hosted WOFF2 assets referenced by the design system.');
+
+// Each project must ship a complete, locally playable Remotion movie and poster.
+const renderInfo = JSON.parse(await readFile(path.join(root, 'dist/assets/films/render-info.json'), 'utf8'));
+assert.equal(renderInfo.engine, 'Remotion');
+assert.deepEqual([renderInfo.width, renderInfo.height, renderInfo.fps, renderInfo.duration], [1240, 900, 30, 24]);
+assert.deepEqual([...renderInfo.kinds].sort(), projects.map(p => p.kind).sort());
+for (const p of projects) {
+  const movie = await readFile(path.join(root, `dist/assets/films/${p.kind}.mp4`));
+  assert.equal(movie.subarray(4,8).toString(), 'ftyp', `${p.kind}: invalid MP4`);
+  assert.ok(movie.length > 100000, `${p.kind}: incomplete movie`);
+  const poster = await readFile(path.join(root, `dist/assets/films/${p.kind}.jpg`));
+  assert.equal(poster.subarray(0,3).toString('hex'), 'ffd8ff');
+}
+assert.ok(html.includes('./editorial-films.css'));
+assert.ok(html.includes('id="spatial-title">作品一覧'));
+console.log('PASS: all 7 Remotion MP4s, posters and 24-second editorial compositions.');

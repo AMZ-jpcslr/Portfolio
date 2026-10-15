@@ -1,0 +1,13 @@
+html, body { margin: 0; }
+* { box-sizing: border-box; }
+.remotion-actor { width: 620px; height: 350px; font-family: PortfolioSans, sans-serif; }
+.remotion-actor .cinema { width: 620px; height: 350px; border-radius: 0; background: transparent; overflow: hidden; content-visibility: visible; }
+.remotion-actor .cinema .scene-scaler { width: 620px; height: 350px; background: none; transform: none; }
+.remotion-actor .film-topline, .remotion-actor .film-intro, .remotion-actor .film-outro,
+.remotion-actor .film-chapters, .remotion-actor .film-atmosphere, .remotion-actor .film-grid,
+.remotion-actor .film-timeline, .remotion-actor .sequence-progress { display: none!important; }
+.remotion-actor .cinema .film-stage { inset: 0; width: 620px; height: 350px; transform: none; opacity: 1; border-radius: 0; outline: 0; box-shadow: none; animation: none!important; }
+.remotion-actor .cinema .film-screen { width: 620px; height: 350px; transform: none; }
+.remotion-actor .cinema .scene-camera { border-radius: 0; }
+.remotion-actor .cinema * { animation-play-state: paused!important; }
+.remotion-actor .discord-scene { font-family: PortfolioSans, sans-serif; }

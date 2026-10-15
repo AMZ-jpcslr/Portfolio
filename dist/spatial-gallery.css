@@ -1,0 +1,60 @@
+.spatial { padding-block: 64px 12px; scroll-margin-top: 24px; }
+.spatial .section-heading h2 { font-family: var(--font); font-weight: 500; font-size: clamp(28px, 3vw, 40px); letter-spacing: -.045em; }
+.spatial-gallery { display: grid; grid-template-columns: minmax(0, 1fr) 292px; border: 1px solid var(--line); background: var(--panel); }
+.spatial-visual { position: relative; min-width: 0; background: var(--ink); color: var(--on-ink); }
+.spatial-stage { position: relative; width: 100%; height: 520px; overflow: hidden; touch-action: pan-y; cursor: grab; outline-offset: -5px!important; }
+.spatial-stage:active { cursor: grabbing; }
+.spatial-gallery[data-state='fallback'] .spatial-stage { cursor: default; }
+.spatial-canvas, .spatial-fallback { position: absolute; inset: 0; width: 100%; height: 100%; }
+.spatial-canvas { opacity: 0; transition: opacity .6s; }
+.spatial-canvas canvas { width: 100%; height: 100%; display: block; }
+.spatial-fallback img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.spatial-gallery[data-state='ready'] .spatial-canvas { opacity: 1; }
+.spatial-gallery[data-state='ready'] .spatial-fallback { visibility: hidden; }
+.spatial-corner, .spatial-coordinate { position: absolute; z-index: 1; pointer-events: none; font-size: 9px; letter-spacing: .14em; color: var(--ink-muted); }
+.spatial-corner { top: 23px; left: 24px; }
+.spatial-coordinate { right: 24px; bottom: 22px; }
+.spatial-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 24px; border-top: 1px solid var(--ink-line); }
+.spatial-toolbar > span { font-size: 11px; color: var(--ink-muted); }
+.spatial-toolbar button { min-height: 44px; background: transparent; color: var(--on-ink); border: 1px solid var(--ink-line); padding: 7px 12px; font-family: var(--font); font-size: 11px; }
+.spatial-toolbar button:hover { border-color: var(--ink-muted); }
+.spatial-toolbar button:disabled { color: var(--ink-muted); }
+.spatial-status { position: absolute; bottom: 92px; left: 24px; margin: 0; padding: 6px 10px; font-size: 11px; color: var(--on-ink); background: var(--ink); border: 1px solid var(--ink-line); }
+.spatial-gallery[data-state='ready'] .spatial-status { clip-path: inset(50%); width: 1px; height: 1px; padding: 0; border: 0; }
+.spatial-info { min-width: 0; display: flex; flex-direction: column; padding: 30px 24px 24px; }
+.spatial-selected { min-height: 176px; }
+.spatial-selected > span { font-size: 11px; letter-spacing: .07em; color: var(--accent); }
+.spatial-selected h3 { font-size: 23px; font-weight: 500; letter-spacing: -.04em; line-height: 1.5; margin: 14px 0 16px; overflow-wrap: anywhere; }
+.spatial-selected p { font-size: 12px; color: var(--muted); line-height: 1.95; margin: 0; }
+.spatial-detail { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; border-block: 1px solid var(--line); padding: 17px 0; margin-top: 18px; }
+.spatial-detail > span { color: var(--accent); font-size: 21px; }
+.spatial-detail:hover { color: var(--accent); }
+.spatial-navigation { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 20px; }
+.spatial-navigation > span { font-size: 9px; letter-spacing: .08em; color: var(--muted); }
+.spatial-navigation button { width: 44px; height: 44px; background: none; border: 1px solid var(--line); color: var(--ink); font-size: 18px; }
+.spatial-navigation button:hover { background: var(--accent-soft); border-color: var(--accent-line); }
+.spatial-projects { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 16px; }
+.spatial-projects button { min-width: 44px; min-height: 44px; flex: 1 0 20%; font-size: 11px; font-family: var(--font); border: 1px solid var(--line); background: transparent; color: var(--muted); }
+.spatial-projects button[aria-pressed='true'] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+.spatial-caption { font-size: 11px; line-height: 1.9; color: var(--muted); margin: 16px 0 0; }
+@media(max-width:1100px) { .spatial-gallery { grid-template-columns: minmax(0, 1fr) 260px; } .spatial-stage { height: 530px; } .spatial-info { padding: 24px 20px; } }
+@media(max-width:760px) {
+  .spatial { padding-block: 48px 0; }
+  .spatial-gallery { grid-template-columns: 1fr; }
+  .spatial-stage { height: clamp(300px, 85vw, 440px); }
+  .spatial-corner { top: 18px; left: 17px; font-size: 8px; }
+  .spatial-coordinate { right: 17px; bottom: 18px; font-size: 8px; }
+  .spatial-toolbar { padding: 12px 16px; gap: 8px; }
+  .spatial-toolbar > span { font-size: 10px; }
+  .spatial-toolbar button { font-size: 10px; padding-inline: 10px; order: -1; }
+  .spatial-status { left: 16px; }
+  .spatial-info { padding: 24px; }
+  .spatial-selected { min-height: 0; }
+  .spatial-selected h3 { font-size: 24px; margin-block: 10px 14px; }
+  .spatial-selected p { font-size: 13px; }
+  .spatial-projects button { flex-basis: 10%; }
+  .spatial-caption { font-size: 10px; }
+}
+@media(max-width:360px) { .spatial-info { padding: 21px; } .spatial-projects button { flex-basis: 18%; } }
+@media(prefers-reduced-motion:reduce) { .spatial-canvas { transition: none; } }
+.motion-paused .spatial-canvas { transition: none; }

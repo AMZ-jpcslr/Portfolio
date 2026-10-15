@@ -1,0 +1,18 @@
+{
+  "engine": "Remotion",
+  "version": "4.0.535",
+  "width": 1240,
+  "height": 900,
+  "fps": 30,
+  "duration": 24,
+  "style": "editorial",
+  "kinds": [
+    "career",
+    "stream",
+    "voice",
+    "weather",
+    "moral",
+    "proxy",
+    "soccer"
+  ]
+}

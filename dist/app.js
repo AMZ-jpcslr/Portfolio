@@ -5,6 +5,7 @@ import { projects } from './projects.js';
 import { renderDemoScene } from './demos.js';
 import { filmDuration } from './films.js';
 import { renderCaseStudy } from './case-study.js';
+import { createSpatialGallery } from './spatial-gallery.js';
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const count = String(projects.length).padStart(2, '0');
 const preference = matchMedia('(prefers-reduced-motion: reduce)');
@@ -53,6 +54,31 @@ class ScenePlayer {
     this.host.innerHTML = renderDemoScene(this.project);
     this.viewport = this.host.querySelector('.scene-viewport');
     this.progress = this.viewport.querySelector('.sequence-progress > i');
+    this.video = document.createElement('video');
+    this.video.className = 'product-film-video';
+    this.video.muted = true;
+    this.video.defaultMuted = true;
+    this.video.playsInline = true;
+    this.video.loop = true;
+    this.video.preload = 'none';
+    this.video.poster = `./assets/films/${this.project.kind}.jpg`;
+    this.video.setAttribute('aria-hidden', 'true');
+    this.video.addEventListener('loadedmetadata', () => {
+      if (this.destroyed) return;
+      if (this.pendingVideoSeek !== undefined) {
+        this.video.currentTime = this.pendingVideoSeek;
+        this.pendingVideoSeek = undefined;
+      }
+      this.sync();
+    });
+    this.video.addEventListener('error', () => {
+      if (this.destroyed) return;
+      this.video?.remove(); this.video = null;
+      this.viewport.classList.remove('scene-with-video');
+      this.sync();
+    }, {once:true});
+    this.viewport.append(this.video);
+    this.viewport.classList.add('scene-with-video');
     this.range = this.detail ? document.querySelector('#film-seek') : null;
     this.time = this.detail ? document.querySelector('#film-time') : null;
     this.resize = new ResizeObserver(entries => {
@@ -70,10 +96,24 @@ class ScenePlayer {
       this.viewport.style.setProperty('--scene-scale', width / 620);
     }
   }
+  ensureVideoSource() {
+    if (!this.video || this.video.getAttribute('src')) return;
+    this.video.src = `./assets/films/${this.project.kind}.mp4`;
+    this.video.load();
+  }
   sync() {
+    if (this.destroyed) return;
     const run = this.userPlaying && !this.scrubbing && this.visible && !document.hidden && !motionPaused && (this.detail || !dialog.open);
     this.viewport?.classList.toggle('scene-paused', !run);
     if (this.viewport) this.viewport.dataset.playback = run ? 'playing' : 'paused';
+    if (this.video) {
+      if (run) {
+        this.ensureVideoSource();
+        if (this.video.paused) this.video.play().catch(error => {
+          if (error.name === 'NotAllowedError') { this.userPlaying = false; this.sync(); }
+        });
+      } else this.video.pause();
+    }
     if (this.button) {
       this.button.textContent = motionPaused ? '動きを停止中' : this.userPlaying ? 'Ⅱ 一時停止' : '▶ 再生';
       this.button.setAttribute('aria-label', motionPaused ? `${this.project.title}：全体設定でアニメーション停止中` : `${this.project.title}のアニメーションを${this.userPlaying ? '一時停止' : '再生'}`);
@@ -85,7 +125,7 @@ class ScenePlayer {
       clearInterval(this.clockTimer);
       this.clock = null;
       this.updateTime();
-      // The film stays on its CSS clock. Only its numeric controls need 10 Hz updates.
+      // Video (or the live CSS fallback) owns playback; only numeric controls update at 10 Hz.
       if (run) this.clockTimer = setInterval(() => this.updateTime(), 100);
     }
   }
@@ -97,8 +137,8 @@ class ScenePlayer {
   }
   updateTime() {
     if (!this.detail) return;
-    const clock = this.clock ||= this.progress.getAnimations()[0];
-    const seconds = ((Number(clock?.currentTime) || 0) / 1000) % filmDuration;
+    const clock = this.video ? null : this.clock ||= this.progress.getAnimations()[0];
+    const seconds = this.video ? this.pendingVideoSeek ?? this.video.currentTime : ((Number(clock?.currentTime) || 0) / 1000) % filmDuration;
     const {range, time} = this;
     if (range && !this.scrubbing) range.value = String(seconds);
     const label = `0:${String(Math.floor(seconds)).padStart(2,'0')} / 0:${filmDuration}`;
@@ -110,6 +150,13 @@ class ScenePlayer {
   }
   setPosition(seconds) {
     const position = Math.min(filmDuration - .001, Math.max(0, Number(seconds))) * 1000;
+    if (this.video) {
+      this.ensureVideoSource();
+      if (this.video.readyState >= 1) this.video.currentTime = position / 1000;
+      else this.pendingVideoSeek = position / 1000;
+      this.updateTime();
+      return;
+    }
     for (const animation of this.viewport.getAnimations({subtree:true})) animation.currentTime = position;
     this.updateTime();
   }
@@ -124,6 +171,10 @@ class ScenePlayer {
     this.sync();
   }
   destroy() {
+    this.destroyed = true;
+    this.video?.pause();
+    this.video?.removeAttribute('src');
+    this.video?.load();
     clearInterval(this.clockTimer);
     this.resize?.disconnect(); this.visibility?.disconnect(); this.preload?.disconnect();
     players.delete(this);
@@ -146,6 +197,7 @@ document.querySelector('#featured-grid').innerHTML = renderFeatured(projects);
 document.querySelector('#team-activity').innerHTML = renderTeamContext();
 document.querySelector('#project-timeline').innerHTML = renderTimeline(projects);
 const pageMotion = createPageMotion({paused: motionPaused, dialog});
+createSpatialGallery({host: document.querySelector('#spatial-gallery'), projects, dialog});
 
 function syncPlayers() { for (const player of players) player.sync(); }
 function updateDetailControls() {

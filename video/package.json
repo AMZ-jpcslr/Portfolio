@@ -1,0 +1,17 @@
+{
+  "name": "portfolio-product-films",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.tsx --public-dir=../dist --port=3001",
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "remotion": "4.0.535",
+    "@remotion/cli": "4.0.535",
+    "@remotion/bundler": "4.0.535",
+    "@remotion/renderer": "4.0.535",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  }
+}

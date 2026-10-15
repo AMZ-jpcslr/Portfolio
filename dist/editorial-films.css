@@ -1,0 +1,20 @@
+@font-face { font-family: 'Portfolio Film Mincho'; src: url('./assets/fonts/shippori-film.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+/* This also styles the live reconstruction used if a video cannot be decoded. */
+.cinema { --film-accent: var(--editorial-accent)!important; background: var(--bg); color: var(--ink); border-radius: 0; }
+.cinema .scene-scaler { background: var(--bg); }
+.cinema .film-atmosphere, .cinema .film-grid { display: none; }
+.cinema .film-topline { color: var(--muted); }
+.cinema .film-topline i { border-radius: 0; width: 18px; height: 1px; box-shadow: none; }
+.cinema .film-stage { border-radius: 0; outline: 1px solid var(--line); box-shadow: none; }
+.cinema .film-intro { background: var(--bg); }
+.cinema .film-kicker, .cinema .film-intro > small { color: var(--muted); }
+.cinema .film-hook { font-family: 'Portfolio Film Mincho', serif; font-weight: 600; color: var(--ink); letter-spacing: -.04em; }
+.cinema .film-chapter > p { color: var(--ink); }
+.cinema .film-outro { background: var(--bg); color: var(--ink); }
+.cinema .film-outro-mark { border-radius: 0; border-color: var(--accent-line); }
+.cinema .film-outro > small, .cinema .film-outro > p, .cinema .film-signature b { color: var(--muted); }
+.scene-host[data-scene-state='pending'] { border-radius: 0; background: var(--wash); }
+.scene-host[data-scene-state='pending']:before { content: 'UI RECONSTRUCTION'; color: var(--muted); }
+.scene-with-video > .scene-scaler { visibility: hidden; }
+.scene-with-video > .scene-scaler * { animation-play-state: paused!important; }
+.product-film-video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: fill; background: var(--bg); }

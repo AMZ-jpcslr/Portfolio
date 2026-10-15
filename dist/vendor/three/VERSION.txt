@@ -1,0 +1,4 @@
+Three.js 0.186.1
+https://github.com/mrdoob/three.js
+MIT License (see LICENSE).
+Local change: relative imports resolve to three.core.min.js.
