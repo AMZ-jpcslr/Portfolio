@@ -156,5 +156,5 @@ for (const p of projects) {
   assert.equal(poster.subarray(0,3).toString('hex'), 'ffd8ff');
 }
 assert.ok(html.includes('./editorial-films.css'));
-assert.ok(html.includes('id="spatial-title">作品一覧'));
+assert.ok(html.includes('id="spatial-title">作品を見渡す'));
 console.log('PASS: all 7 Remotion MP4s, posters and 24-second editorial compositions.');
