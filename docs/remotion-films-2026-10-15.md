@@ -1,6 +1,6 @@
 # 7作品のRemotion PV更新
 
-2026年10月15日。ローカルUser Skill「remotion」に沿って、7作品の機能再現PVを更新しました。ローカルのプレビューまで実施し、Vercelへの公開は行っていません。
+2026年10月15日。ローカルUser Skill「remotion」に沿って、7作品の機能再現PVを更新しました。ローカルのプレビュー確認後に承認を受け、同日GitHubの `master` ブランチを通じてVercelの本番サイトへ公開しました。
 
 ## 見せ方
 
@@ -71,6 +71,8 @@ Microsoft Edgeの自動ブラウザで次を確認しました。
 これらはブラウザでの確認です。実機のスマートフォンによる性能・通信量・電池消費の測定は行っていません。
 
 ## プレビュー
+
+[本番サイト](https://portfolio-amz-jpcslr.vercel.app/#spatial)にも反映済みです。コミット `375991e` のProductionデプロイ成功と、公開URLでの全7動画の読み込み・停止・シークをブラウザで確認しています。以下のローカルURLはサーバー起動中に利用できます。
 
 - [作品一覧・3D](http://127.0.0.1:4180/#spatial)
 - [Streaming Screen](http://127.0.0.1:4180/#project=Streaming-Screen)（詳細内「再現デモ」）
