@@ -2,8 +2,8 @@ import { readFile, writeFile, cp, mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { projects as existingProjects } from '../dist/projects.js';
 
-export function siteOrigin(env = process.env) {
-  const value = env.SITE_URL || env.VERCEL_PROJECT_PRODUCTION_URL || env.VERCEL_URL || 'https://portfolio-amz-jpcslr.vercel.app';
+export function siteOrigin(env = {}) {
+  const value = env.SITE_URL || 'https://portfolio-amz-jpcslr.vercel.app';
   const url = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`);
   if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.search || url.hash || url.pathname !== '/') {
     throw new Error('SITE_URL must be the site origin, e.g. https://portfolio.example.com');
