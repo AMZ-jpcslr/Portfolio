@@ -29,7 +29,7 @@ export function initPaperUI(){
   const el=event.target.closest('a,button');if(!el||replaying.has(el)||!el.matches('.paper-action,.notebook-tab'))return;
   if(matchMedia('(prefers-reduced-motion:reduce)').matches||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||event.button>0)return;
   if(el.matches('.notebook-tab'))return;
-  const navigates=el.tagName==='A'||el.matches('[data-preview]');
+  const navigates=el.tagName==='A'||el.matches('[data-preview],[data-summary-close]');
   if(navigates){event.preventDefault();event.stopImmediatePropagation();if(pending?.el===el)return;cancelPending();document.dispatchEvent(new CustomEvent('portfolio-paper-intent',{detail:{element:el}}));const state={el};pending=state;el.setAttribute('aria-busy','true');peel(el).then(()=>{if(pending!==state||!el.isConnected)return;pending=null;replaying.add(el);try{el.click()}finally{replaying.delete(el)}});}else{peel(el)}
  },{capture:true});
  matchMedia('(prefers-reduced-motion:reduce)').addEventListener('change',event=>{if(event.matches){const action=pending;pending=null;for(const el of [...flights.keys()])removeFlight(el);if(action?.el.isConnected){replaying.add(action.el);try{action.el.click()}finally{replaying.delete(action.el)}}}});

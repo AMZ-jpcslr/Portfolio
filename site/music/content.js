@@ -1,3 +1,4 @@
+import{authorProject}from'./author-narratives.js';
 import {projects as existing} from '/projects.js';
 export const github='https://github.com/AMZ-jpcslr';
 export const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -37,17 +38,17 @@ const descriptions={
 };
 mania.limits='時刻表と徒歩時間に基づく目安です。画面の再現映像は機能の説明用で、公開版への採用や、使いやすさの改善効果を示すものではありません。';
 export const lifecycle={
- mania:{label:'運用中',detail:'公開アプリを20人近くが利用（本人申告）。UIの改善を検討しています。'},
- career:{label:'公開済み',detail:'Webアプリを公開。友人約10人の利用は2026年9月時点の情報です。'},
- stream:{label:'制作済み',detail:'依頼を受けて制作し、利用者の感想を聞いた作品です。現在の稼働状況は確認していません。'},
- voice:{label:'稼働確認中',detail:'約1年半の利用実績がありますが、現在は動作していないとの申告があり、復旧は未確認です。'},
- weather:{label:'稼働確認中',detail:'過去の利用実績はありますが、現在のDiscord上での稼働は確認できていません。'},
+ mania:{label:'運用中',detail:'公開アプリをつくり、発車時刻を優先するUIを検討しています。'},
+ career:{label:'運用中',detail:'公開して運用し、友人に使った感想を聞いています。'},
+ stream:{label:'運用中',detail:'配信者の依頼で制作し、運用しています。'},
+ voice:{label:'運用中',detail:'友人のDiscordサーバーで運用しています。'},
+ weather:{label:'運用中',detail:'友人と使いながらDiscord上で運用しています。'},
  moral:{label:'研究中',detail:'固定ルールと合成シナリオで判断の仕組みを検証する個人研究です。'},
- proxy:{label:'運用中',detail:'本人の説明に基づき、小規模な会社で通信の確認に使っています。'},
- soccer:{label:'試作',detail:'位置評価の仕組みが導入用プロトタイプとして活用されました。実機システム全体の運用を示すものではありません。'}
+ proxy:{label:'運用中',detail:'母と営む小規模な会社で、通信の確認に使っています。'},
+ soccer:{label:'活動成果',detail:'私がつくった位置評価の仕組みを、導入用プロトタイプとして活用してもらいました。'}
 };
-export const projects=[mania,...sourceProjects].map((p,i)=>({...p,status:lifecycle[p.kind],short:descriptions[p.kind][0],tagline:descriptions[p.kind][1],purpose:purposes[p.kind],trigger:p.painPoint||p.challenge,clip:p.clip?{...p.clip,src:p.clip.src||`/media/${p.kind}.mp4`,poster:p.clip.poster||`/media/${p.kind}.jpg`}:null,number:String(i+1).padStart(2,'0'),path:`/projects/${p.slug}/`}));
-export const chronology=[mania,...sourceProjects].sort((a,b)=>Date.parse(a.repositoryCreatedAt)-Date.parse(b.repositoryCreatedAt));
+export const projects=[mania,...sourceProjects].map((p,i)=>({...p,status:lifecycle[p.kind],short:descriptions[p.kind][0],tagline:descriptions[p.kind][1],purpose:purposes[p.kind],trigger:p.painPoint||p.challenge,clip:p.clip?{...p.clip,src:p.clip.src||`/media/${p.kind}.mp4`,poster:p.clip.poster||`/media/${p.kind}.jpg`}:null,number:String(i+1).padStart(2,'0'),path:`/projects/${p.slug}/`})).map(authorProject);
+export const chronology=[...projects].sort((a,b)=>Date.parse(a.repositoryCreatedAt)-Date.parse(b.repositoryCreatedAt));
 export const philosophy=[
  {group:'課題を理解する',label:'01 / PROBLEM',title:'身近な問題と社会の課題から考える',body:'作るものを先に決めず、不便や疑問を出発点にします。分野を限定せず、個人の視点から取り組めることを探します。'},
  {group:'課題を理解する',label:'02 / CONTEXT',title:'誰が、どこで使うかを考える',body:'使う人や場面によって、必要な情報は変わります。利用する状況を理解し、何を先に伝えるかを考えます。'},
