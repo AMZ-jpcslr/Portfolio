@@ -2,21 +2,21 @@ import{insights}from'./case-insights.js';
 // Copy follows the author's supplied experience. It does not infer measured outcomes.
 export const narratives={
  mania:{
-  summary:'いつもの駅で、今から乗れる電車の発車時刻をひと目で判断できるアプリをつくっています。',
-  purpose:'いつも使う駅から出かける人が、駅から駅への経路を毎回検索し直さずに、今乗れる電車を判断できるようにしたいと考えています。',
-  trigger:'慣れた経路なら、乗り方や歩く時間は分かっています。それでも出発のたびに経路を検索する手間を減らせないかと考え、まにあうをつくりました。',
-  engineering:'利用者にプロトタイプやUIの別案を見せ、どの情報を先に知りたいかを聞きました。慣れた経路では発車時刻が優先され、慣れていない出発地点では徒歩時間や乗車の目安も必要になります。そこで、発車時刻を先に示し、徒歩時間との関係も確認できる構成を検討しています。',
+  summary:'「今出たら、何時何分の電車に乗れる？」を確かめるアプリです。いつもの駅の時刻表と、駅まで歩く時間をもとに、次に乗れる電車の目安を表示します。',
+  purpose:'いつもの駅から出かけるときに、経路を毎回検索し直さず、次に乗れる電車の時刻をすぐに確かめられるようにしたいと考えています。',
+  trigger:'使う駅も歩く時間も分かっている経路で、毎回検索し直す手間を減らしたいと考えたのがきっかけです。',
+  engineering:'利用者にプロトタイプやUIの別案を見せ、どの情報を先に知りたいかを聞きました。慣れた経路では電車の時刻を先に知りたい一方、慣れない場所から出かけるときは、歩く時間や乗れるかどうかの目安も必要になります。そこで、まず電車の時刻を見て、必要なら歩く時間も確認できるよう、画面の順序を見直しています。',
   impact:'20人近くに使ってもらっています。一方で、経路検索アプリで足りたり、次の電車に乗ればよかったりして、それほど困っていないという声も聞きました。情報の見せ方だけでなく、どの場面で必要とされるのかを考え直すきっかけになりました。',
   limits:'発車時刻を優先する方針は決めていますが、最適な配置や使いやすさの改善効果は、まだ確かめられていません。表示は時刻表と徒歩時間に基づく目安です。',
-  outlook:'慣れた経路と慣れない出発地点で、必要な情報を見つけられるか、どこで判断に迷うかを確かめていきたいです。',
+  outlook:'いつもの経路で出かけるときも、慣れない場所から出かけるときも、必要な情報をすぐ見つけられるか、迷うところがないかを確かめていきたいです。',
   audience:'20人近くに使ってもらっています。',
-  history:{reason:'いつもの経路を毎回検索し直さず、今乗れる電車を判断できるようにしたいと考えました。',result:'利用者に候補画面を見てもらい、発車時刻を先に示す方向でUIを検討しています。'},
-  flow:['いつもの駅','今乗れる発車時刻','徒歩時間との関係'],
+  history:{reason:'いつもの経路を毎回検索し直さず、次に乗れる電車の時刻を確かめられるようにしたいと考えました。',result:'利用者に候補画面を見てもらい、電車の時刻を先に表示する方向で画面を見直しています。'},
+  flow:['いつもの駅を選ぶ','次に乗れる電車の時刻を見る','歩く時間も確かめる'],
   collaboration:'課題設定、UIの検討、開発を私が行っています。利用者に候補画面を見せ、最初に必要な情報を聞いています。'
  },
  career:{
   summary:'応募・締切・選考の予定をまとめて管理し、公開募集を自分の予定に取り込めるWebアプリをつくりました。',
-  purpose:'企業ごとに分かれている日程を整理し、次に何をすればよいか、新しい応募機会がないかを見つけやすくしたいと考えました。',
+  purpose:'企業ごとに分かれている日程を整理して、次に何をすればよいかを分かりやすくし、新しい募集も見つけられるようにしたいと考えました。',
   trigger:'応募日程や締切が企業ごとに分散すると、次の行動を把握しにくくなります。予定を一か所にまとめ、ほかの人が見つけた募集にも触れられるようにしたいと考えました。',
   engineering:'公開する募集と、個人の応募・ES・面接記録を分けました。募集を引用すると独立したコピーができ、元の更新で個人の予定が勝手に変わらない構成にしています。取り込む候補は、利用者が確認してから予定に反映します。',
   impact:'友人に使ってもらい、「予定を管理しやすい」「ほかの人がどこに応募しているか分かって面白い」という感想をもらいました。公開募集を引用できる機能は、特に工夫した点です。',
@@ -101,5 +101,5 @@ export const narratives={
 };
 export function authorProject(project){
  const copy=narratives[project.kind],insight=insights[project.kind];
- return{...project,...copy,...insight,caseStudy:{...project.caseStudy,decision:{...project.caseStudy.decision,...insight.decision},process:insight.process||project.caseStudy.process,role:{...project.caseStudy.role,collaboration:copy.collaboration}}};
+ return{...project,...copy,...insight,caseStudy:{...project.caseStudy,decision:{...project.caseStudy.decision,...insight.decision},process:insight.process||project.caseStudy.process,ai:{...project.caseStudy.ai,...insight.ai},role:{...project.caseStudy.role,collaboration:copy.collaboration}}};
 }

@@ -1,6 +1,9 @@
 import{authorProject}from'./author-narratives.js';
 import {projects as existing} from '/projects.js';
 export const github='https://github.com/AMZ-jpcslr';
+// Stable cloth colors, shared by each project's spine, search book and summary accent.
+export const bookColors=Object.freeze({mania:'#e6ce9e',career:'#c7d1b5',stream:'#dec6b8',voice:'#c8d9dc',weather:'#ddd9b5',moral:'#d6c9dd',proxy:'#d7cfb5',soccer:'#bdd0be'});
+export const bookColor=kind=>bookColors[kind];
 export const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clipNotes={
  mania:'駅の検索、徒歩時間の変更、推薦された便と選択した便の確認を再現しています。駅名と時刻の組み合わせ・ダイヤは説明用の模擬例です。実際の運行情報や、公開アプリを録画した映像ではありません。',
@@ -27,7 +30,7 @@ const mania={id:'mania',slug:'mania',kind:'mania',title:'まにあう',category:
 mania.repository='https://github.com/AMZ-jpcslr/train_time';
 mania.tags=['React','TypeScript','Vite'];
 const descriptions={
- mania:['発車時刻と乗車の目安','今から乗れる電車の発車時刻を確認'],
+ mania:['次に乗れる電車は、何時何分？','今出たら、何時何分の電車に乗れる？'],
  career:['応募・締切・選考の予定管理','応募・締切・選考の予定をまとめて管理'],
  stream:['配信画面のレイアウト編集','配信画面のレイアウトを編集するツール'],
  voice:['テキスト読み上げ・翻訳','テキストを読み上げ、翻訳するDiscord Bot'],

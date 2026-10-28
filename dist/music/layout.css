@@ -1,0 +1,25 @@
+/* One outer content rail. Paper, cards and prose retain their own inner padding. */
+:root{
+ --content-max:1440px;
+ --page-inset:max(var(--gutter),calc((100% - var(--content-max))/2));
+}
+.site-header{padding-inline:var(--page-inset)}
+.home-intro,
+.instrument-section,
+main>.home-section,
+.philosophy-section>.home-section,
+.detail-heading,
+.detail-media,
+.detail-content,
+.site-footer,
+.no-script{
+ width:100%;
+ max-width:none;
+ margin-inline:0;
+ padding-inline:var(--page-inset);
+}
+.instrument-section>.section-heading{padding-inline:0}
+.instrument-grid{width:100%;max-width:none;margin-inline:0}
+.github-diary,.closing-paper{width:100%;max-width:none}
+.search-shelf-stage{width:100%;max-width:none}
+.shelf-books .decorative-spine{max-width:none}

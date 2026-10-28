@@ -14,7 +14,7 @@ export function siteOrigin(env = {}) {
 export function socialMetadata(origin, page = {}) {
   const escape = value => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
   const title = page.title || '北岡 英磨 / AMZ — Notes & Works';
-  const description = page.description || 'PdMを目指す北岡英磨のポートフォリオ。個人開発と研究の8作品を、目的・設計の理由・利用者の声・結果と現状から紹介します。';
+  const description = page.description || 'PdMを目指す北岡英磨のポートフォリオです。個人開発と研究の8作品について、つくった理由や工夫、結果と今の課題をまとめています。';
   const alt = '北岡英磨の個人開発と研究。ノートと8冊の作品の本を描いた紹介カード。';
   const image = `${origin}/og-image.png?v=notes-20261028`;
   const pageUrl = origin + (page.path || '/');
@@ -37,7 +37,7 @@ export async function buildSocialMetadata() {
   const origin = siteOrigin();
   for (const folder of ['music','assets','recreation']) await cp(new URL(`../site/${folder}/`, import.meta.url), new URL(`../dist/${folder}/`, import.meta.url), {recursive:true});
   await writeFile(file, html.replace(block, socialMetadata(origin)));
-  const pages = [{kind:'mania',title:'まにあう',summary:'いつもの駅で、今乗れる電車の時刻をひと目で判断するための個人開発。'},...existingProjects];
+  const pages = [{kind:'mania',title:'まにあう',summary:'いつもの駅で、今出たら何時何分の電車に乗れそうかを確かめるアプリです。'},...existingProjects];
   for(const page of pages){
     const folder=new URL(`../dist/projects/${page.kind}/`,import.meta.url);await mkdir(folder,{recursive:true});
     const title=`${page.title} — AMZ / Notes & Works`, escape=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
