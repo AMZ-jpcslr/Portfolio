@@ -18,14 +18,7 @@ try{
   await page.locator('#key-mania').click();await page.locator('dialog[open]').waitFor();
   assert.equal(await page.evaluate(()=>history.state.summarySlug),'mania');
   assert.equal(await page.locator('dialog video').count(),0);assert.equal(media,0);
-  const frames=[];
-  if(width===1440){
-   for(const time of [0,280,560]){
-    frames.push(await page.locator('dialog').evaluate((d,time)=>{for(const a of d.getAnimations({subtree:true})){a.pause();a.currentTime=time}const cover=d.querySelector('.book-opening-cover');return{time,coverTransform:getComputedStyle(cover).transform,pageOpacity:getComputedStyle(d.querySelector('.book-summary-pages')).opacity}},time));
-    await page.screenshot({path:`${out}/cover-${time}.png`});
-   }
-   assert.notEqual(frames[0].coverTransform,frames[1].coverTransform);assert.equal(frames[0].pageOpacity,'0');assert.ok(Number(frames[2].pageOpacity)>.5);
-  }
+  assert.equal(await page.locator('.book-opening-cover').count(),0);assert.equal(await page.locator('.book-summary-pages').evaluate(e=>getComputedStyle(e).opacity),'1');assert.equal(await page.locator('dialog').evaluate(d=>d.getAnimations({subtree:true}).filter(a=>a.playState==='running'&&a.effect.target.matches('.open-book,.book-summary-pages')).length),0);
   await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
   assert.equal(await page.evaluate(()=>document.activeElement.id),'key-mania');
   await page.goForward();await page.locator('dialog[open]').waitFor();
@@ -47,10 +40,10 @@ try{
   await page.goto(base+'/#records');assert.equal(await page.locator('.notebook img:not(.github-mark)').count(),0);
   for(const slug of slugs){await page.locator('#notebook-tab-'+slug).focus();assert.ok((await page.locator('#notebook-reason').innerText()).length>10);assert.ok((await page.locator('#notebook-result').innerText()).length>10)}
   await page.goto(base+'/#search');await page.locator('#shelf-query').fill('理念');await page.locator('#shelf-query').press('Enter');await page.locator('#search-result-section-philosophy').click();await page.waitForURL('**/#philosophy');await page.goBack();assert.equal(await page.locator('#shelf-query').inputValue(),'理念');
-  checks.push({width,coverFrames:frames,overviewVideoRequests:0,all8Summaries:true,history:true,touchEmulated:width<900});await context.close();
+  checks.push({width,immediateSummary:true,overviewVideoRequests:0,all8Summaries:true,history:true,touchEmulated:width<900});await context.close();
  }
  const p=await browser.newPage({viewport:{width:1440,height:1000}});p.on('pageerror',e=>errors.push(e.message));
  for(const slug of slugs){await p.goto(base+'/projects/'+slug+'/');await p.locator('.detail-video').waitFor();const text=await p.locator('main').innerText();assert.ok(!/本人申告|本人情報|稼働確認中|年.*月時点/.test(text));assert.ok(await p.locator('.case-reflection').count());}
  await p.goto(base+'/#works');await p.locator('#key-career').click();await p.keyboard.press('Escape');await p.waitForFunction(()=>!document.querySelector('dialog').open);await p.locator('#key-voice').click();await p.locator('.summary-more').evaluate(e=>{e.click();e.click()});await p.waitForURL('**/projects/voice/');await p.goBack();await p.locator('dialog[open]').waitFor();await p.keyboard.press('Escape');await p.waitForFunction(()=>!document.querySelector('dialog').open);assert.equal(await p.locator('.flying-key,.key-wipe,.note-flight,.book-opening-cover').count(),0);
- assert.deepEqual(errors,[]);await writeFile(out+'/results.json',JSON.stringify({checks,errors},null,2));console.log('PASS overview book cover/reveal, all8 summaries and detail routes, silent detail video, Back/Forward, focus/cancel/repeated navigation, history/search, desktop/mobile/reduced motion');
+ assert.deepEqual(errors,[]);await writeFile(out+'/results.json',JSON.stringify({checks,errors},null,2));console.log('PASS immediate overview book, all8 summaries and detail routes, silent detail video, Back/Forward, focus/cancel/repeated navigation, history/search, desktop/mobile/reduced motion');
 }finally{await browser.close()}

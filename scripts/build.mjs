@@ -13,10 +13,10 @@ export function siteOrigin(env = process.env) {
 
 export function socialMetadata(origin, page = {}) {
   const escape = value => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-  const title = page.title || 'Kitaoka Yoma / AMZ — Notes & Works';
-  const description = page.description || '社会や身近な問題に取り組む、個人開発と研究の記録。8作品の目的、設計、結果と現状を紹介します。';
-  const alt = 'Kitaoka Yomaの個人開発と研究のポートフォリオ。';
-  const image = `${origin}/og-image.png`;
+  const title = page.title || '北岡 英磨 / AMZ — Notes & Works';
+  const description = page.description || 'PdMを目指す北岡英磨のポートフォリオ。個人開発と研究の8作品を、目的・設計の理由・利用者の声・結果と現状から紹介します。';
+  const alt = '北岡英磨の個人開発と研究。ノートと8冊の作品の本を描いた紹介カード。';
+  const image = `${origin}/og-image.png?v=notes-20261028`;
   const pageUrl = origin + (page.path || '/');
   const og = { title, description, type: 'website', site_name: 'AMZ / Notes & Works', locale: 'ja_JP', url: pageUrl, image, 'image:type': 'image/png', 'image:width': '1200', 'image:height': '630', 'image:alt': alt };
   const twitter = { card: 'summary_large_image', title, description, image, 'image:alt': alt };
@@ -41,7 +41,7 @@ export async function buildSocialMetadata() {
   for(const page of pages){
     const folder=new URL(`../dist/projects/${page.kind}/`,import.meta.url);await mkdir(folder,{recursive:true});
     const title=`${page.title} — AMZ / Notes & Works`, escape=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
-    await writeFile(new URL('index.html',folder),html.replace(block,socialMetadata(origin,{title,description:page.summary,path:`/projects/${page.kind}/`})).replace(/<title>[^<]*<\/title>/,`<title>${escape(title)}</title>`));
+    await writeFile(new URL('index.html',folder),html.replace(block,socialMetadata(origin,{title,description:page.summary,path:`/projects/${page.kind}/`})).replace(/<meta name="description" content="[^"]*">/,`<meta name="description" content="${escape(page.summary)}">`).replace(/<title>[^<]*<\/title>/,`<title>${escape(title)}</title>`));
   }
   console.log(`Social sharing image: ${origin}/og-image.png`);
 }
