@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "studio": "remotion studio src/index.tsx --public-dir=../dist --port=3001",
-    "render": "node render.mjs"
+    "render": "node render.mjs",
+    "recreation:render": "node recreations/render.mjs"
   },
   "dependencies": {
     "remotion": "4.0.535",

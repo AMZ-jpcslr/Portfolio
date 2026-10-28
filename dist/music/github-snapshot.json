@@ -1,0 +1,71 @@
+{
+  "account": "AMZ-jpcslr",
+  "fetchedAt": "2026-10-28T02:37:54.128Z",
+  "source": "https://api.github.com/users/AMZ-jpcslr/events/public?per_page=30",
+  "items": [
+    {
+      "id": "25293284364",
+      "repo": "AMZ-jpcslr/train_time",
+      "type": "PushEvent",
+      "label": "コードをpush",
+      "date": "2026-10-26T06:40:15Z",
+      "url": "https://github.com/AMZ-jpcslr/train_time/commit/202b11120c3f3f11888bab707a47d5f6ddc77eaa"
+    },
+    {
+      "id": "25202511568",
+      "repo": "AMZ-jpcslr/train_time",
+      "type": "PushEvent",
+      "label": "コードをpush",
+      "date": "2026-10-26T06:25:50Z",
+      "url": "https://github.com/AMZ-jpcslr/train_time/commit/3c082a78f0ea9262b4796c0e8c9510f346ef2f58"
+    },
+    {
+      "id": "25200419635",
+      "repo": "AMZ-jpcslr/train_time",
+      "type": "PushEvent",
+      "label": "コードをpush",
+      "date": "2026-10-26T05:57:35Z",
+      "url": "https://github.com/AMZ-jpcslr/train_time/commit/d684108ee22b25674edd259dc1634cfc1e9e2743"
+    },
+    {
+      "id": "25286883645",
+      "repo": "AMZ-jpcslr/train_time",
+      "type": "PushEvent",
+      "label": "コードをpush",
+      "date": "2026-10-26T05:19:13Z",
+      "url": "https://github.com/AMZ-jpcslr/train_time/commit/7d9c0196d4db2ee2148d524b78a903ab7413867f"
+    },
+    {
+      "id": "25288451683",
+      "repo": "AMZ-jpcslr/train_time",
+      "type": "PushEvent",
+      "label": "コードをpush",
+      "date": "2026-10-26T04:27:49Z",
+      "url": "https://github.com/AMZ-jpcslr/train_time/commit/685ee4489fe75cbb1cbd82e4aa40e573ce503c3b"
+    },
+    {
+      "id": "25130230279",
+      "repo": "AMZ-jpcslr/train_time",
+      "type": "PushEvent",
+      "label": "コードをpush",
+      "date": "2026-10-25T13:27:46Z",
+      "url": "https://github.com/AMZ-jpcslr/train_time/commit/7b4dd84bfffea91939f5136911469643d161b8a3"
+    },
+    {
+      "id": "25129804108",
+      "repo": "AMZ-jpcslr/train_time",
+      "type": "PushEvent",
+      "label": "コードをpush",
+      "date": "2026-10-25T13:22:13Z",
+      "url": "https://github.com/AMZ-jpcslr/train_time/commit/965cb262eeca0f1b61293e1751a12b63284cbbb0"
+    },
+    {
+      "id": "25128901682",
+      "repo": "AMZ-jpcslr/train_time",
+      "type": "PushEvent",
+      "label": "コードをpush",
+      "date": "2026-10-25T13:08:38Z",
+      "url": "https://github.com/AMZ-jpcslr/train_time/commit/9bf111e38458b19ffd2b98d36f18694075d0984c"
+    }
+  ]
+}

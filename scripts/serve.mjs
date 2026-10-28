@@ -10,11 +10,12 @@ createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
     const relative = decodeURIComponent(url.pathname === '/' ? '/index.html' : url.pathname);
-    const filename = path.resolve(root, '.' + relative);
+    let filename = path.resolve(root, '.' + relative);
     if (!filename.startsWith(root + path.sep) && filename !== path.join(root, 'index.html')) {
       res.writeHead(403).end(); return;
     }
-    const info = await stat(filename);
+    let info = await stat(filename);
+    if(info.isDirectory()){filename=path.join(filename,'index.html');info=await stat(filename)}
     if (!info.isFile()) { res.writeHead(404).end(); return; }
     const headers = {'Content-Type':types[path.extname(filename)] || 'application/octet-stream', 'Cache-Control':'no-store', 'Accept-Ranges':'bytes'};
     let start = 0, end = info.size - 1, status = 200;

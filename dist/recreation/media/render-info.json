@@ -1,0 +1,90 @@
+[
+  {
+    "kind": "mania",
+    "file": "mania.mp4",
+    "size": 1187252,
+    "width": 1240,
+    "height": 900,
+    "fps": 24,
+    "duration": 20,
+    "type": "recreation",
+    "audio": false
+  },
+  {
+    "kind": "career",
+    "file": "career.mp4",
+    "size": 509405,
+    "width": 1240,
+    "height": 900,
+    "fps": 24,
+    "duration": 12,
+    "type": "recreation",
+    "audio": false
+  },
+  {
+    "kind": "stream",
+    "file": "stream.mp4",
+    "size": 796741,
+    "width": 1240,
+    "height": 900,
+    "fps": 24,
+    "duration": 12,
+    "type": "recreation",
+    "audio": false
+  },
+  {
+    "kind": "voice",
+    "file": "voice.mp4",
+    "size": 550216,
+    "width": 1240,
+    "height": 900,
+    "fps": 24,
+    "duration": 12,
+    "type": "recreation",
+    "audio": false
+  },
+  {
+    "kind": "weather",
+    "file": "weather.mp4",
+    "size": 692818,
+    "width": 1240,
+    "height": 900,
+    "fps": 24,
+    "duration": 12,
+    "type": "recreation",
+    "audio": false
+  },
+  {
+    "kind": "moral",
+    "file": "moral.mp4",
+    "size": 401089,
+    "width": 1240,
+    "height": 900,
+    "fps": 24,
+    "duration": 12,
+    "type": "recreation",
+    "audio": false
+  },
+  {
+    "kind": "proxy",
+    "file": "proxy.mp4",
+    "size": 450248,
+    "width": 1240,
+    "height": 900,
+    "fps": 24,
+    "duration": 12,
+    "type": "recreation",
+    "audio": false
+  },
+  {
+    "kind": "soccer",
+    "file": "soccer-v2.mp4",
+    "size": 716543,
+    "width": 1240,
+    "height": 900,
+    "fps": 24,
+    "duration": 12,
+    "type": "recreation",
+    "audio": false
+  }
+]

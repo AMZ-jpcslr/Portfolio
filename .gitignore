@@ -5,3 +5,6 @@ node_modules/
 *.log
 
 .review/
+
+# Local-only design alternatives, captures and handoff records.
+docs/portfolio-lab/

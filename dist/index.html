@@ -1,122 +1,22 @@
 <!doctype html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f3f2ee">
-  <meta name="description" content="Kitaoka Yoma（AMZ-jpcslr）の開発ポートフォリオ。Discord Bot、配信ツール、AIの研究など、日常の不便から社会問題の解決まで、7つの個人開発と利用実績を紹介します。">
-  <!-- social-meta:start -->
-  <meta property="og:title" content="Kitaoka Yoma / AMZ — Developer Portfolio">
-  <meta property="og:description" content="日常の不便から、社会の課題まで。個人開発で問題解決の糸口をつくる。">
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="社会や身近な問題に取り組む、北岡英磨の個人開発と研究の記録。8作品の目的、設計、結果と現状を紹介します。">
+<!-- social-meta:start -->
+  <meta property="og:title" content="Kitaoka Yoma / AMZ — Notes &amp; Works">
+  <meta property="og:description" content="社会や身近な問題に取り組む、個人開発と研究の記録。8作品の目的、設計、結果と現状を紹介します。">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Kitaoka Yoma / AMZ — Developer Portfolio">
+  <meta property="og:site_name" content="AMZ / Notes &amp; Works">
   <meta property="og:locale" content="ja_JP">
   <meta property="og:url" content="https://portfolio-amz-jpcslr.vercel.app/">
   <meta property="og:image" content="https://portfolio-amz-jpcslr.vercel.app/og-image.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Kitaoka Yomaの開発ポートフォリオ。日常の不便から社会の課題まで、Discord Bot・防災・配信ツール・AI研究・通信・ロボットサッカー・就活支援の7分野。">
+  <meta property="og:image:alt" content="Kitaoka Yomaの個人開発と研究のポートフォリオ。">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Kitaoka Yoma / AMZ — Developer Portfolio">
-  <meta name="twitter:description" content="日常の不便から、社会の課題まで。個人開発で問題解決の糸口をつくる。">
+  <meta name="twitter:title" content="Kitaoka Yoma / AMZ — Notes &amp; Works">
+  <meta name="twitter:description" content="社会や身近な問題に取り組む、個人開発と研究の記録。8作品の目的、設計、結果と現状を紹介します。">
   <meta name="twitter:image" content="https://portfolio-amz-jpcslr.vercel.app/og-image.png">
-  <meta name="twitter:image:alt" content="Kitaoka Yomaの開発ポートフォリオ。日常の不便から社会の課題まで、Discord Bot・防災・配信ツール・AI研究・通信・ロボットサッカー・就活支援の7分野。">
+  <meta name="twitter:image:alt" content="Kitaoka Yomaの個人開発と研究のポートフォリオ。">
   <link rel="canonical" href="https://portfolio-amz-jpcslr.vercel.app/">
-  <!-- social-meta:end -->
-  <title>Kitaoka Yoma / AMZ — Developer Portfolio</title>
-  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./fonts.css">
-  <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./demos.css">
-  <link rel="stylesheet" href="./films.css">
-  <link rel="stylesheet" href="./page-motion.css">
-  <link rel="stylesheet" href="./case-evidence.css">
-  <link rel="preload" href="./assets/fonts/shippori-display.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./design-system.css">
-  <link rel="stylesheet" href="./editorial-films.css">
-  <link rel="stylesheet" href="./spatial-gallery.css">
-  <script type="module" src="./app.js"></script>
-</head>
-<body id="top">
-  <div class="reading-progress" aria-hidden="true"><i></i></div>
-  <a class="skip-link" href="#work">プロジェクト一覧へ移動</a>
-  <header class="header">
-    <a class="brand" href="#top" aria-label="Kitaoka Yoma / AMZ ホーム">amz<span class="brand-dot">.</span><span class="brand-sub">DESIGN &amp; DEVELOPMENT</span></a>
-    <nav aria-label="メインナビゲーション"><a href="#work">作品 <span>07</span></a><a href="#timeline">制作の歩み</a><a href="#approach">考え方</a><a class="nav-github" href="https://github.com/AMZ-jpcslr" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></nav>
-  </header>
-  <main>
-    <section class="hero wrap" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <div class="eyebrow"><span class="tiny-line"></span> PERSONAL PORTFOLIO / 2026</div>
-        <div class="hero-identity"><strong>北岡 英磨</strong><span>Yoma Kitaoka / AMZ-jpcslr</span></div>
-        <h1 id="hero-title"><span class="title-line"><span>日常の不便から、</span></span><span class="title-line"><span><span class="hero-emphasis">社会の課題</span>まで<span class="period">.</span></span></span></h1>
-        <p class="hero-description">身近な困りごとから社会の課題まで、幅広く関心を持ち、<br>利用する場面から機能と操作を考えています。<br>AIを実装支援に使いながら、設計と検証は私が担います。</p>
-        <div class="hero-actions"><a class="button primary" href="#featured">代表作から見る <span aria-hidden="true">↘</span></a><a class="hero-all-link" href="#spatial">3Dで作品を見る <span aria-hidden="true">↗</span></a></div>
-        <dl class="authorship-note"><div><dt>私の担当</dt><dd>課題設定・要件定義・設計・レビュー・検証</dd></div><div><dt>AIの担当</dt><dd>コーディングを中心とした実装支援</dd></div></dl>
-        <div class="hero-meta"><a href="#approach">開発で大切にすること ↗</a><span class="meta-divider"></span><a href="#timeline">制作の歩み ↘</a><a href="#activity">Ri-oneでの活動 ↗</a></div>
-      </div>
-      <div class="hero-art">
-        <div class="hero-art-caption"><span>WORK IN MOTION</span><span>01 / 07</span></div>
-        <div class="hero-stage" aria-label="しゅうかつ手帳の操作を説明する再現アニメーション">
-          <div id="hero-demo" class="hero-live-demo" aria-hidden="true"></div>
-        </div>
-        <div class="hero-art-index"><a href="#project=Syukatu-Note">しゅうかつ手帳 <span aria-hidden="true">↗</span></a><span>再現アニメーション / 24秒</span></div>
-        <div class="hero-process" aria-label="課題を捉え、設計し、使う人の声を聞く"><span>課題を捉える</span><i aria-hidden="true"></i><span>設計する</span><i aria-hidden="true"></i><span>使う人の声を聞く</span></div>
-      </div>
-      <div class="hero-bottom"><span>DESIGNING FOR EVERYDAY LIFE.</span><a href="#featured">作品と、その背景へ <span aria-hidden="true">↓</span></a></div>
-    </section>
-    <section id="spatial" class="spatial wrap" aria-labelledby="spatial-title">
-      <div class="section-heading"><div><div class="eyebrow">PROJECT ATLAS / INTERACTIVE 3D</div><h2 id="spatial-title">作品を見渡す</h2></div><p>会話、防災、配信、研究。<br>それぞれの関心から生まれた作品に触れる。</p></div>
-      <div id="spatial-gallery" class="spatial-gallery" data-state="pending">
-        <div class="spatial-visual">
-          <div class="spatial-stage" tabindex="0" role="group" aria-label="7作品の3Dギャラリー" aria-describedby="spatial-help">
-            <picture class="spatial-fallback"><source media="(max-width:760px)" srcset="./assets/spatial-fallback-mobile.png"><img src="./assets/spatial-fallback.png" width="970" height="520" alt="7つの作品パネルが円形に並ぶ3Dギャラリーの静止画"></picture>
-            <div class="spatial-canvas" aria-hidden="true"></div>
-            <span class="spatial-corner" aria-hidden="true">AMZ / PROJECT ATLAS</span>
-            <span class="spatial-coordinate" aria-hidden="true">07 PERSPECTIVES</span>
-          </div>
-          <div class="spatial-toolbar"><span id="spatial-help">ドラッグで回転・クリックで詳細</span><button id="spatial-pause" type="button" aria-pressed="false">3Dを一時停止</button></div>
-          <p id="spatial-status" class="spatial-status" role="status">3Dを準備しています</p>
-        </div>
-        <div class="spatial-info">
-          <div class="spatial-selected" aria-live="polite" aria-atomic="true"><span id="spatial-number">01 / 07</span><h3 id="spatial-project-title">しゅうかつ手帳</h3><p id="spatial-project-summary">公開募集を自分用に引用し、応募・締切・選考をまとめて管理するWebアプリです。</p></div>
-          <a id="spatial-detail" class="spatial-detail" href="#project=Syukatu-Note">制作の背景と設計を見る <span aria-hidden="true">↗</span></a>
-          <div class="spatial-navigation" aria-label="表示する作品を選ぶ"><button id="spatial-prev" type="button" aria-label="前の作品">←</button><span>SELECT A PROJECT</span><button id="spatial-next" type="button" aria-label="次の作品">→</button></div>
-          <div id="spatial-projects" class="spatial-projects" role="group" aria-label="7作品の選択"></div>
-        </div>
-      </div>
-      <p class="spatial-caption">作品を紹介するための3D表現です。実際の画面や動作の説明は、各作品の詳細で紹介しています。</p>
-    </section>
-    <section id="featured" class="featured wrap" aria-labelledby="featured-title"><div class="section-heading"><div><div class="eyebrow">01 / SELECTED CASE STUDIES</div><h2 id="featured-title">代表作から、設計を知る。</h2></div><p>実際の画面と情報設計を詳しく紹介する2作品です。</p></div><div id="featured-grid" class="featured-grid"></div></section>
-    <div class="tech-strip"><div class="wrap"><span class="strip-label">実装で使う技術</span><span>TypeScript</span><b>／</b><span>JavaScript</span><b>／</b><span>Python</span><b>／</b><span>Java</span><b>／</b><span>Discord.js</span><b>／</b><span>Node.js</span></div></div>
-    <section id="work" class="work wrap" aria-labelledby="work-title">
-
-      <div class="section-heading"><div><div class="eyebrow">02 / ALL PROJECTS</div><h2 id="work-title">作品一覧<span class="heading-count">07</span></h2></div><p>身近な人への支援から、社会課題への探究まで。<br>課題・設計の理由・担当範囲・AI活用を紹介します。</p></div>
-      <div id="project-grid" class="project-grid"></div>
-      <p class="repository-note">7つの個人開発 · 課題設定から設計判断、利用者に届いた価値まで</p>
-    </section>
-    <section id="activity" class="activity wrap" aria-labelledby="activity-title"><div class="section-heading"><div><div class="eyebrow">03 / ACTIVITY & ROLE</div><h2 id="activity-title">Ri-oneでの活動と、私の担当。</h2></div></div><div id="team-activity"></div><a class="activity-link" href="#project=SSL-DEMO">個人制作の試作を見る ↗</a></section>
-    <section id="timeline" class="timeline wrap" aria-labelledby="timeline-title">
-      <div class="section-heading"><div><div class="eyebrow">04 / PROJECT TIMELINE</div><h2 id="timeline-title">制作の歩み</h2></div><p>会話・防災から、研究・就活支援まで。<br>関心を広げながら重ねてきた個人開発。</p></div>
-      <p class="timeline-note">GitHubにリポジトリを作成した年月順です（UTC）。開発開始日や完成日とは異なります。</p>
-      <ol id="project-timeline" class="project-timeline" aria-label="リポジトリ作成年月順の制作一覧"></ol>
-    </section>
-    <section id="approach" class="approach" aria-labelledby="approach-title"><div class="wrap">
-
-      <div class="section-heading"><div><div class="eyebrow">05 / HOW I BUILD</div><h2 id="approach-title">つくるときに、<br>大切にしていること。</h2></div><p>何をつくるか。なぜつくるか。誰に届くか。<br>技術だけでなく、使われる理由まで考える。</p></div>
-      <div class="approach-grid">
-        <article class="approach-lead"><span class="approach-number">01 / AI AS A TOOL</span><h3>AIで実装を進める。<br>設計と確認は、私の仕事。</h3><p>コーディングには生成AIを大きく活用しています。AIは時間を短縮するための道具で、課題設定・要件定義・機能や構成の設計は私が担います。評価の仕方を考え、生成コードのレビュー、デバッグ、修正、テスト、実行結果の確認も行っています。</p><span class="approach-role">私：要件・設計・レビュー・検証 <span aria-hidden="true">／</span> AI：実装支援</span></article>
-        <article><span class="approach-number">02 / A WIDER VIEW</span><h3>身近な問題から、社会問題まで。</h3><p>友人との会話で感じる不便も、防災やAIの行動判断といった社会の課題も。分野を限定せずに広く関心を持ち、個人の視点と実践から、問題解決の糸口を探します。</p><a href="#project=Artificial-Moral-Architecture">AIの行動判断を探究する ↗</a></article>
-        <article><span class="approach-number">03 / REAL NEEDS</span><h3>本当に必要とされ、使われるか。</h3><p>完成させることだけをゴールにしません。誰の、どんな困りごとに必要なのか。実際に使ってもらってこそ意味があると考え、利用する人の場面から機能を設計します。</p><a href="#project=Yomiage_Discord_Bot">声を出せない人の会話参加を支える ↗</a></article>
-        <article><span class="approach-number">04 / BUSINESS PERSPECTIVE</span><h3>収益化と、選ばれる理由まで。</h3><p>実際に事業として運営しない開発でも、マネタイズの方法や、競合・既存の手段と比べた優位性まで考えます。つくれるかに加えて、なぜ選ばれるのか、継続して価値を届けられるかを問い続けます。</p></article>
-        <article><span class="approach-number">05 / LISTEN & IMPROVE</span><h3>使ってくれた人の声を、次へ。</h3><p>ユーザーフィードバックを大切にしています。便利だった点も使いにくかった点も、次の判断の手がかりにしています。自分の想定だけで完結せず、実際に使った人の声を受け止め、改善につなげることを目指します。</p><a href="#project=Syukatu-Note">しゅうかつ手帳に届いた声を読む ↗</a></article>
-      </div>
-    </div></section>
-    <section class="closing wrap"><div class="eyebrow">ALWAYS A WORK IN PROGRESS</div><p>個人の一歩を、<br><span>問題解決の糸口に。</span></p><a href="https://github.com/AMZ-jpcslr" target="_blank" rel="noopener noreferrer" class="button primary">GitHubで開発を見る <span aria-hidden="true">↗</span></a><div class="closing-signature" aria-hidden="true">Keep asking. Keep building.</div></section>
-  </main>
-  <footer class="footer wrap"><a class="brand" href="#top">amz<span class="brand-dot">.</span></a><span>© 2026 Kitaoka Yoma / AMZ-jpcslr</span><a href="#top">ページの先頭へ ↑</a><button id="motion-toggle" data-motion-toggle type="button" aria-pressed="false">アニメーションを停止</button></footer>
-  <dialog id="project-dialog" aria-labelledby="detail-title"><div class="dialog-top"><span>作品詳細</span><div class="dialog-actions"><button id="dialog-motion-toggle" data-motion-toggle type="button" aria-pressed="false">全体の動きを停止</button><button class="close-button" id="close-dialog" aria-label="詳細を閉じる">閉じる <span aria-hidden="true">×</span></button></div></div><div id="detail-content"></div></dialog>
-  <noscript><p class="wrap">プロジェクトの一覧とデモを表示するにはJavaScriptを有効にしてください。<a href="https://github.com/AMZ-jpcslr?tab=repositories">公開リポジトリを見る</a></p></noscript>
-</body>
-</html>
+  <!-- social-meta:end --><meta name="theme-color" content="#151c19"><title>北岡 英磨 / AMZ — Notes & Works</title><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/fonts.css"><link rel="stylesheet" href="/music/music.css"><link rel="stylesheet" href="/music/paper.css"><link rel="stylesheet" href="/music/compact.css"><link rel="stylesheet" href="/music/books.css"><link rel="stylesheet" href="/music/search-shelf.css"><script type="module" src="/music/app.js"></script></head>
+<body><a class="skip-link" href="#main">本文へ移動</a><header class="site-header"><a class="wordmark" data-route href="/" aria-label="AMZ ホーム">amz<span class="brand-dot">.</span><span class="wordmark-sub">NOTES &amp; WORKS</span></a><button class="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false">メニュー</button><nav id="site-menu" aria-label="サイト内"><a data-route href="/#works">作品</a><a data-route href="/#records">記録</a><a data-route href="/#philosophy">理念</a><a data-route href="/#closing">メッセージ</a><a data-route href="/#search">検索</a><a class="github-header" href="https://github.com/AMZ-jpcslr" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></header><main id="main" tabindex="-1"></main><footer class="site-footer"><span>© 2026 Yoma Kitaoka</span><p>個人開発と研究の記録。</p><a href="https://github.com/AMZ-jpcslr" target="_blank" rel="noopener noreferrer">github.com/AMZ-jpcslr ↗</a></footer><p id="route-status" class="sr-only" role="status"></p><noscript><p class="no-script">作品の一覧にはJavaScriptを使っています。<a href="https://github.com/AMZ-jpcslr">GitHubで作品を見る</a></p></noscript></body></html>
