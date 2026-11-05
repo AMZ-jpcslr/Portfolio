@@ -2,7 +2,7 @@
 const flights=new Map(),replaying=new WeakSet();let pending=null;
 export function decoratePaper(root=document){
  for(const el of root.querySelectorAll('a,button')){
-  if(el.matches('.piano-key,.wordmark,.skip-link,.notebook-tab,.search-book'))continue;el.classList.add('paper-action');
+  if(el.matches('.piano-key,.wordmark,.skip-link,.notebook-tab,.search-book,.core-demo-toggle'))continue;el.classList.add('paper-action');
   if(el.tagName==='A'&&/^https:\/\/github\.com\//.test(el.href)&&!el.querySelector('.github-mark')){const img=document.createElement('img');img.className='github-mark';img.src='/assets/github-mark.svg';img.width=18;img.height=18;img.alt='';img.setAttribute('aria-hidden','true');el.prepend(img)}
  }
 }
