@@ -1,4 +1,4 @@
-import{featureFlows}from'./feature-flows.js';
+import{pvStories,pvSegmentAt}from'./product-pv.js';
 import{setupBookSummary,handleSummaryHistory}from'./book-summary.js';
 import {setupSearchShelf} from './search-shelf.js';
 try{localStorage.removeItem('portfolio-sound')}catch{}
@@ -28,7 +28,7 @@ function renderHome(){
  notebookCleanup=setupNotebook(main,chronology,projects,history.state?.notebookKind);
  summaryCleanup=setupBookSummary(main,projects,slug=>{selected=slug});diaryCleanup=setupDiary(main);renderClosing();searchCleanup=setupSearchShelf(main,projects,{query:history.state?.searchQuery,expanded:history.state?.searchExpanded,resultIds:history.state?.searchResultIds});setupDrawReveals(main);
 }
-function media(p){return `<div class="media-frame video-panel"><video class="detail-video" muted autoplay loop playsinline preload="none" poster="${p.clip.poster}" aria-label="${e(p.title)}の動作イメージ（再現映像）" aria-describedby="clip-note"><source src="${p.clip.src}" type="video/mp4"></video><span class="recreation-mark">動作イメージ・再現映像</span><button class="media-toggle" type="button" aria-label="再現映像を一時停止">一時停止</button></div><p class="detail-flow-caption" aria-live="off"><strong data-film-stage>04 / 04</strong><span data-film-caption>${e(featureFlows[p.kind].captions[3])}</span></p><div class="media-meta"><strong>動作イメージ（再現映像）</strong><span>${p.clip.size} ・ 無音</span><a href="${p.clip.src}">動画を大きく開く ↗</a></div><p class="media-caption" id="clip-note">${e(p.clip.note)}</p>`;}
+function media(p){return `<div class="media-frame video-panel"><video class="detail-video" muted autoplay loop playsinline preload="none" poster="${p.clip.poster}" aria-label="${e(p.title)}のPV（再現映像）" aria-describedby="clip-note"><source src="${p.clip.src}" type="video/mp4"></video><span class="recreation-mark">PV・再現映像</span><button class="media-toggle" type="button" aria-label="再現映像を一時停止">一時停止</button></div><p class="detail-flow-caption" aria-live="off"><strong data-film-stage>この作品</strong><span data-film-caption>${e(pvStories[p.kind].detailCaptions[6])}</span></p><div class="media-meta"><strong>作品のPV（再現映像）</strong><span>${p.clip.size} ・ 無音</span><a href="${p.clip.src}">動画を大きく開く ↗</a></div><p class="media-caption" id="clip-note">${e(p.clip.note)}</p>`;}
 
 function renderDetail(p){
  document.body.dataset.page='detail';document.title=`${p.title} — AMZ / Notes & Works`;
@@ -111,8 +111,8 @@ window.addEventListener('hashchange',()=>revealDrawTarget(anchorFor(location.has
 function wireDetailMedia(project){
  const video=main.querySelector('.detail-video'),button=main.querySelector('.media-toggle');if(!video)return;
  let visible=false,userPaused=false;video.autoplay=!motion.matches;
- const story=featureFlows[project.kind];
- const showPhase=()=>{const phase=video.readyState<2&&video.paused?3:Math.min(3,Math.floor(video.currentTime/5));const text=main.querySelector('[data-film-caption]'),count=main.querySelector('[data-film-stage]');if(text&&text.textContent!==story.captions[phase])text.textContent=story.captions[phase];if(count)count.textContent='0'+(phase+1)+' / 04'};
+ const story=pvStories[project.kind];
+ const showPhase=()=>{const segment=pvSegmentAt(video.readyState<2&&video.paused?29:Math.min(29.99,video.currentTime));const text=main.querySelector('[data-film-caption]'),count=main.querySelector('[data-film-stage]');if(text&&text.textContent!==story.detailCaptions[segment.index])text.textContent=story.detailCaptions[segment.index];if(count)count.textContent=segment.label};
  for(const event of ['timeupdate','seeked','loadeddata','emptied'])video.addEventListener(event,showPhase);showPhase();
  function label(){button.textContent=video.paused?'再生':'一時停止';button.setAttribute('aria-label',video.paused?'再現映像を再生':'再現映像を一時停止');button.setAttribute('aria-pressed',String(!video.paused));}
  video.addEventListener('play',label);video.addEventListener('pause',label);

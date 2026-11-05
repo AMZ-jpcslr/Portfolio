@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "studio": "remotion studio recreations/flow-films.tsx --public-dir=../dist --port=3001",
+    "studio": "remotion studio recreations/product-pv.tsx --public-dir=../dist --port=3001",
     "render": "node recreations/render.mjs",
     "recreation:render": "node recreations/render.mjs"
   },

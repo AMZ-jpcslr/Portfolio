@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {gzipSync} from 'node:zlib';
+import {pvStories} from '../site/music/product-pv.js';
 const {chromium}=await import(process.env.PORTFOLIO_PLAYWRIGHT_MODULE||'playwright');
 const base=process.env.PORTFOLIO_REVIEW_URL||'http://127.0.0.1:4173';
 const out='.review/core-demos';await mkdir(out,{recursive:true});
@@ -23,9 +24,15 @@ try{
    const before=await clocks(figure);assert.ok(before.some(a=>a.state==='running'));
    await figure.locator('button').click();await running(figure,false);const paused=await clocks(figure);await page.waitForTimeout(100);const still=await clocks(figure);
    assert.deepEqual(paused,still,'pause must freeze every visual animation');assert.ok(still.every(a=>a.state==='paused'));
-   for(const [time,index] of [[100,0],[3100,1],[6100,2],[9100,3]]){
+   for(const [time,index] of [[100,0],[4500,1],[8700,2]]){
     await figure.evaluate((el,time)=>el.querySelector('.core-demo-visual').getAnimations({subtree:true}).forEach(a=>a.currentTime=time),time);
     assert.equal(await figure.locator('.cd-caption.cd-at-'+index).evaluate(el=>getComputedStyle(el).visibility),'visible');
+    assert.equal(await figure.locator('.cd-caption.cd-at-'+index).innerText(),pvStories[kind].shortCaptions[index]);
+    assert.ok(await figure.locator('.cd-caption.cd-at-'+index).evaluate(el=>parseFloat(getComputedStyle(el).fontSize)>=14&&el.scrollHeight<=el.clientHeight),'scene explanation must be readable and fit');
+    for(const line of pvStories[kind].shortScenes[index].body)assert.ok((await figure.locator(`[data-pv-phase="${index}"] svg`).first().textContent()).includes(line),'explanation is included inside the animation, not only below it');
+    assert.deepEqual(await figure.locator(`[data-pv-phase="${index}"] .product-pv-svg`).evaluate(svg=>[...svg.children].filter(el=>el.tagName==='text').flatMap(el=>{const b=el.getBBox();return b.x<0||b.y<0||b.x+b.width>480||b.y+b.height>460?[el.textContent]:[]})),[],'all scene headings and explanations fit inside the animation');
+    if(kind==='mania'&&index===0){const person=await figure.locator('[data-pv-phase="0"] .flow-person').boundingBox(),scene=await figure.locator('.flow-scenes').boundingBox();assert.ok(person&&scene&&person.x>=scene.x&&person.y>=scene.y&&person.x+person.width<=scene.x+scene.width&&person.y+person.height<=scene.y+scene.height,'walking character stays inside the illustrated map');}
+    if(kind==='mania'&&[1440,390].includes(width))await figure.screenshot({path:`${out}/mania-${width}-${index}.png`});
    }
    if(width===1440)await figure.screenshot({path:`${out}/${kind}.png`});
    if(kind==='mania'&&[1440,390,320].includes(width))await page.screenshot({path:`${out}/overview-${width}.png`});
@@ -57,7 +64,7 @@ try{
   checks.push({width,all8Overviews:true,all8RecordTabs:true,pauseResume:true,offscreenPause:true,reducedMotionAndExplicitPlay:true,backgroundPause:true,history:true,overviewVideoRequests:media.length});await context.close();
  }
  assert.deepEqual(errors,[]);
- const source=Buffer.concat(await Promise.all(['feature-flows.js','core-demo.js','core-demo.css'].map(name=>readFile('site/music/'+name))));
+ const source=Buffer.concat(await Promise.all(['product-pv.js','flow-illustrations.js','feature-flows.js','core-demo.js','core-demo.css'].map(name=>readFile('site/music/'+name))));
  const results={checks,errors,assets:{rawBytes:source.length,gzipBytes:gzipSync(source).length,externalDependencies:0,additionalVideoRequests:0}};
  await writeFile(out+'/results.json',JSON.stringify(results,null,2));console.log('PASS short core demos: 8 overview + 8 record views at 4 viewport sizes; pause/resume, offscreen/background, reduced motion/manual play, history, zero overview video requests.',results.assets);
 }finally{await browser.close()}

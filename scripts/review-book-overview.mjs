@@ -25,7 +25,7 @@ try{
   await page.locator('.summary-more').focus();assert.equal(await page.locator('.book-opening-cover').count(),0);
   await page.locator('.summary-more').click();await page.waitForURL('**/projects/mania/');
   await page.locator('video').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('video').readyState>=2&&!document.querySelector('video').paused);
-  assert.deepEqual(await page.locator('video').evaluate(v=>[v.duration,v.videoWidth,v.muted,v.controls]),[20,1240,true,false]);
+  assert.deepEqual(await page.locator('video').evaluate(v=>[v.duration,v.videoWidth,v.muted,v.controls]),[30,1240,true,false]);
   await page.goBack();await page.locator('dialog[open]').waitFor();assert.equal(await page.evaluate(()=>history.state.summarySlug),'mania');
   await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
   await page.emulateMedia({reducedMotion:'reduce'});
