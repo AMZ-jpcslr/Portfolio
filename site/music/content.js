@@ -1,3 +1,4 @@
+import{featureFlows}from'./feature-flows.js';
 import{authorProject}from'./author-narratives.js';
 import {projects as existing} from '/projects.js';
 export const github='https://github.com/AMZ-jpcslr';
@@ -6,14 +7,14 @@ export const bookColors=Object.freeze({mania:'#e6ce9e',career:'#c7d1b5',stream:'
 export const bookColor=kind=>bookColors[kind];
 export const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clipNotes={
- mania:'駅の検索、徒歩時間の変更、推薦された便と選択した便の確認を再現しています。駅名と時刻の組み合わせ・ダイヤは説明用の模擬例です。実際の運行情報や、公開アプリを録画した映像ではありません。',
- career:'公開募集の確認、応募予定への追加、カレンダーでの予定確認を再現しています。企業名・日程・応募記録は架空です。',
- stream:'テキストの追加・配置・配信出力への反映という操作を再現しています。OBSやYouTubeには接続していません。',
- voice:'参加・テキスト読み上げ・翻訳の流れを再現しています。実際のDiscord操作や音声の記録ではありません。会話・名前・翻訳内容は架空です。',
- weather:'通知先の設定と地震通知の流れを再現しています。実際のDiscord操作や現在の災害情報ではありません。表示する地震・数値は架空です。',
- moral:'行動案・影響評価・Dry Runの判断の流れを再現しています。実際の試験や外部操作は行っていません。',
- proxy:'サンプル通信・検出・ブロックの流れを再現しています。実際の通信記録や顧客データではありません。',
- soccer:'位置評価・パス・シュートの考え方を再現しています。選手位置や評価の色は説明用で、実機の試合や検証結果ではありません。'
+ mania:'位置情報と現在時刻から駅入口への徒歩時間を計算し、構内・余裕時間と時刻表を合わせて、次に乗れる電車と出る目安を求める流れです。対応する入口と経路を取得できた場合の例で、駅・時刻・経路は架空です。遅延・運休や実際の乗車を保証しません。',
+ career:'最新版v2のテキスト取り込み、端末内解析、Inboxへの保存、項目ごとの確認と承認、タスク・カレンダーへの反映を簡略再現しています。企業名・日程は架空で、MyPage・Gmail・本番DBには接続していません。',
+ stream:'最新版のモジュール式エディターで、表題を追加・配置し、保存してからOBS用ブラウザ出力へ反映する流れを簡略再現しています。OBS・YouTube・VTube Studioには接続していません。',
+ voice:'VCへの参加、/voice_web join、テキスト投稿、音声生成、同じVCでの読み上げを再現しています。会話は架空で無音です。翻訳は設定済み宛先へのメンション・返信に対する別機能で、訳文は自動読み上げしません。',
+ weather:'通知先と最低震度の設定、情報取得、条件・重複確認、Discordへの通知を再現しています。地震・地域・数値は架空で、現在の速報や通知速度の実測ではありません。',
+ moral:'実際のCLIデモB_informationをもとに、予測・当事者評価・制約の適用・代替案の選択・Dry Runを模式化しています。GUI製品の画面ではありません。固定ルールと合成シナリオによる研究です。',
+ proxy:'サンプル通信の宛先判定と転送、その後の上限付きメモリ検査、PII候補の種別・件数の記録を再現しています。本文検査は送信前DLPではなく、原文を保存しません。実通信やシステム設定は変更していません。',
+ soccer:'2Dの位置情報からグリッド評価、行動候補の比較、成功・失敗に基づく重み更新までを模式化しています。配置・スコアは説明用で、実機の試合や性能向上の実測ではありません。'
 };
 const clips=Object.fromEntries(Object.entries(clipNotes).map(([kind,note])=>[kind,{type:'recreation',src:kind==='soccer'?'/recreation/media/soccer-v2.mp4':`/recreation/media/${kind}.mp4`,poster:`/recreation/media/${kind}.jpg`,size:'1240 × 900',note:'動作イメージ（再現映像）。'+note}]));
 const short={career:'予定と応募機会を、一冊に。',stream:'配信の画面を、自分の手で。',voice:'声を出せないときも、会話へ。',weather:'いつもの場所で、災害を知る。',moral:'行動の前に、影響を考える。',proxy:'見えない通信を、理解する。',soccer:'位置取りを、数値で比較する。'};
@@ -50,7 +51,11 @@ export const lifecycle={
  proxy:{label:'運用中',detail:'母と営む小規模な会社で、通信の確認に使っています。'},
  soccer:{label:'活動成果',detail:'私がつくった位置評価の仕組みを、導入用プロトタイプとして活用してもらいました。'}
 };
-export const projects=[mania,...sourceProjects].map((p,i)=>({...p,status:lifecycle[p.kind],short:descriptions[p.kind][0],tagline:descriptions[p.kind][1],purpose:purposes[p.kind],trigger:p.painPoint||p.challenge,clip:p.clip?{...p.clip,src:p.clip.src||`/media/${p.kind}.mp4`,poster:p.clip.poster||`/media/${p.kind}.jpg`}:null,number:String(i+1).padStart(2,'0'),path:`/projects/${p.slug}/`})).map(authorProject);
+export const projects=[mania,...sourceProjects].map((p,i)=>({...p,status:lifecycle[p.kind],short:descriptions[p.kind][0],tagline:descriptions[p.kind][1],purpose:purposes[p.kind],trigger:p.painPoint||p.challenge,clip:p.clip?{...p.clip,src:p.clip.src||`/media/${p.kind}.mp4`,poster:p.clip.poster||`/media/${p.kind}.jpg`}:null,number:String(i+1).padStart(2,'0'),path:`/projects/${p.slug}/`})).map(authorProject).map(p=>({...p,flow:featureFlows[p.kind].steps,
+ summary:p.kind==='mania'?p.summary+' 対応する駅入口では、位置情報から徒歩時間を計算できます。':p.kind==='career'?p.summary+' v2では日程テキストの解析と、Inboxで確認した項目の反映にも対応しています。':p.summary,
+ engineering:p.kind==='proxy'?p.engineering+' 本文のPII候補検出は転送後の通知です。記録は種類と件数に絞り、原文を保存しません。':p.engineering,
+ limits:p.kind==='proxy'?p.limits+' 本文検査は送信前DLPではありません。':p.limits
+}));
 export const chronology=[...projects].sort((a,b)=>Date.parse(a.repositoryCreatedAt)-Date.parse(b.repositoryCreatedAt));
 export const philosophy=[
  {group:'課題を理解する',label:'01 / PROBLEM',title:'身近な問題と社会の課題から考える',body:'作るものを先に決めず、不便や疑問を出発点にします。分野を限定せず、個人の視点から取り組めることを探します。'},

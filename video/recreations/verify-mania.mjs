@@ -19,5 +19,5 @@ for(const t of [0.5,4,6,8.75,11.5,15.5,19]){
  frames.push({second:t,file:name,sha256:createHash('sha256').update(out).digest('hex')});
 }
 assert.equal(new Set(frames.map(x=>x.sha256)).size,frames.length);
-const data=await readFile(file),report={file:'site/recreation/media/mania.mp4',size:data.length,sha256:createHash('sha256').update(data).digest('hex'),width:1240,height:900,fps:24,duration:20,frames:480,codec:'h264',audio:false,fullDecode:true,distinctDecodedFrames:frames,provenance:'Independent local recreation; synthetic station/timetable examples; fixed 14:00; no cloud source or artifact used.'};
+const data=await readFile(file),report={file:'site/recreation/media/mania.mp4',size:data.length,sha256:createHash('sha256').update(data).digest('hex'),width:1240,height:900,fps:24,duration:20,frames:480,codec:'h264',audio:false,fullDecode:true,distinctDecodedFrames:frames,provenance:'Feature-flow recreation with synthetic examples; see docs/feature-flow-evidence.md and verify-flows.mjs for the current complete verification.'};
 await writeFile(path.join(qa,'verification.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));

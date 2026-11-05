@@ -23,13 +23,13 @@ try{
    const before=await clocks(figure);assert.ok(before.some(a=>a.state==='running'));
    await figure.locator('button').click();await running(figure,false);const paused=await clocks(figure);await page.waitForTimeout(100);const still=await clocks(figure);
    assert.deepEqual(paused,still,'pause must freeze every visual animation');assert.ok(still.every(a=>a.state==='paused'));
-   for(const [time,index] of [[100,0],[2600,1],[5100,2]]){
+   for(const [time,index] of [[100,0],[3100,1],[6100,2],[9100,3]]){
     await figure.evaluate((el,time)=>el.querySelector('.core-demo-visual').getAnimations({subtree:true}).forEach(a=>a.currentTime=time),time);
     assert.equal(await figure.locator('.cd-caption.cd-at-'+index).evaluate(el=>getComputedStyle(el).visibility),'visible');
    }
    if(width===1440)await figure.screenshot({path:`${out}/${kind}.png`});
    if(kind==='mania'&&[1440,390,320].includes(width))await page.screenshot({path:`${out}/overview-${width}.png`});
-   await figure.locator('button').click();await figure.locator('svg').scrollIntoViewIfNeeded();await running(figure,true)
+   await figure.locator('button').click();await figure.locator('.flow-scenes').scrollIntoViewIfNeeded();await running(figure,true)
    await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
    assert.equal(await page.evaluate(()=>document.activeElement.id),'key-'+kind);
   }
@@ -48,7 +48,7 @@ try{
   assert.equal(await figure.getAttribute('data-static'),'true');assert.equal((await clocks(figure)).length,0);
   await figure.locator('button').click();await running(figure,true);assert.ok((await clocks(figure)).some(a=>a.state==='running'),'explicit play works with reduced motion');
   await figure.locator('button').click();await running(figure,false);
-  await page.goto(base+'/#works');await page.locator('#key-mania').click();const summary=page.locator('dialog[open] .core-demo');await summary.scrollIntoViewIfNeeded();await running(summary,false);assert.equal((await clocks(summary)).length,0);await summary.locator('button').click();await summary.locator('svg').scrollIntoViewIfNeeded();await running(summary,true);assert.ok((await clocks(summary)).length>0);
+  await page.goto(base+'/#works');await page.locator('#key-mania').click();const summary=page.locator('dialog[open] .core-demo');await summary.scrollIntoViewIfNeeded();await running(summary,false);assert.equal((await clocks(summary)).length,0);await summary.locator('button').click();await summary.locator('.flow-scenes').scrollIntoViewIfNeeded();await running(summary,true);assert.ok((await clocks(summary)).length>0);
   await page.evaluate(()=>{Object.defineProperty(document,'hidden',{value:true,configurable:true});document.dispatchEvent(new Event('visibilitychange'))});await running(summary,false);
   await page.evaluate(()=>{Object.defineProperty(document,'hidden',{value:false,configurable:true});document.dispatchEvent(new Event('visibilitychange'))});await running(summary,true);
   await page.locator('.summary-more').click();await page.waitForURL('**/projects/mania/');assert.equal(await page.locator('.core-demo').count(),0);
@@ -57,7 +57,7 @@ try{
   checks.push({width,all8Overviews:true,all8RecordTabs:true,pauseResume:true,offscreenPause:true,reducedMotionAndExplicitPlay:true,backgroundPause:true,history:true,overviewVideoRequests:media.length});await context.close();
  }
  assert.deepEqual(errors,[]);
- const source=Buffer.concat(await Promise.all(['core-demo.js','core-demo.css'].map(name=>readFile('site/music/'+name))));
+ const source=Buffer.concat(await Promise.all(['feature-flows.js','core-demo.js','core-demo.css'].map(name=>readFile('site/music/'+name))));
  const results={checks,errors,assets:{rawBytes:source.length,gzipBytes:gzipSync(source).length,externalDependencies:0,additionalVideoRequests:0}};
  await writeFile(out+'/results.json',JSON.stringify(results,null,2));console.log('PASS short core demos: 8 overview + 8 record views at 4 viewport sizes; pause/resume, offscreen/background, reduced motion/manual play, history, zero overview video requests.',results.assets);
 }finally{await browser.close()}
