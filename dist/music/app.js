@@ -1,4 +1,4 @@
-import{pvStories,pvSegmentAt}from'./product-pv.js';
+import{setupRecordedVideo}from'./recorded-video.js';
 import{setupBookSummary,handleSummaryHistory}from'./book-summary.js';
 import {setupSearchShelf} from './search-shelf.js';
 try{localStorage.removeItem('portfolio-sound')}catch{}
@@ -9,7 +9,7 @@ import {setupDiary} from './github-diary.js';
 import {initPaperUI} from './paper-actions.js';
 import {projects,chronology,philosophy,github,bookColor,escape as e} from './content.js';
 const main=document.querySelector('main'),motion=matchMedia('(prefers-reduced-motion: reduce)');
-let selected='mania',observer,summaryCleanup;
+let selected='mania',observer,summaryCleanup,detailMediaCleanup;
 let transition=null,routeToken=0,restoring=false,scrollTimer;
 let diaryCleanup,searchCleanup,notebookCleanup;
 let returnRequested=false;
@@ -28,17 +28,18 @@ function renderHome(){
  notebookCleanup=setupNotebook(main,chronology,projects,history.state?.notebookKind);
  summaryCleanup=setupBookSummary(main,projects,slug=>{selected=slug});diaryCleanup=setupDiary(main);renderClosing();searchCleanup=setupSearchShelf(main,projects,{query:history.state?.searchQuery,expanded:history.state?.searchExpanded,resultIds:history.state?.searchResultIds});setupDrawReveals(main);
 }
-function media(p){return `<div class="media-frame video-panel"><video class="detail-video" muted autoplay loop playsinline preload="none" poster="${p.clip.poster}" aria-label="${e(p.title)}のPV（再現映像）" aria-describedby="clip-note"><source src="${p.clip.src}" type="video/mp4"></video><span class="recreation-mark">PV・再現映像</span><button class="media-toggle" type="button" aria-label="再現映像を一時停止">一時停止</button></div><p class="detail-flow-caption" aria-live="off"><strong data-film-stage>この作品</strong><span data-film-caption>${e(pvStories[p.kind].detailCaptions[6])}</span></p><div class="media-meta"><strong>作品のPV（再現映像）</strong><span>${p.clip.size} ・ 無音</span><a href="${p.clip.src}">動画を大きく開く ↗</a></div><p class="media-caption" id="clip-note">${e(p.clip.note)}</p>`;}
+function media(p){if(p.clip.type==='unavailable')return `<div class="recording-unavailable"><strong>実動作動画を準備中</strong><p>${e(p.clip.note)}</p></div>`;return `<div class="media-frame video-panel" data-orientation="${p.clip.orientation}"><video class="detail-video" muted loop playsinline preload="none" poster="${p.clip.poster}" aria-label="${e(p.title)}の操作を再現した動作デモ" aria-describedby="clip-note"><source src="${p.clip.src}" type="video/mp4"></video><button class="media-toggle" type="button" aria-label="動作デモを再生" aria-pressed="false">再生</button></div><div class="media-meta"><strong>操作を再現した動作デモ</strong><span>${p.clip.size} ・ 約${Math.round(p.clip.duration)}秒 ・ 無音</span><a href="${p.clip.src}">動画を大きく開く ↗</a></div><p class="media-caption" id="clip-note">${e(p.clip.note)}</p>`;}
+
 
 function renderDetail(p){
  document.body.dataset.page='detail';document.title=`${p.title} — AMZ / Notes & Works`;
  const next=projects[(projects.indexOf(p)+1)%projects.length],c=p.caseStudy;
  main.innerHTML=`<section class="detail-heading"><a class="back-link" data-home href="/#works">← 作品一覧に戻る</a><div class="detail-topline"><span class="measure" aria-hidden="true">${p.number}</span><p class="eyebrow">${e(p.category)}</p></div><h1 id="detail-title" tabindex="-1">${e(p.title)}</h1><p class="detail-tagline">${e(p.tagline)}</p><p class="detail-summary">${e(p.summary)}</p><div class="detail-links">${footerLinks(p)}</div></section>
- <section class="detail-media" aria-label="再現映像のプレビュー">${media(p)}</section>
+ <section class="detail-media" aria-label="動作デモ">${media(p)}</section>
  <div class="detail-content"><p class="detail-status"><span class="lifecycle-badge">${e(p.status.label)}</span> ${e(p.status.detail)}</p><section class="detail-takeaway" aria-labelledby="takeaway-title"><h2 id="takeaway-title">${p.kind==='moral'?'研究で確かめたいこと':'この作品で取り組むこと'}</h2><p>${e(p.purpose)}</p></section><dl class="detail-facts"><div><dt>担当</dt><dd>${e(c.role.scope)}</dd></div><div><dt>技術・領域</dt><dd class="tags">${p.tags.map(e).join(' / ')}</dd></div><div><dt>利用・活動の範囲</dt><dd>${e(p.audience)}</dd></div></dl><nav class="detail-toc" aria-label="作品詳細の目次"><a href="#context">目的</a><a href="#trigger">きっかけ</a><a href="#decisions">アプローチ</a><a href="#limits">結果と現状</a><a href="#role">担当・AI活用</a></nav><div class="detail-grid"><div><section class="detail-block" id="context" tabindex="-1"><p class="eyebrow">01 / PURPOSE</p><h2>${p.kind==='moral'?'研究の問い':'解決したい困りごと'}</h2><p>${e(p.purpose)}</p>${p.features?`<ul>${p.features.map(f=>`<li>${e(f)}</li>`).join('')}</ul>`:''}</section><section class="detail-block" id="trigger" tabindex="-1"><p class="eyebrow">02 / BACKGROUND</p><h2>きっかけ</h2><p>${e(p.trigger)}</p></section><section class="detail-block" id="decisions" tabindex="-1"><p class="eyebrow">03 / APPROACH</p><h2>${p.kind==='moral'?'検証の方法':'つくるときに考えたこと'}</h2><p>${e(p.engineering)}</p><ol class="detail-flow" aria-label="仕組みの流れ">${p.flow.map(step=>`<li>${e(step)}</li>`).join('')}</ol><div class="decision-panel"><h3>${e(c.decision.choice)}</h3><p>${e(c.decision.reason)}</p></div></section><section class="detail-block" id="limits" tabindex="-1"><p class="eyebrow">04 / RESULTS &amp; CURRENT STATE</p><h2>${p.kind==='moral'?'研究の現状と限界':'使ってもらって分かったこと'}</h2><div class="result-callout"><p>${e(p.impact)}</p></div><h3>現在の課題</h3><p class="limits-note">${e(p.limits)}</p>${p.outlook?`<p>${e(p.outlook)}</p>`:''}<aside class="case-reflection" aria-label="学びと考えたこと"><h3>${e(p.reflectionTitle)}</h3><p>${e(p.reflection)}</p></aside></section></div><aside><section class="detail-block" aria-labelledby="process-title"><p class="eyebrow">APPROACH</p><h2 id="process-title">設計で考えたこと</h2><ol class="detail-process">${c.process.map(s=>`<li><h3>${e(s.title)}</h3><p>${e(s.body)}</p></li>`).join('')}</ol></section><section class="detail-block" id="role" tabindex="-1"><p class="eyebrow">MY ROLE</p><h2>担当とAIの活用</h2><p>${e(c.role.collaboration)}</p>${c.ai?`<p>${e(c.ai.human)}</p><p>${e(c.ai.assistant)}</p>`:'<p>この作品は個人開発です。課題設定、UIの検討、開発を行っています。</p>'}</section></aside></div><nav class="next-project" aria-label="ほかの作品"><a class="back-link" data-home href="/#works">← 作品一覧へ</a><a data-route href="${next.path}">次の作品 / ${e(next.title)} ↗</a></nav></div>`;
  wireDetailMedia(p);setupDrawReveals(main);
 }
-function stopMedia(){notebookCleanup?.();notebookCleanup=null;summaryCleanup?.();summaryCleanup=null;searchCleanup?.();searchCleanup=null;diaryCleanup?.();diaryCleanup=null;observer?.disconnect();for(const video of document.querySelectorAll('video'))if(!video.paused)video.pause();}
+function stopMedia(){detailMediaCleanup?.();detailMediaCleanup=null;notebookCleanup?.();notebookCleanup=null;summaryCleanup?.();summaryCleanup=null;searchCleanup?.();searchCleanup=null;diaryCleanup?.();diaryCleanup=null;observer?.disconnect();for(const video of document.querySelectorAll('video'))if(!video.paused)video.pause();}
 function savePosition(focusId){if(restoring)return;history.replaceState({...history.state,scrollY:scrollY,searchQuery:main.querySelector('.search-shelf')?.dataset.query??history.state?.searchQuery,searchExpanded:main.querySelector('.search-shelf')?.dataset.expanded==='true',searchResultIds:JSON.parse(main.querySelector('.search-shelf')?.dataset.resultIds||'null')??history.state?.searchResultIds,notebookKind:main.querySelector('.notebook')?.dataset.preview??history.state?.notebookKind,focusId:focusId??history.state?.focusId},'');}
 function cancelTransition(restoreFocus=false){
  if(!transition)return;const previous=transition;transition=null;previous.controller.abort();for(const animation of previous.animations)animation.cancel();for(const node of previous.nodes)node.remove();document.body.removeAttribute('data-navigating');main.style.visibility='';
@@ -108,25 +109,13 @@ const initial=pathProject();if(!history.state?.route)history.replaceState({route
 if(location.hash)requestAnimationFrame(()=>{const target=anchorFor(location.hash);target?.scrollIntoView({behavior:'instant'});revealDrawTarget(target)});
 window.addEventListener('hashchange',()=>revealDrawTarget(anchorFor(location.hash)));
 
-function wireDetailMedia(project){
- const video=main.querySelector('.detail-video'),button=main.querySelector('.media-toggle');if(!video)return;
- let visible=false,userPaused=false;video.autoplay=!motion.matches;
- const story=pvStories[project.kind];
- const showPhase=()=>{const segment=pvSegmentAt(video.readyState<2&&video.paused?29:Math.min(29.99,video.currentTime));const text=main.querySelector('[data-film-caption]'),count=main.querySelector('[data-film-stage]');if(text&&text.textContent!==story.detailCaptions[segment.index])text.textContent=story.detailCaptions[segment.index];if(count)count.textContent=segment.label};
- for(const event of ['timeupdate','seeked','loadeddata','emptied'])video.addEventListener(event,showPhase);showPhase();
- function label(){button.textContent=video.paused?'再生':'一時停止';button.setAttribute('aria-label',video.paused?'再現映像を再生':'再現映像を一時停止');button.setAttribute('aria-pressed',String(!video.paused));}
- video.addEventListener('play',label);video.addEventListener('pause',label);
- video.dataset.resume='true';video._resume=()=>{if(visible&&!userPaused&&!motion.matches&&!document.hidden)video.play().catch(label);};
- button.addEventListener('click',()=>{if(video.paused){userPaused=false;video.play().catch(label);}else{userPaused=true;video.pause();}label();});
- observer=new IntersectionObserver(entries=>{visible=entries.at(-1).isIntersecting;if(!visible)video.pause();else video._resume();label();},{threshold:.08});observer.observe(video);label();
- const error=()=>{document.querySelector('#route-status').textContent='動画を読み込めませんでした。動画リンクから確認できます。';button.textContent='読み込みエラー';button.disabled=true;};video.addEventListener('error',error);video.querySelector('source')?.addEventListener('error',error);
-}
+function wireDetailMedia(project){detailMediaCleanup=setupRecordedVideo(main.querySelector('.detail-video'),main.querySelector('.media-toggle'));}
 function resumeVisibleMedia(){main.querySelector('.detail-video')?._resume?.();}
 async function closeDetail(){
  const controller=new AbortController(),surface=document.createElement('div'),copy=main.cloneNode(true),headerHeight=document.querySelector('.site-header').getBoundingClientRect().height;
  surface.className='detail-closing-surface';surface.setAttribute('aria-hidden','true');surface.inert=true;surface.style.top=headerHeight+'px';
  for(const el of copy.querySelectorAll('[id]'))el.removeAttribute('id');copy.removeAttribute('id');
- const originalVideos=[...main.querySelectorAll('video')];[...copy.querySelectorAll('video')].forEach((v,i)=>{const original=originalVideos[i],canvas=document.createElement('canvas');canvas.width=original.videoWidth||1240;canvas.height=original.videoHeight||900;canvas.style.cssText='display:block;width:100%;height:auto;aspect-ratio:1240/900';try{if(original.readyState>=2)canvas.getContext('2d').drawImage(original,0,0,canvas.width,canvas.height);}catch{}if(original.readyState>=2)v.replaceWith(canvas);else{const img=document.createElement('img');img.src=original.poster;img.alt='';img.style.cssText=canvas.style.cssText;v.replaceWith(img);}});
+ const originalVideos=[...main.querySelectorAll('video')];[...copy.querySelectorAll('video')].forEach((v,i)=>{const original=originalVideos[i],canvas=document.createElement('canvas');canvas.width=original.videoWidth||1240;canvas.height=original.videoHeight||900;canvas.style.cssText='display:block;width:100%;height:auto;aspect-ratio:'+canvas.width+'/'+canvas.height;try{if(original.readyState>=2)canvas.getContext('2d').drawImage(original,0,0,canvas.width,canvas.height);}catch{}if(original.readyState>=2)v.replaceWith(canvas);else{const img=document.createElement('img');img.src=original.poster;img.alt='';img.style.cssText=canvas.style.cssText;v.replaceWith(img);}});
  Object.assign(copy.style,{position:'absolute',top:(main.getBoundingClientRect().top-headerHeight)+'px',left:'0',width:main.getBoundingClientRect().width+'px',margin:'0',background:'#f5f0e4',visibility:'visible'});surface.append(copy);document.body.append(surface);main.style.visibility='hidden';
  const animation=surface.animate([{clipPath:'inset(0 0% 0 0)',transform:'translateX(0)'},{clipPath:'inset(0 100% 0 0)',transform:'translateX(-18px)'}],{duration:360,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});
  transition={controller,animations:[animation],nodes:[surface],focusId:'detail-title'};document.body.dataset.navigating='true';await wait(360,controller.signal);

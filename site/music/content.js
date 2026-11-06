@@ -1,3 +1,4 @@
+import{interactionDemos as recordings}from'./interaction-demos.js';
 import{featureFlows}from'./feature-flows.js';
 import{authorProject}from'./author-narratives.js';
 import {projects as existing} from '/projects.js';
@@ -6,17 +7,7 @@ export const github='https://github.com/AMZ-jpcslr';
 export const bookColors=Object.freeze({mania:'#e6ce9e',career:'#c7d1b5',stream:'#dec6b8',voice:'#c8d9dc',weather:'#ddd9b5',moral:'#d6c9dd',proxy:'#d7cfb5',soccer:'#bdd0be'});
 export const bookColor=kind=>bookColors[kind];
 export const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const clipNotes={
- mania:'位置情報と現在時刻から駅入口への徒歩時間を計算し、構内・余裕時間と時刻表を合わせて、次に乗れる電車と出る目安を求める流れです。対応する入口と経路を取得できた場合の例で、駅・時刻・経路は架空です。遅延・運休や実際の乗車を保証しません。',
- career:'最新版v2のテキスト取り込み、端末内解析、Inboxへの保存、項目ごとの確認と承認、タスク・カレンダーへの反映を簡略再現しています。企業名・日程は架空で、MyPage・Gmail・本番DBには接続していません。',
- stream:'最新版のモジュール式エディターで、表題を追加・配置し、保存してからOBS用ブラウザ出力へ反映する流れを簡略再現しています。OBS・YouTube・VTube Studioには接続していません。',
- voice:'VCへの参加、/voice_web join、テキスト投稿、音声生成、同じVCでの読み上げを再現しています。会話は架空で無音です。翻訳は設定済み宛先へのメンション・返信に対する別機能で、訳文は自動読み上げしません。',
- weather:'通知先と最低震度の設定、情報取得、条件・重複確認、Discordへの通知を再現しています。地震・地域・数値は架空で、現在の速報や通知速度の実測ではありません。',
- moral:'実際のCLIデモB_informationをもとに、予測・当事者評価・制約の適用・代替案の選択・Dry Runを模式化しています。GUI製品の画面ではありません。固定ルールと合成シナリオによる研究です。',
- proxy:'サンプル通信の宛先判定と転送、その後の上限付きメモリ検査、PII候補の種別・件数の記録を再現しています。本文検査は送信前DLPではなく、原文を保存しません。実通信やシステム設定は変更していません。',
- soccer:'2Dの位置情報からグリッド評価、行動候補の比較、成功・失敗に基づく重み更新までを模式化しています。配置・スコアは説明用で、実機の試合や性能向上の実測ではありません。'
-};
-const clips=Object.fromEntries(Object.entries(clipNotes).map(([kind,note])=>[kind,{type:'recreation',src:kind==='soccer'?'/recreation/media/soccer-v2.mp4':`/recreation/media/${kind}.mp4`,poster:`/recreation/media/${kind}.jpg`,size:'1240 × 900',note:'動作イメージ（再現映像）。'+note}]));
+const clips=recordings;
 const short={career:'予定と応募機会を、一冊に。',stream:'配信の画面を、自分の手で。',voice:'声を出せないときも、会話へ。',weather:'いつもの場所で、災害を知る。',moral:'行動の前に、影響を考える。',proxy:'見えない通信を、理解する。',soccer:'位置取りを、数値で比較する。'};
 const purposes={mania:'いつもの駅で、今乗れる電車の発車時刻をひと目で判断できるようにする。',career:'応募や締切、選考の予定をまとめ、自分の次の行動と新しい応募機会を見つけやすくする。',stream:'配信画面の専門知識がない人でも、自分でレイアウトを調整できるようにする。',voice:'声を出せない場面でも、テキスト入力でボイスチャットの会話に参加できるようにする。',weather:'PC作業中も、普段開いているDiscordで地震や気象の情報に気づけるようにする。',moral:'行動前の予測と、影響を受ける当事者の評価を、AIの行動選択につなぐ仕組みを探究する。',proxy:'通信の内容と検出結果を可視化し、何がやり取りされているか確認できるようにする。',soccer:'ロボットの移動先やパス相手を考えるため、候補位置とチーム全体の動きを比較できるようにする。'};
 const sourceProjects=existing.map(p=>({...p,

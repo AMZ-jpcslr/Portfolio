@@ -1,0 +1,107 @@
+// UI reconstruction animations. No live service interaction is performed.
+export const interactionDemos={
+  "mania": {
+    "type": "animation",
+    "title": "まにあう",
+    "src": "/interaction-demos/media/mania.mp4",
+    "shortSrc": "/interaction-demos/media/mania-short.mp4",
+    "poster": "/interaction-demos/media/mania.jpg",
+    "size": "720 × 1100",
+    "orientation": "portrait",
+    "duration": 20,
+    "shortDuration": 8.083333,
+    "summary": "現在地の取得、駅検索・選択、徒歩時間による発車判定、便の詳細。",
+    "note": "実アプリの操作を簡略再現したアニメーションです。位置・駅・時刻・徒歩経路は説明用の例で、実際のGPS取得・経路照会・運行情報ではありません。"
+  },
+  "career": {
+    "type": "animation",
+    "title": "しゅうかつ手帳",
+    "src": "/interaction-demos/media/career.mp4",
+    "shortSrc": "/interaction-demos/media/career-short.mp4",
+    "poster": "/interaction-demos/media/career.jpg",
+    "size": "1280 × 900",
+    "orientation": "landscape",
+    "duration": 22,
+    "shortDuration": 8.083333,
+    "summary": "テキスト取り込み、抽出内容の確認、Inboxへの保存、承認後の予定反映。",
+    "note": "v2のテキスト取り込み、Inbox確認、承認後の反映を簡略再現しています。企業・日程は架空です。MyPage・Gmail・本番DBには接続しません。"
+  },
+  "stream": {
+    "type": "animation",
+    "title": "Streaming Screen",
+    "src": "/interaction-demos/media/stream.mp4",
+    "shortSrc": "/interaction-demos/media/stream-short.mp4",
+    "poster": "/interaction-demos/media/stream.jpg",
+    "size": "1280 × 900",
+    "orientation": "landscape",
+    "duration": 20,
+    "shortDuration": 8.083333,
+    "summary": "表題の追加・編集、配置の調整、保存、ブラウザー出力。",
+    "note": "表題追加・配置・保存と、保存済みレイアウトのブラウザー出力を再現しています。OBS・YouTube・VTube Studioとの実接続ではありません。"
+  },
+  "voice": {
+    "type": "animation",
+    "title": "Yomiage Bot",
+    "src": "/interaction-demos/media/voice.mp4",
+    "shortSrc": "/interaction-demos/media/voice-short.mp4",
+    "poster": "/interaction-demos/media/voice.jpg",
+    "size": "1280 × 900",
+    "orientation": "landscape",
+    "duration": 20,
+    "shortDuration": 8.083333,
+    "summary": "VCへの参加、/voice_web join、テキスト投稿、Botの発話状態。",
+    "note": "サンプルのDiscord画面で、VC参加・コマンド・投稿・VCでの発話状態を再現しています。実サーバーへ送信せず、無音です。発話リングは音声再生を表す再現で、実際の音声記録ではありません。"
+  },
+  "weather": {
+    "type": "animation",
+    "title": "Shindo Bot",
+    "src": "/interaction-demos/media/weather.mp4",
+    "shortSrc": "/interaction-demos/media/weather-short.mp4",
+    "poster": "/interaction-demos/media/weather.jpg",
+    "size": "1280 × 900",
+    "orientation": "landscape",
+    "duration": 22,
+    "shortDuration": 8.083333,
+    "summary": "通知先と最低震度の設定、条件を満たす新しい情報の通知。",
+    "note": "通知先・最低震度の設定後、条件を満たす新しい地震情報が指定先へ届く流れです。地震・場所・数値・日時はすべて架空で、実際の速報ではありません。実サーバーへの通知送信は行いません。"
+  },
+  "moral": {
+    "type": "animation",
+    "title": "Artificial Moral Architecture",
+    "src": "/interaction-demos/media/moral.mp4",
+    "shortSrc": "/interaction-demos/media/moral-short.mp4",
+    "poster": "/interaction-demos/media/moral.jpg",
+    "size": "1280 × 900",
+    "orientation": "landscape",
+    "duration": 20,
+    "shortDuration": 8.083333,
+    "summary": "CLIコマンドの実行、合成シナリオの判断とDry Runの出力。",
+    "note": "実在するCLIコマンドと保存された合成シナリオの出力を、端末上で再現しています。GUI製品ではありません。固定ルールによる研究用例で、現実の道徳能力や外部操作の実行を示しません。"
+  },
+  "proxy": {
+    "type": "animation",
+    "title": "Inspection Proxy",
+    "src": "/interaction-demos/media/proxy.mp4",
+    "shortSrc": "/interaction-demos/media/proxy-short.mp4",
+    "poster": "/interaction-demos/media/proxy.jpg",
+    "size": "1280 × 900",
+    "orientation": "landscape",
+    "duration": 20,
+    "shortDuration": 8.083333,
+    "summary": "HTTP通信、転送後のPII候補通知、管理画面での件数確認。",
+    "note": "合成HTTP通信の転送後に本文の形式候補を検査し、管理画面で種類・件数を確認する流れです。送信前DLPや漏えい防止の実証ではありません。原文は記録せず、実通信やCA設定の変更はありません。"
+  },
+  "soccer": {
+    "type": "animation",
+    "title": "SSL Robot AI",
+    "src": "/interaction-demos/media/soccer.mp4",
+    "shortSrc": "/interaction-demos/media/soccer-short.mp4",
+    "poster": "/interaction-demos/media/soccer.jpg",
+    "size": "1280 × 900",
+    "orientation": "landscape",
+    "duration": 20,
+    "shortDuration": 8.083333,
+    "summary": "2D環境でのロボットの移動、パス、シュート。",
+    "note": "個人制作の2Dシミュレーターを参考に、位置の変化・パス・シュートの動作を再現しています。配置・軌道は例で、実機の試合・得点・性能向上の実測ではありません。"
+  }
+};

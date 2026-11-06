@@ -1,0 +1,238 @@
+{
+  "createdAt": "2026-11-06T02:41:26.359Z",
+  "presentation": "UI interaction reconstruction; no narration or explanatory captions inside films",
+  "records": [
+    {
+      "kind": "mania",
+      "title": "まにあう",
+      "width": 720,
+      "height": 1100,
+      "duration": 20,
+      "checkpoints": [
+        0.08,
+        0.29,
+        0.43,
+        0.67,
+        0.91
+      ],
+      "source": "train_time: useGeolocation/useWalking/StationPicker/railway UI",
+      "note": "実アプリの操作を簡略再現したアニメーションです。位置・駅・時刻・徒歩経路は説明用の例で、実際のGPS取得・経路照会・運行情報ではありません。",
+      "type": "animation",
+      "src": "/interaction-demos/media/mania.mp4",
+      "shortSrc": "/interaction-demos/media/mania-short.mp4",
+      "poster": "/interaction-demos/media/mania.jpg",
+      "size": "720 × 1100",
+      "orientation": "portrait",
+      "shortDuration": 8.083333,
+      "summary": "現在地の取得、駅検索・選択、徒歩時間による発車判定、便の詳細。",
+      "hashes": {
+        "full": "af31fda49eef94608c6c0dc0ec30a2f72d7a02d9d048edffcedf3181d21bae3c",
+        "short": "ce4cc57a235b402f5d3d77e2ac479de7106aff6d2f2efff5eee13f7d4a7b11d7"
+      },
+      "audio": false
+    },
+    {
+      "kind": "career",
+      "title": "しゅうかつ手帳",
+      "width": 1280,
+      "height": 900,
+      "duration": 22,
+      "checkpoints": [
+        0.1,
+        0.3,
+        0.48,
+        0.69,
+        0.91
+      ],
+      "source": "Syukatu-Note v2: import-inbox.tsx / parser.ts / import.spec.ts",
+      "note": "v2のテキスト取り込み、Inbox確認、承認後の反映を簡略再現しています。企業・日程は架空です。MyPage・Gmail・本番DBには接続しません。",
+      "type": "animation",
+      "src": "/interaction-demos/media/career.mp4",
+      "shortSrc": "/interaction-demos/media/career-short.mp4",
+      "poster": "/interaction-demos/media/career.jpg",
+      "size": "1280 × 900",
+      "orientation": "landscape",
+      "shortDuration": 8.083333,
+      "summary": "テキスト取り込み、抽出内容の確認、Inboxへの保存、承認後の予定反映。",
+      "hashes": {
+        "full": "1c0da230e9a6bed8e390813500981c9408b816ef547c7c0fa505838bc9be7267",
+        "short": "14064cf2ac7e196554553015d5614fb128150f760cd76b396e28fb10dac5a33c"
+      },
+      "audio": false
+    },
+    {
+      "kind": "stream",
+      "title": "Streaming Screen",
+      "width": 1280,
+      "height": 900,
+      "duration": 20,
+      "checkpoints": [
+        0.08,
+        0.25,
+        0.45,
+        0.7,
+        0.92
+      ],
+      "source": "Streaming-Screen: studio/editor / render / overlay",
+      "note": "表題追加・配置・保存と、保存済みレイアウトのブラウザー出力を再現しています。OBS・YouTube・VTube Studioとの実接続ではありません。",
+      "type": "animation",
+      "src": "/interaction-demos/media/stream.mp4",
+      "shortSrc": "/interaction-demos/media/stream-short.mp4",
+      "poster": "/interaction-demos/media/stream.jpg",
+      "size": "1280 × 900",
+      "orientation": "landscape",
+      "shortDuration": 8.083333,
+      "summary": "表題の追加・編集、配置の調整、保存、ブラウザー出力。",
+      "hashes": {
+        "full": "540d969bea9b259fcc99c9e5b50228bbd7d003b2208a0c26bd8779077541d352",
+        "short": "640892caace8246520bd371f36c6f3e908c027bea03aff5838af456c5277f7d6"
+      },
+      "audio": false
+    },
+    {
+      "kind": "voice",
+      "title": "Yomiage Bot",
+      "width": 1280,
+      "height": 900,
+      "duration": 20,
+      "checkpoints": [
+        0.08,
+        0.29,
+        0.48,
+        0.7,
+        0.92
+      ],
+      "source": "Yomiage_Discord_Bot: voice_web.ts / voice_web_api.ts",
+      "note": "サンプルのDiscord画面で、VC参加・コマンド・投稿・VCでの発話状態を再現しています。実サーバーへ送信せず、無音です。発話リングは音声再生を表す再現で、実際の音声記録ではありません。",
+      "type": "animation",
+      "src": "/interaction-demos/media/voice.mp4",
+      "shortSrc": "/interaction-demos/media/voice-short.mp4",
+      "poster": "/interaction-demos/media/voice.jpg",
+      "size": "1280 × 900",
+      "orientation": "landscape",
+      "shortDuration": 8.083333,
+      "summary": "VCへの参加、/voice_web join、テキスト投稿、Botの発話状態。",
+      "hashes": {
+        "full": "731cf5ee1ac43d46e250f6e77608669d60380a100feae2eff6d9e4a0fac831f1",
+        "short": "d04fcb2b6662516d6d26e3274031faeaaa9b86dd1e94445184347ffdcb8d6b54"
+      },
+      "audio": false
+    },
+    {
+      "kind": "weather",
+      "title": "Shindo Bot",
+      "width": 1280,
+      "height": 900,
+      "duration": 22,
+      "checkpoints": [
+        0.08,
+        0.28,
+        0.47,
+        0.7,
+        0.94
+      ],
+      "source": "Shindo_Discord_Bot: set_eq_channel / set_eq_threshold / eq_notify",
+      "note": "通知先・最低震度の設定後、条件を満たす新しい地震情報が指定先へ届く流れです。地震・場所・数値・日時はすべて架空で、実際の速報ではありません。実サーバーへの通知送信は行いません。",
+      "type": "animation",
+      "src": "/interaction-demos/media/weather.mp4",
+      "shortSrc": "/interaction-demos/media/weather-short.mp4",
+      "poster": "/interaction-demos/media/weather.jpg",
+      "size": "1280 × 900",
+      "orientation": "landscape",
+      "shortDuration": 8.083333,
+      "summary": "通知先と最低震度の設定、条件を満たす新しい情報の通知。",
+      "hashes": {
+        "full": "e1b63c3b4af9ce773d2b8e5f0613a7d56ccd8d9a919d615a928c2b33096e5483",
+        "short": "407025bb34db5aecbd43c854c3f3496cd873f409c39c1baeeda8bf413be64aeb"
+      },
+      "audio": false
+    },
+    {
+      "kind": "moral",
+      "title": "Artificial Moral Architecture",
+      "width": 1280,
+      "height": 900,
+      "duration": 20,
+      "checkpoints": [
+        0.06,
+        0.25,
+        0.45,
+        0.67,
+        0.94
+      ],
+      "source": "Artificial Moral Architecture: examples/demo.py / docs/assets/cli-demo.txt",
+      "note": "実在するCLIコマンドと保存された合成シナリオの出力を、端末上で再現しています。GUI製品ではありません。固定ルールによる研究用例で、現実の道徳能力や外部操作の実行を示しません。",
+      "type": "animation",
+      "src": "/interaction-demos/media/moral.mp4",
+      "shortSrc": "/interaction-demos/media/moral-short.mp4",
+      "poster": "/interaction-demos/media/moral.jpg",
+      "size": "1280 × 900",
+      "orientation": "landscape",
+      "shortDuration": 8.083333,
+      "summary": "CLIコマンドの実行、合成シナリオの判断とDry Runの出力。",
+      "hashes": {
+        "full": "3e51880e7ec1c8aab35b263550b1c809c4a71e30eadb77215a32ee8e295c8582",
+        "short": "af9793fc8603dd17804b7110563c8aeaabe7ec3fd06ea18e6a078877c6764ec1"
+      },
+      "audio": false
+    },
+    {
+      "kind": "proxy",
+      "title": "Inspection Proxy",
+      "width": 1280,
+      "height": 900,
+      "duration": 20,
+      "checkpoints": [
+        0.07,
+        0.28,
+        0.48,
+        0.7,
+        0.94
+      ],
+      "source": "ssl-inspection-prodxy: inspection / pii / securityEvents / dashboard",
+      "note": "合成HTTP通信の転送後に本文の形式候補を検査し、管理画面で種類・件数を確認する流れです。送信前DLPや漏えい防止の実証ではありません。原文は記録せず、実通信やCA設定の変更はありません。",
+      "type": "animation",
+      "src": "/interaction-demos/media/proxy.mp4",
+      "shortSrc": "/interaction-demos/media/proxy-short.mp4",
+      "poster": "/interaction-demos/media/proxy.jpg",
+      "size": "1280 × 900",
+      "orientation": "landscape",
+      "shortDuration": 8.083333,
+      "summary": "HTTP通信、転送後のPII候補通知、管理画面での件数確認。",
+      "hashes": {
+        "full": "111def3e6389cc0074d5e57c80faaa1107a98fbb4d8c15a972df0aab8c761a7a",
+        "short": "18acfc4d445884089707bf80ca4ab167baac5e3ef879b83f4f4d4d13e058f832"
+      },
+      "audio": false
+    },
+    {
+      "kind": "soccer",
+      "title": "SSL Robot AI",
+      "width": 1280,
+      "height": 900,
+      "duration": 20,
+      "checkpoints": [
+        0.05,
+        0.28,
+        0.5,
+        0.72,
+        0.94
+      ],
+      "source": "SSL-DEMO: ScoreGrid / PositionLearning / ActionLearning / sim",
+      "note": "個人制作の2Dシミュレーターを参考に、位置の変化・パス・シュートの動作を再現しています。配置・軌道は例で、実機の試合・得点・性能向上の実測ではありません。",
+      "type": "animation",
+      "src": "/interaction-demos/media/soccer.mp4",
+      "shortSrc": "/interaction-demos/media/soccer-short.mp4",
+      "poster": "/interaction-demos/media/soccer.jpg",
+      "size": "1280 × 900",
+      "orientation": "landscape",
+      "shortDuration": 8.083333,
+      "summary": "2D環境でのロボットの移動、パス、シュート。",
+      "hashes": {
+        "full": "d23b229a9a5bc55cd06a12b023731bd0c1dc79e47e9f6395a11846cc6db92658",
+        "short": "8a568d31abd9cb4b654c140fd7615b4b925c0444241f7efd6d7e92ba4d052393"
+      },
+      "audio": false
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+[
+  {
+    "kind": "mania",
+    "title": "まにあう",
+    "width": 720,
+    "height": 1100,
+    "duration": 20,
+    "checkpoints": [
+      0.08,
+      0.29,
+      0.43,
+      0.67,
+      0.91
+    ],
+    "source": "train_time: useGeolocation/useWalking/StationPicker/railway UI",
+    "note": "実アプリの操作を簡略再現したアニメーションです。位置・駅・時刻・徒歩経路は説明用の例で、実際のGPS取得・経路照会・運行情報ではありません。",
+    "shortDuration": 8.083333,
+    "bytes": 234796,
+    "type": "animation",
+    "audio": false
+  },
+  {
+    "kind": "career",
+    "title": "しゅうかつ手帳",
+    "width": 1280,
+    "height": 900,
+    "duration": 22,
+    "checkpoints": [
+      0.1,
+      0.3,
+      0.48,
+      0.69,
+      0.91
+    ],
+    "source": "Syukatu-Note v2: import-inbox.tsx / parser.ts / import.spec.ts",
+    "note": "v2のテキスト取り込み、Inbox確認、承認後の反映を簡略再現しています。企業・日程は架空です。MyPage・Gmail・本番DBには接続しません。",
+    "shortDuration": 8.083333,
+    "bytes": 196041,
+    "type": "animation",
+    "audio": false
+  },
+  {
+    "kind": "stream",
+    "title": "Streaming Screen",
+    "width": 1280,
+    "height": 900,
+    "duration": 20,
+    "checkpoints": [
+      0.08,
+      0.25,
+      0.45,
+      0.7,
+      0.92
+    ],
+    "source": "Streaming-Screen: studio/editor / render / overlay",
+    "note": "表題追加・配置・保存と、保存済みレイアウトのブラウザー出力を再現しています。OBS・YouTube・VTube Studioとの実接続ではありません。",
+    "shortDuration": 8.083333,
+    "bytes": 274798,
+    "type": "animation",
+    "audio": false
+  },
+  {
+    "kind": "voice",
+    "title": "Yomiage Bot",
+    "width": 1280,
+    "height": 900,
+    "duration": 20,
+    "checkpoints": [
+      0.08,
+      0.29,
+      0.48,
+      0.7,
+      0.92
+    ],
+    "source": "Yomiage_Discord_Bot: voice_web.ts / voice_web_api.ts",
+    "note": "サンプルのDiscord画面で、VC参加・コマンド・投稿・VCでの発話状態を再現しています。実サーバーへ送信せず、無音です。発話リングは音声再生を表す再現で、実際の音声記録ではありません。",
+    "shortDuration": 8.083333,
+    "bytes": 240483,
+    "type": "animation",
+    "audio": false
+  },
+  {
+    "kind": "weather",
+    "title": "Shindo Bot",
+    "width": 1280,
+    "height": 900,
+    "duration": 22,
+    "checkpoints": [
+      0.08,
+      0.28,
+      0.47,
+      0.7,
+      0.94
+    ],
+    "source": "Shindo_Discord_Bot: set_eq_channel / set_eq_threshold / eq_notify",
+    "note": "通知先・最低震度の設定後、条件を満たす新しい地震情報が指定先へ届く流れです。地震・場所・数値・日時はすべて架空で、実際の速報ではありません。実サーバーへの通知送信は行いません。",
+    "shortDuration": 8.083333,
+    "bytes": 339728,
+    "type": "animation",
+    "audio": false
+  },
+  {
+    "kind": "moral",
+    "title": "Artificial Moral Architecture",
+    "width": 1280,
+    "height": 900,
+    "duration": 20,
+    "checkpoints": [
+      0.06,
+      0.25,
+      0.45,
+      0.67,
+      0.94
+    ],
+    "source": "Artificial Moral Architecture: examples/demo.py / docs/assets/cli-demo.txt",
+    "note": "実在するCLIコマンドと保存された合成シナリオの出力を、端末上で再現しています。GUI製品ではありません。固定ルールによる研究用例で、現実の道徳能力や外部操作の実行を示しません。",
+    "shortDuration": 8.083333,
+    "bytes": 1304787,
+    "type": "animation",
+    "audio": false
+  },
+  {
+    "kind": "proxy",
+    "title": "Inspection Proxy",
+    "width": 1280,
+    "height": 900,
+    "duration": 20,
+    "checkpoints": [
+      0.07,
+      0.28,
+      0.48,
+      0.7,
+      0.94
+    ],
+    "source": "ssl-inspection-prodxy: inspection / pii / securityEvents / dashboard",
+    "note": "合成HTTP通信の転送後に本文の形式候補を検査し、管理画面で種類・件数を確認する流れです。送信前DLPや漏えい防止の実証ではありません。原文は記録せず、実通信やCA設定の変更はありません。",
+    "shortDuration": 8.083333,
+    "bytes": 186252,
+    "type": "animation",
+    "audio": false
+  },
+  {
+    "kind": "soccer",
+    "title": "SSL Robot AI",
+    "width": 1280,
+    "height": 900,
+    "duration": 20,
+    "checkpoints": [
+      0.05,
+      0.28,
+      0.5,
+      0.72,
+      0.94
+    ],
+    "source": "SSL-DEMO: ScoreGrid / PositionLearning / ActionLearning / sim",
+    "note": "個人制作の2Dシミュレーターを参考に、位置の変化・パス・シュートの動作を再現しています。配置・軌道は例で、実機の試合・得点・性能向上の実測ではありません。",
+    "shortDuration": 8.083333,
+    "bytes": 1345932,
+    "type": "animation",
+    "audio": false
+  }
+]

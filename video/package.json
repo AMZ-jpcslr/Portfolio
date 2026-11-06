@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "studio": "remotion studio recreations/product-pv.tsx --public-dir=../dist --port=3001",
-    "render": "node recreations/render.mjs",
-    "recreation:render": "node recreations/render.mjs"
+    "studio": "remotion studio recreations/ui-interactions.tsx --public-dir=../dist --port=3001",
+    "render": "node recreations/render-interactions.mjs",
+    "recreation:render": "node recreations/render-interactions.mjs"
   },
   "dependencies": {
     "remotion": "4.0.535",

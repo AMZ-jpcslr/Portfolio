@@ -35,7 +35,7 @@ export async function buildSocialMetadata() {
   const block = /<!-- social-meta:start -->[\s\S]*?<!-- social-meta:end -->/;
   if (!block.test(html)) throw new Error('Social metadata block missing from index.html');
   const origin = siteOrigin();
-  for (const folder of ['music','assets','recreation']) await cp(new URL(`../site/${folder}/`, import.meta.url), new URL(`../dist/${folder}/`, import.meta.url), {recursive:true});
+  for (const folder of ['music','assets','recreation','recordings','interaction-demos']) await cp(new URL(`../site/${folder}/`, import.meta.url), new URL(`../dist/${folder}/`, import.meta.url), {recursive:true});
   await writeFile(file, html.replace(block, socialMetadata(origin)));
   const pages = [{kind:'mania',title:'まにあう',summary:'いつもの駅で、今出たら何時何分の電車に乗れそうかを確かめるアプリです。'},...existingProjects];
   for(const page of pages){
