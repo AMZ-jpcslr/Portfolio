@@ -30,7 +30,7 @@
     <script type="module" src="/notebook/interactions.js"></script>
   </head>
   <body>
-    <a class="skip-link" href="#main">本文へ移動</a>
+    <a class="skip-link" href="#main" tabindex="0">本文へ移動</a>
     <header class="site-header">
       <a class="wordmark" href="/" aria-label="北岡英磨の制作ノート ホーム"><img src="/notebook/workshop-mark.svg" width="30" height="30" alt="">制作ノート</a>
       <nav class="site-nav" aria-label="サイト内">
@@ -49,7 +49,10 @@
       </nav>
     </header>
     <section class="bio-section" aria-labelledby="history">
-      <h2 id="history">これまでの歩み</h2>
+      <div class="bio-history-heading"><h2 id="history">これまでの歩み</h2><span class="gear-rule" aria-hidden="true"><span class="gear-pair" data-gears aria-hidden="true">
+    <img class="gear-wheel gear-wheel--brass" src="/notebook/gears/brass-12.svg" width="96" height="96" alt="">
+    <img class="gear-wheel gear-wheel--green" src="/notebook/gears/green-8.svg" width="68" height="68" alt="">
+  </span></span></div>
       <ol class="bio-timeline"><li class="bio-chapter">
     <div class="bio-dateline"><span>2021.04 — 2024.03</span><span aria-hidden="true">01 / 04</span></div>
     <div class="bio-chapter-layout">

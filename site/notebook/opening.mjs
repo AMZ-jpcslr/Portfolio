@@ -48,7 +48,7 @@ function startOpening() {
 
   dialog.showModal();
   timer = setTimeout(finish, 900);
-  image.src = mobile.matches ? '/assets/opening/sp.webp' : '/assets/opening/pc.webp';
+  image.src = mobile.matches ? '/assets/opening/sp.webp?v=paper-2' : '/assets/opening/pc.webp?v=paper-2';
 }
 
 export function renderOpening() {

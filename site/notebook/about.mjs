@@ -1,3 +1,5 @@
+import { renderGearRule } from './gears.mjs';
+
 const chapters = [
   {
     key: 'school',
@@ -112,7 +114,7 @@ export function renderAbout() {
       </nav>
     </header>
     <section class="bio-section" aria-labelledby="history">
-      <h2 id="history">これまでの歩み</h2>
+      <div class="bio-history-heading"><h2 id="history">これまでの歩み</h2>${renderGearRule()}</div>
       <ol class="bio-timeline">${chapters.map(renderChapter).join('')}</ol>
     </section>
     <section class="bio-section" aria-labelledby="skills">

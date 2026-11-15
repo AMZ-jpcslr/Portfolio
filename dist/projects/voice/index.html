@@ -30,7 +30,7 @@
     <script type="module" src="/notebook/interactions.js"></script>
   </head>
   <body>
-    <a class="skip-link" href="#main">本文へ移動</a>
+    <a class="skip-link" href="#main" tabindex="0">本文へ移動</a>
     <header class="site-header">
       <a class="wordmark" href="/" aria-label="北岡英磨の制作ノート ホーム"><img src="/notebook/workshop-mark.svg" width="30" height="30" alt="">制作ノート</a>
       <nav class="site-nav" aria-label="サイト内">
@@ -40,7 +40,10 @@
       </nav>
     </header>
     <main id="main" tabindex="-1"><article class="work-story work-story-voice">
-    <header class="work-story-head"><a class="work-back" href="/#works">← 作品一覧へ</a>
+    <header class="work-story-head"><div class="work-story-nav"><a class="work-back" href="/#works">← 作品一覧へ</a><span class="gear-rule" aria-hidden="true"><span class="gear-pair" data-gears aria-hidden="true">
+    <img class="gear-wheel gear-wheel--brass" src="/notebook/gears/brass-12.svg" width="96" height="96" alt="">
+    <img class="gear-wheel gear-wheel--green" src="/notebook/gears/green-8.svg" width="68" height="68" alt="">
+  </span></span></div>
       <p class="work-category">読み上げBot</p><h1>Yomiage Bot</h1>
       <p class="work-story-intro">声を出せない人も会話に参加できるように、Discordのテキストを読み上げ、相手に合わせて翻訳するBotをつくりました。</p></header>
     <div class="work-spread"><div><figure class="work-figure">

@@ -22,6 +22,48 @@ function wirePortrait() {
   });
 }
 
+function wireNotebookGears() {
+  const pairs = document.querySelectorAll('[data-gears]');
+  if (!pairs.length) return;
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const visible = new Set();
+  let frame = 0;
+  function requestTurn() {
+    if (frame || reduced.matches || !visible.size) return;
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      const angle = (window.scrollY * .14) % 720;
+      for (const pair of visible) pair.style.setProperty('--gear-scroll', angle.toFixed(2) + 'deg');
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) visible.add(entry.target);
+        else visible.delete(entry.target);
+      }
+      requestTurn();
+    }, { rootMargin: '80px' });
+    for (const pair of pairs) observer.observe(pair);
+  } else {
+    for (const pair of pairs) visible.add(pair);
+    requestTurn();
+  }
+  window.addEventListener('scroll', requestTurn, { passive: true });
+  reduced.addEventListener('change', requestTurn);
+
+  let clicks = 0;
+  document.querySelector('[data-turn-gears]')?.addEventListener('click', event => {
+    if (reduced.matches || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    clicks++;
+    for (const selector of ['[data-turn-gears] [data-gears]', '#message [data-gears]']) {
+      document.querySelector(selector)?.style.setProperty('--gear-kick', (clicks * 60) + 'deg');
+    }
+  });
+}
+
 function addNotebookStamp() {
   const footer = document.querySelector('.site-footer');
   if (!footer) return;
@@ -56,5 +98,6 @@ function animateNotebookEntries() {
 openLegacyBookmark();
 window.addEventListener('hashchange', openLegacyBookmark);
 wirePortrait();
+wireNotebookGears();
 addNotebookStamp();
 animateNotebookEntries();

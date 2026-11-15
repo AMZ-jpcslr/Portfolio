@@ -1,5 +1,6 @@
 import { narratives } from '../music/author-narratives.js';
 import { insights } from '../music/case-insights.js';
+import { renderGearRule } from './gears.mjs';
 
 const catalogue = [
   {
@@ -96,7 +97,7 @@ function renderCard(project) {
 
 export function renderWorks() {
   return `<section id="works" class="work-gallery" aria-labelledby="work-gallery-heading">
-    <header class="work-gallery-header"><h2 id="work-gallery-heading" lang="en">Works</h2><span>作品一覧</span></header>
+    <header class="work-gallery-header"><h2 id="work-gallery-heading" lang="en">Works</h2><span>作品一覧</span>${renderGearRule()}</header>
     <ul class="work-grid">${projectList.map(renderCard).join('')}</ul></section>`;
 }
 
@@ -131,7 +132,7 @@ export function renderProject(kind) {
   if (!project) return '';
   const copy = narratives[kind];
   return `<article class="work-story work-story-${kind}">
-    <header class="work-story-head"><a class="work-back" href="/#works">← 作品一覧へ</a>
+    <header class="work-story-head"><div class="work-story-nav"><a class="work-back" href="/#works">← 作品一覧へ</a>${renderGearRule()}</div>
       <p class="work-category">${esc(project.category)}</p><h1>${esc(project.title)}</h1>
       <p class="work-story-intro">${esc(kind === 'mania' ? '今出たら、何時の電車に乗れる？' : copy.summary)}</p></header>
     <div class="work-spread"><div>${renderProjectImage(project)}</div><aside class="work-margin">

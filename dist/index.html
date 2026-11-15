@@ -30,7 +30,7 @@
     <script type="module" src="/notebook/interactions.js"></script>
   </head>
   <body>
-    <a class="skip-link" href="#main">本文へ移動</a>
+    <a class="skip-link" href="#main" tabindex="0">本文へ移動</a>
     <header class="site-header">
       <a class="wordmark" href="/" aria-label="北岡英磨の制作ノート ホーム"><img src="/notebook/workshop-mark.svg" width="30" height="30" alt="">制作ノート</a>
       <nav class="site-nav" aria-label="サイト内">
@@ -93,32 +93,46 @@
 
   dialog.showModal();
   timer = setTimeout(finish, 900);
-  image.src = mobile.matches ? '/assets/opening/sp.webp' : '/assets/opening/pc.webp';
-})();</script><section class="profile paper-width" aria-labelledby="profile-name">
-    <div class="profile-copy">
-      <span class="section-label" lang="en">Profile</span>
-      <img class="signature" src="/assets/workshop/signature.svg" width="497" height="127" alt="" fetchpriority="high">
-      <h1 id="profile-name">北岡 英磨</h1>
-      <p class="profile-lead">技術で、身近な困りごとを減らす。</p>
+  image.src = mobile.matches ? '/assets/opening/sp.webp?v=paper-2' : '/assets/opening/pc.webp?v=paper-2';
+})();</script><section class="welcome paper-width" aria-labelledby="welcome-title">
+    <div class="welcome-copy">
+      <span class="section-label" lang="en">WELCOME</span>
+      <h1 id="welcome-title"><span>からくり工房へ、</span><span>ようこそ。</span></h1>
     </div>
     <button type="button" class="portrait" data-portrait aria-label="からくり修理屋に挨拶する" aria-pressed="false" disabled>
       <span class="portrait-paper" aria-hidden="true"></span>
       <img src="/assets/workshop/front.webp" class="portrait-front" width="689" height="887" alt="正面を向いて歯車を手にしたからくり修理屋" fetchpriority="high">
       <img src="/assets/workshop/wave.webp" class="portrait-wave" width="689" height="887" alt="" aria-hidden="true">
     </button>
-    <p class="profile-bio">立命館大学で情報理工学を学んでいます。個人開発や研究では、誰がどんな場面で困っているのかを考え、設計・実装を通じて解決策を試しています。</p>
-    <a href="#message" class="next-note">メッセージを読む <span aria-hidden="true">↓</span></a>
-  </section><section id="message" class="message paper-width" aria-labelledby="message-title">
+    <div class="welcome-entry">
+      <p>歯車を回して、制作ノートを開いてみてください。</p>
+      <a href="#message" class="workshop-entry" data-turn-gears><span class="gear-pair" data-gears aria-hidden="true">
+    <img class="gear-wheel gear-wheel--brass" src="/notebook/gears/brass-12.svg" width="96" height="96" alt="">
+    <img class="gear-wheel gear-wheel--green" src="/notebook/gears/green-8.svg" width="68" height="68" alt="">
+  </span><span>制作ノートを開く</span><span class="workshop-entry-arrow" aria-hidden="true">↓</span></a>
+    </div>
+    <div class="welcome-mechanism" aria-hidden="true"><span class="gear-pair" data-gears aria-hidden="true">
+    <img class="gear-wheel gear-wheel--brass" src="/notebook/gears/brass-12.svg" width="96" height="96" alt="">
+    <img class="gear-wheel gear-wheel--green" src="/notebook/gears/green-8.svg" width="68" height="68" alt="">
+  </span></div>
+  </section><section id="message" class="message paper-width" aria-labelledby="message-title" tabindex="-1">
     <div class="message-heading" data-reveal>
       <span class="section-label" lang="en">Message</span>
       <h2 class="ink-heading" id="message-title">一緒につくりたいこと</h2>
+      <span class="gear-rule" aria-hidden="true"><span class="gear-pair" data-gears aria-hidden="true">
+    <img class="gear-wheel gear-wheel--brass" src="/notebook/gears/brass-12.svg" width="96" height="96" alt="">
+    <img class="gear-wheel gear-wheel--green" src="/notebook/gears/green-8.svg" width="68" height="68" alt="">
+  </span></span>
     </div>
     <div class="message-body"><p data-reveal>「社会の役に立ってから死ぬ」。これは、私が大切にしている人生の抱負です。自分がつくったもので誰かの困りごとを減らす。その小さな貢献を、積み重ねていきたいです。</p><p data-reveal>私の夢は、2112年にドラえもんをつくることです。世界中の「のび太」を助けたい。困ったときや、一人ではうまくいかないときに、その人に寄り添い、挑戦を支えられる存在を技術で実現したいと考えています。</p><p data-reveal>私は、つくることだけでなく、誰のどんな課題を解決するのか、何を優先してつくるのかを考えることにも面白さを感じています。利用者の声と実際の使われ方を確かめ、異なる専門性を持つ方々と協力しながら、使われ続けるプロダクトに育てていきたいです。</p></div>
     <a class="works-guide" href="#works"><img src="/assets/workshop/guide.webp" width="920" height="885" alt="" loading="lazy">
       <span><em>つくる、試す、直す。</em>作品一覧へ <b aria-hidden="true">↓</b></span>
     </a>
   </section><section id="works" class="work-gallery" aria-labelledby="work-gallery-heading">
-    <header class="work-gallery-header"><h2 id="work-gallery-heading" lang="en">Works</h2><span>作品一覧</span></header>
+    <header class="work-gallery-header"><h2 id="work-gallery-heading" lang="en">Works</h2><span>作品一覧</span><span class="gear-rule" aria-hidden="true"><span class="gear-pair" data-gears aria-hidden="true">
+    <img class="gear-wheel gear-wheel--brass" src="/notebook/gears/brass-12.svg" width="96" height="96" alt="">
+    <img class="gear-wheel gear-wheel--green" src="/notebook/gears/green-8.svg" width="68" height="68" alt="">
+  </span></span></header>
     <ul class="work-grid"><li><a class="work-card" href="/projects/mania/">
     <div class="work-stage stage-mania" aria-hidden="true"><div class="work-device device-phone"><img src="/assets/works/mania-mobile.webp" alt="" loading="lazy" decoding="async"></div></div>
     <div class="work-card-copy"><span class="work-category">交通アプリ</span><span class="work-arrow" aria-hidden="true">↗</span>
@@ -153,7 +167,10 @@
       <h3>SSL Robot AI</h3><p>位置を評価してロボットサッカーの戦略を試す。</p>
     </div></a></li></ul></section><section id="about" class="about-preview paper-width" aria-labelledby="about-title">
     <div class="about-cover">
-      <h2 id="about-title" class="english-heading" lang="en">About Me</h2>
+      <div class="about-cover-heading"><h2 id="about-title" class="english-heading" lang="en">About Me</h2><span class="gear-rule" aria-hidden="true"><span class="gear-pair" data-gears aria-hidden="true">
+    <img class="gear-wheel gear-wheel--brass" src="/notebook/gears/brass-12.svg" width="96" height="96" alt="">
+    <img class="gear-wheel gear-wheel--green" src="/notebook/gears/green-8.svg" width="68" height="68" alt="">
+  </span></span></div>
       <div class="nameplate"><span class="nameplate-type" aria-hidden="true">Yoma<br>Kitaoka</span>
         <span class="nameplate-jp">北岡 英磨<small>立命館大学 情報理工学部</small></span>
         <img src="/assets/workshop/guide.webp" alt="" width="920" height="885" loading="lazy">

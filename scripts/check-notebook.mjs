@@ -52,7 +52,30 @@ assert.doesNotMatch(pages.get('/'), /この夢に向けた一歩として/);
 for (const variant of ['pc', 'sp']) {
   const asset = await readFile(new URL(`assets/opening/${variant}.webp`, dist));
   assert.equal(asset.toString('ascii', 8, 12), 'WEBP');
-  assert.ok(asset.includes(Buffer.from('ANIM')) && asset.includes(Buffer.from('ANMF')), `Missing animation for ${variant}`);
+  const [width, height] = variant === 'pc' ? [1280, 800] : [390, 844];
+  const durations = [];
+  for (let pos = 12; pos < asset.length;) {
+    const type = asset.toString('ascii', pos, pos + 4);
+    const size = asset.readUInt32LE(pos + 4);
+    const chunk = asset.subarray(pos + 8, pos + 8 + size);
+    if (type === 'VP8X') {
+      assert.equal(chunk[0], 2, 'Opening must have animation and an opaque canvas');
+      assert.equal(chunk.readUIntLE(4, 3) + 1, width);
+      assert.equal(chunk.readUIntLE(7, 3) + 1, height);
+    } else if (type === 'ANIM') {
+      assert.deepEqual([...chunk], [233, 244, 248, 255, 1, 0], 'Play once on the Figma paper colour');
+    } else if (type === 'ANMF') {
+      assert.equal(chunk[15], 2, 'Copy opaque pixels without blending or clearing the previous frame');
+      assert.equal(chunk.toString('ascii', 16, 20), 'VP8L', 'Every update must be lossless');
+      assert.equal(chunk[24], 0x2f);
+      assert.equal((chunk.readUInt32LE(25) >>> 28) & 1, 0, 'No alpha or matte in the animation canvas');
+      durations.push(chunk.readUIntLE(12, 3));
+    }
+    pos += 8 + size + (size % 2);
+  }
+  assert.equal(durations.length, 77);
+  assert.equal(durations.at(-1), 500);
+  assert.equal(durations.reduce((sum, ms) => sum + ms, 0), 2755);
 }
 const aboutText = pages.get('/about/').replace(/<[^>]+>/g, '').replaceAll('&amp;', '&').replace(/\s+/g, '');
 for (const label of ['UBC', 'MATLAB', 'TOEIC Listening & Reading 公開テスト 905点', '2026年10月25日受験', 'TOEFL iBT 72点', '2025年7月', '実用英語技能検定準1級', '日商簿記検定3級']) {
