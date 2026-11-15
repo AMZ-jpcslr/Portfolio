@@ -114,7 +114,6 @@ html:has(.notebook-opening[open]) { overflow: hidden; }
   border-radius: 60% 25% 60% 30%;
 }
 .welcome-entry { grid-column: 1; align-self: start; margin-top: 1.8rem; }
-.welcome-entry p { max-width: 28rem; margin: 0 0 1.05rem; font-size: clamp(.94rem, 1.5vw, 1.13rem); line-height: 1.8; }
 .workshop-entry {
   display: inline-flex; align-items: center; gap: clamp(.7rem, 1.5vw, 1.2rem);
   padding: .3rem .9rem .3rem .4rem; border: 1px solid #9e9d84; border-radius: .34rem .16rem .28rem .15rem;
@@ -220,7 +219,6 @@ html:has(.notebook-opening[open]) { overflow: hidden; }
   .welcome h1 { margin-top: .8rem; }
   .portrait { grid-area: 2 / 1; width: min(59%, 14rem); margin: 1.25rem 0 0; }
   .welcome-entry { grid-row: 3; margin-top: 1.5rem; }
-  .welcome-entry p { margin-bottom: .75rem; }
   .workshop-entry .gear-pair { width: 4.25rem; }
   .work-gallery-header { gap: .65rem; }
   .gear-rule { gap: .35rem; }

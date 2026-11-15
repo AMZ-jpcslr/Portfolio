@@ -13,8 +13,7 @@ const message = [
 function renderWelcome() {
   return `<section class="welcome paper-width" aria-labelledby="welcome-title">
     <div class="welcome-copy">
-      <span class="section-label" lang="en">WELCOME</span>
-      <h1 id="welcome-title"><span>からくり工房へ、</span><span>ようこそ。</span></h1>
+      <h1 id="welcome-title" lang="en"><span>Welcome to my</span> <span>portfolio site.</span></h1>
     </div>
     <button type="button" class="portrait" data-portrait aria-label="からくり修理屋に挨拶する" aria-pressed="false" disabled>
       <span class="portrait-paper" aria-hidden="true"></span>
@@ -22,8 +21,7 @@ function renderWelcome() {
       <img src="${illustrations}/wave.webp" class="portrait-wave" width="689" height="887" alt="" aria-hidden="true">
     </button>
     <div class="welcome-entry">
-      <p>歯車を回して、制作ノートを開いてみてください。</p>
-      <a href="#message" class="workshop-entry" data-turn-gears>${renderGearPair()}<span>制作ノートを開く</span><span class="workshop-entry-arrow" aria-hidden="true">↓</span></a>
+      <a href="#message" class="workshop-entry" data-turn-gears>${renderGearPair()}<span>メッセージを読む</span><span class="workshop-entry-arrow" aria-hidden="true">↓</span></a>
     </div>
     <div class="welcome-mechanism" aria-hidden="true">${renderGearPair()}</div>
   </section>`;
