@@ -1,0 +1,255 @@
+.bio-notebook {
+  width: min(100%, 80rem);
+  margin-inline: auto;
+  padding: clamp(1.25rem, 3.3vw, 3rem) clamp(1.25rem, 6.4vw, 5.65rem) clamp(3rem, 7vw, 6rem);
+  color: var(--ink);
+}
+
+.bio-notebook :where(h1, h2, h3, p, figure, ol, ul, dl, dd) {
+  margin: 0;
+}
+
+.bio-notebook :where(p, dt, dd, a, h1, h2, h3) {
+  overflow-wrap: anywhere;
+}
+
+.bio-notebook :where(h1, h2, h3) {
+  font-family: var(--hand);
+  color: var(--green);
+  line-height: 1.45;
+}
+
+.bio-back {
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+  min-height: 2.85rem;
+  padding: .62rem 1.1rem;
+  border: 1px solid var(--green);
+  border-radius: .2rem .18rem .32rem .16rem;
+  background: var(--green);
+  color: var(--paper);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.bio-notebook a:focus-visible {
+  outline: 3px solid var(--rust);
+  outline-offset: 4px;
+}
+
+.bio-header {
+  padding-block: clamp(2.5rem, 6vw, 5rem) 0;
+}
+
+.bio-header h1 {
+  font-size: clamp(2.1rem, 5vw, 3.7rem);
+  letter-spacing: .045em;
+}
+
+.bio-header p {
+  margin-top: .55rem;
+  font-size: clamp(.95rem, 1.4vw, 1.15rem);
+}
+
+.bio-header p span { white-space: nowrap; }
+
+.bio-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .125rem 1.45rem;
+  margin-top: 1.25rem;
+}
+
+.bio-index a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: var(--green);
+  font-size: .92rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: .4em;
+}
+
+.bio-section { margin-block: clamp(2.6rem, 6vw, 5.3rem); }
+
+.bio-section h2 {
+  margin-bottom: 1.25rem;
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  scroll-margin-top: 5rem;
+}
+
+.bio-timeline,
+.bio-tools {
+  padding: 0;
+  list-style: none;
+}
+
+.bio-chapter {
+  border-top: 1px solid var(--line);
+  padding: clamp(1.15rem, 2.4vw, 2.15rem) clamp(0rem, 2vw, 2.25rem) clamp(3.2rem, 6.8vw, 6rem);
+}
+
+.bio-dateline,
+.bio-tool-heading span {
+  font-variant-numeric: tabular-nums;
+}
+
+.bio-dateline {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: clamp(1.3rem, 3.2vw, 2.6rem);
+  color: var(--rust);
+  font-family: ui-monospace, monospace;
+  font-size: .88rem;
+  letter-spacing: .045em;
+}
+
+.bio-chapter-layout {
+  display: grid;
+  grid-template-columns: minmax(12rem, .77fr) minmax(0, 1.35fr);
+  align-items: center;
+  gap: clamp(2.25rem, 6.3vw, 5.75rem);
+}
+
+.bio-illustration {
+  display: grid;
+  isolation: isolate;
+  place-items: end center;
+  aspect-ratio: 1.16;
+  background: #e9e0d0;
+  border-radius: .16rem .35rem .1rem .22rem;
+}
+
+.bio-illustration--university { background: #e1e5d9; }
+.bio-illustration--ubc { background: #e7e4d8; }
+.bio-illustration--present { background: #e8ded8; }
+
+.bio-illustration img {
+  display: block;
+  width: 92%;
+  height: 100%;
+  min-height: 0;
+  padding: .65rem .4rem;
+  object-fit: contain;
+}
+
+.bio-story {
+  padding-block: clamp(1rem, 4vw, 3rem) .5rem;
+}
+
+.bio-story h3 {
+  font-size: clamp(1.45rem, 2.5vw, 2.1rem);
+}
+
+.bio-story p,
+.bio-skills dd {
+  margin-top: 1rem;
+  line-height: 1.9;
+}
+
+.bio-skills > div,
+.bio-qualifications > div {
+  display: grid;
+  grid-template-columns: minmax(11rem, .8fr) minmax(0, 1.35fr);
+  align-items: baseline;
+  gap: 1rem clamp(1.5rem, 5.5vw, 5rem);
+  padding: 1.45rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.bio-skills dt {
+  color: var(--green);
+  font-size: clamp(1.04rem, 1.75vw, 1.35rem);
+  font-weight: 680;
+}
+
+.bio-skills dt small {
+  display: block;
+  margin-top: .38rem;
+  color: var(--rust);
+  font-size: .82rem;
+  font-weight: 550;
+  line-height: 1.7;
+}
+
+.bio-skills dd { margin: 0; }
+
+.bio-qualifications {
+  max-width: 48rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.bio-qualifications > div {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding-block: .95rem;
+}
+
+.bio-qualifications dd {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.bio-tools {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.65rem clamp(2rem, 6vw, 5rem);
+  max-width: 58rem;
+}
+
+.bio-tool-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: .8rem;
+}
+
+.bio-tool-heading span { color: var(--green); }
+.bio-tool p { margin-top: .4rem; font-size: .9rem; line-height: 1.6; }
+
+.bio-tool-track {
+  height: .28rem;
+  margin-block: .45rem;
+  overflow: hidden;
+  border-radius: .25rem;
+  background: var(--line);
+}
+
+.bio-tool-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--green);
+}
+
+@media (hover: hover) {
+  .bio-back:hover { background: var(--ink); }
+  .bio-index a:hover { text-decoration-color: var(--rust); }
+}
+
+@media (max-width: 43rem) {
+  .bio-chapter { padding-inline: 0; }
+  .bio-chapter-layout,
+  .bio-skills > div,
+  .bio-tools {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bio-chapter-layout { gap: 1.45rem; }
+  .bio-illustration { width: min(75%, 16rem); justify-self: center; }
+  .bio-story { padding: 0; }
+  .bio-story p, .bio-skills dd { line-height: 1.85; }
+  .bio-skills > div { gap: .65rem; }
+  .bio-qualifications > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: .25rem;
+  }
+  .bio-tools { gap: 1.15rem; }
+}
+
+@media (forced-colors: active) {
+  .bio-tool-track { border: 1px solid CanvasText; }
+  .bio-tool-track span { background: CanvasText; }
+}

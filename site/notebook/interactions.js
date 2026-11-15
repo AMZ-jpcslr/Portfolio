@@ -1,0 +1,60 @@
+const legacyProjects = new Map([
+  ['mania', 'mania'], ['Syukatu-Note', 'career'], ['Streaming-Screen', 'stream'],
+  ['Yomiage_Discord_Bot', 'voice'], ['Shindo_Discord_Bot', 'weather'],
+  ['Artificial-Moral-Architecture', 'moral'], ['ssl-inspection-prodxy', 'proxy'], ['SSL-DEMO', 'soccer'],
+]);
+
+function openLegacyBookmark() {
+  if (location.pathname !== '/') return;
+  const id = new URLSearchParams(location.hash.slice(1)).get('project');
+  if (legacyProjects.has(id)) location.replace('/projects/' + legacyProjects.get(id) + '/');
+}
+
+function wirePortrait() {
+  const portrait = document.querySelector('[data-portrait]');
+  if (!portrait) return;
+  portrait.disabled = false;
+  portrait.addEventListener('click', () => {
+    portrait.setAttribute('aria-pressed', String(portrait.getAttribute('aria-pressed') !== 'true'));
+  });
+  portrait.addEventListener('pointerleave', event => {
+    if (event.pointerType === 'mouse') portrait.setAttribute('aria-pressed', 'false');
+  });
+}
+
+function addNotebookStamp() {
+  const footer = document.querySelector('.site-footer');
+  if (!footer) return;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'stamp-button';
+  button.setAttribute('aria-label', '制作ノートに歯車の判を押す');
+  button.setAttribute('aria-pressed', 'false');
+  button.innerHTML = '<span class="stamp-imprint" aria-hidden="true">検印</span><span class="stamp-gear" aria-hidden="true">⚙</span>';
+  footer.append(button);
+  button.addEventListener('click', () => {
+    const pressed = button.getAttribute('aria-pressed') === 'true';
+    button.setAttribute('aria-pressed', String(!pressed));
+    button.setAttribute('aria-label', pressed ? '制作ノートに歯車の判を押す' : '歯車の判を戻す');
+  });
+}
+
+// Elements are visible in static HTML and whenever motion or observation is unavailable.
+function animateNotebookEntries() {
+  if (!('IntersectionObserver' in window)) return;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      if (!reduced.matches) entry.target.classList.add('ink-appears');
+      observer.unobserve(entry.target);
+    }
+  }, { threshold: 0.08 });
+  for (const element of document.querySelectorAll('[data-reveal]')) observer.observe(element);
+}
+
+openLegacyBookmark();
+window.addEventListener('hashchange', openLegacyBookmark);
+wirePortrait();
+addNotebookStamp();
+animateNotebookEntries();

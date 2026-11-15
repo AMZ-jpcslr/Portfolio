@@ -1,0 +1,142 @@
+@import url("./about.css");
+@import url("./projects.css");
+
+@font-face {
+  font-family: "Workshop Klee";
+  src: url("/assets/workshop/notebook-klee.ttf") format("truetype");
+  font-display: swap;
+}
+:root {
+  --paper: #f8f3e7;
+  --ink: #3d3433;
+  --green: #405a50;
+  --rust: #985333;
+  --line: #c9c0aa;
+  --plum: #654e60;
+  --hand: "Workshop Klee", "Klee One", "Yu Mincho", serif;
+  --gutter: clamp(1.25rem, 5.7vw, 5rem);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-padding-block-start: 1rem; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  background-image: radial-gradient(#9e916724 .55px, transparent .8px);
+  background-size: 5px 6px;
+  font: 1rem/1.8 "Portfolio Sans", "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+  overflow-wrap: break-word;
+}
+img { max-width: 100%; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid #814322; outline-offset: 4px; }
+::selection { color: #302822; background: #e8c78d; }
+.skip-link { position: absolute; left: 1rem; top: 0; z-index: 10; transform: translateY(-130%); padding: .6rem 1.2rem; background: var(--green); color: white; }
+.skip-link:focus { transform: none; }
+.site-header, .paper-width, .site-footer {
+  width: min(calc(100% - var(--gutter) * 2), 74rem);
+  margin-inline: auto;
+}
+.site-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; min-height: 4.8rem; position: relative; border-bottom: 1px solid var(--line); }
+.site-header::after { content: ""; position: absolute; left: 0; bottom: -2px; width: min(22%, 12rem); height: 2px; background: var(--green); border-radius: 45%; transform-origin: left; }
+.wordmark { display: flex; align-items: center; gap: .55rem; color: var(--green); text-decoration: none; font: bold clamp(1.1rem, 2vw, 1.45rem)/1.3 var(--hand); letter-spacing: .07em; }
+.site-nav { display: flex; align-items: center; gap: clamp(.6rem, 2.7vw, 2.4rem); }
+.site-nav a, .site-footer a { display: inline-flex; align-items: center; min-height: 44px; font-size: .87rem; text-decoration-thickness: 1px; text-decoration-color: transparent; text-underline-offset: .35em; }
+.site-nav a:is(:hover,:focus-visible), .site-footer a:is(:hover,:focus-visible) { text-decoration-color: currentColor; }
+.profile { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); column-gap: clamp(2rem, 6vw, 6rem); align-items: center; padding-top: clamp(3rem, 8vh, 6rem); }
+.profile-copy { align-self: end; }
+.section-label { color: var(--green); display: inline-flex; align-items: center; gap: .7rem; font: .78rem/1.4 ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; }
+.section-label::before { content: ""; width: 1.6rem; border-bottom: 1px solid var(--rust); }
+.signature { display: block; width: min(91%, 31rem); height: auto; margin: 2.1rem 0 1.45rem; }
+.profile h1 { margin: 0; font: 500 clamp(1.85rem, 3.6vw, 3.45rem)/1.25 var(--hand); letter-spacing: .12em; }
+.profile-lead { margin: 1.4rem 0 0; color: var(--green); font: 500 clamp(1.35rem, 2.5vw, 2rem)/1.6 var(--hand); }
+.profile-bio { align-self: start; margin: 1rem 0 0; max-width: 34rem; }
+.portrait { cursor: pointer; position: relative; isolation: isolate; grid-area: 1 / 2 / 3; justify-self: center; width: min(100%, 24rem); aspect-ratio: .77; background: none; padding: 0; border: 0; border-radius: .3rem; }
+.portrait img { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; }
+.portrait-paper { position: absolute; z-index: -1; inset: 17% -2% 0; background-color: #e6e7d6; background-image: linear-gradient(#85967c25 1px,transparent 1px),linear-gradient(90deg,#85967c25 1px,transparent 1px); background-size: 27px 27px; border: 1px solid #b7b8a188; transform: rotate(-1.4deg); }
+.portrait-paper::after { content: ""; position: absolute; top: -.4rem; right: .4rem; width: 5rem; height: 1rem; background: #d8bd7db5; transform: rotate(8deg); }
+.portrait-wave, .portrait[aria-pressed=true] .portrait-front { opacity: 0; }
+.portrait[aria-pressed=true] .portrait-wave { opacity: 1; }
+@media (hover:hover) and (pointer:fine) {
+  .portrait:not(:disabled):hover .portrait-front { opacity: 0; }
+  .portrait:not(:disabled):hover .portrait-wave { opacity: 1; }
+}
+.next-note { grid-column: 1/-1; margin-top: clamp(2.3rem, 6vw, 5rem); display: flex; justify-content: space-between; align-items: center; padding: .75rem 0; border-top: 1px solid var(--line); text-decoration: none; color: var(--green); font-size: .9rem; }
+.next-note span { font-size: 1.25rem; }
+.message { padding-block: clamp(3rem, 8vw, 7.5rem) 2rem; display: grid; grid-template-columns: 1fr 1.32fr; align-items: start; gap: 1rem clamp(2rem, 5vw, 5rem); }
+.ink-heading, .english-heading { font-family: var(--hand); font-weight: 500; color: var(--green); }
+.ink-heading { margin: 1rem 0; font-size: clamp(1.8rem, 3vw, 2.65rem); line-height: 1.5; }
+.ink-heading::after, .english-heading::after { content: ""; display: block; width: 5.8rem; border-bottom: 2px solid var(--rust); border-radius: 50%; transform: rotate(-2deg); margin-top: .6rem; }
+.message-body { grid-row: span 2; }
+.message-body p { line-height: 2; margin: 0 0 1.5rem; }
+.works-guide { align-self: end; display: inline-flex; width: fit-content; max-width: 100%; align-items: center; gap: 1rem; text-decoration: none; padding: .3rem .35rem; color: var(--green); }
+.works-guide img { width: clamp(4rem, 6vw, 5.5rem); height: auto; }
+.works-guide em { display: block; margin-bottom: .65rem; font: normal clamp(1.15rem, 2vw, 1.55rem)/1.5 var(--hand); border-bottom: 1px solid var(--rust); }
+.works-guide span { font-size: .92rem; }
+.works-guide b { margin-left: .5rem; }
+.about-preview { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(2rem, 6vw, 6rem); padding-block: 2.8rem 4.2rem; border-top: 1px solid var(--line); }
+.english-heading { font-size: clamp(3rem, 5.7vw, 5rem); line-height: 1.2; margin: 0 0 2rem; }
+.nameplate { background: linear-gradient(105deg,#384e44,#71856d); position: relative; margin-top: 4.5rem; height: clamp(15rem, 23vw, 19.5rem); padding: 1rem 1.2rem; color: #fff8e8; }
+.nameplate-type { font: 500 clamp(3.3rem, 6.4vw, 6.5rem)/.94 Georgia, serif; }
+.nameplate-jp { display: block; position: absolute; bottom: 1.1rem; left: 1.3rem; max-width: 55%; font: 1.3rem var(--hand); }
+.nameplate-jp small { display: block; margin-top: .4rem; font: .76rem/1.4 "Portfolio Sans", sans-serif; }
+.nameplate img { position: absolute; width: 50%; height: 132%; object-fit: contain; object-position: bottom center; bottom: -.5rem; right: -.4rem; }
+.about-info h3 { font: 500 1.45rem/1.5 var(--hand); color: var(--green); margin: 1.3rem 0 .7rem; }
+.tool-summary, .skill-stamps { list-style: none; padding: 0; margin: 0; }
+.tool-summary { display: grid; gap: .55rem; padding-top: .6rem; border-top: 1px solid var(--line); }
+.tool-summary li div { display: flex; justify-content: space-between; align-items: baseline; font-size: .91rem; }
+.tool-summary li small { color: var(--green); }
+.tool-summary i { display: block; height: 4px; width: 100%; border-radius: 2px; background: linear-gradient(to right,#80866c var(--period),#ddd9cd var(--period)); }
+.skill-stamps { display: flex; gap: .6rem; flex-wrap: wrap; }
+.skill-stamps li { padding: .25rem .75rem; font-size: .87rem; color: var(--green); border: 1px solid var(--line); border-radius: .2rem; }
+.about-info > p { border-top: 1px solid var(--line); padding-top: 1rem; }
+.chapter-link { display: inline-flex; gap: .8rem; color: var(--paper); background: var(--green); padding: .65rem 1.1rem; text-decoration: none; border-radius: .15rem .3rem .2rem .1rem; }
+.chapter-link:is(:hover,:focus-visible) { background: #324940; }
+.site-footer { min-height: 6rem; display: flex; align-items: center; gap: 1.3rem; border-top: 1px solid var(--line); font: .95rem var(--hand); color: var(--green); }
+.site-footer > span:first-child { margin-right: auto; }
+.stamp-button { min-width: 3rem; min-height: 3rem; cursor: pointer; position: relative; padding: .35rem; border: 1px solid var(--line); background: transparent; border-radius: 50%; color: var(--green); }
+.stamp-gear { font-size: 1.35rem; line-height: 1; }
+.stamp-imprint { position: absolute; right: .3rem; top: -1.5rem; font: bold 1rem var(--hand); padding: .05rem .35rem; border: 2px double var(--rust); color: var(--rust); opacity: 0; transform: rotate(-9deg); }
+.stamp-button[aria-pressed=true] .stamp-imprint { opacity: 1; }
+@media (prefers-reduced-motion:no-preference) {
+  .site-header::after { animation: draw-line .48s ease-out both; }
+  .wordmark img { animation: stamp-in .3s ease-out; }
+  .portrait img { transition: opacity .16s ease-out; }
+  .ink-appears { animation: enter-note .35s ease-out both; }
+  .bio-story.ink-appears { animation-delay: .07s; }
+  .stamp-button[aria-pressed=true] .stamp-imprint { animation: stamp-in .18s ease-out; }
+  .chapter-link span, .works-guide b { display: inline-block; transition: transform .16s; }
+  .chapter-link:is(:hover,:focus-visible) span { transform: translateX(3px); }
+  .works-guide:is(:hover,:focus-visible) b { transform: translateY(3px); }
+}
+@keyframes draw-line { from { transform: scaleX(.07); } to { transform: scaleX(1); } }
+@keyframes stamp-in { from { opacity: .3; scale: 1.15; } to { opacity: 1; scale: 1; } }
+@keyframes enter-note { from { opacity: .35; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+@media (max-width: 700px) {
+  .site-header { min-height: 3.9rem; gap: .6rem; }
+  .wordmark { font-size: 1.06rem; gap: .25rem; letter-spacing: 0; }
+  .wordmark img { width: 24px; height: 24px; }
+  .site-nav { gap: .7rem; }
+  .site-nav a { font-size: .79rem; }
+  .profile { grid-template-columns: 1fr; gap: 0; padding-top: 2rem; }
+  .profile-copy { grid-row: 1; }
+  .signature { width: min(83%, 19rem); margin: 1.1rem 0 .7rem; }
+  .profile-lead { margin-top: .75rem; }
+  .portrait { grid-area: 2/1; width: min(62%, 15.8rem); margin: 1.2rem 0 .8rem; }
+  .profile-bio { grid-row: 3; font-size: .96rem; }
+  .next-note { margin-top: 1.8rem; }
+  .message, .about-preview { grid-template-columns: 1fr; }
+  .message-body { grid-row: auto; }
+  .works-guide { justify-self: start; }
+  .message-body p { font-size: .97rem; }
+  .about-preview { gap: 1.75rem; }
+  .nameplate { margin-top: 2.5rem; height: 13rem; }
+  .nameplate-type { font-size: clamp(2.8rem, 13vw, 4.5rem); }
+  .nameplate img { height: 120%; }
+  .site-footer { gap: .75rem; }
+}

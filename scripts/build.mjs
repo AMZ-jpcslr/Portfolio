@@ -1,8 +1,16 @@
-import { readFile, writeFile, cp, mkdir } from 'node:fs/promises';
+import { cp, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { projects as existingProjects } from '../dist/projects.js';
+import { renderAbout } from '../site/notebook/about.mjs';
+import { renderHome } from '../site/notebook/home.mjs';
+import { projectList, renderProject } from '../site/notebook/projects.mjs';
 
-export function siteOrigin(env = {}) {
+const source = new URL('../site/', import.meta.url);
+const output = new URL('../dist/', import.meta.url);
+const siteName = '北岡 英磨の制作ノート';
+const homeDescription = '北岡英磨の個人開発と研究の制作ノート。8つの作品を実際の画面とともに紹介します。';
+
+export function siteOrigin(env = process.env) {
   const value = env.SITE_URL || 'https://portfolio-amz-jpcslr.vercel.app';
   const url = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`);
   if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.search || url.hash || url.pathname !== '/') {
@@ -11,42 +19,75 @@ export function siteOrigin(env = {}) {
   return url.origin;
 }
 
+function escape(value) {
+  return String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+}
+
 export function socialMetadata(origin, page = {}) {
-  const escape = value => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-  const title = page.title || '北岡 英磨 / AMZ — Notes & Works';
-  const description = page.description || 'PdMを目指す北岡英磨のポートフォリオです。個人開発と研究の8作品について、つくった理由や工夫、結果と今の課題をまとめています。';
-  const alt = '北岡英磨の個人開発と研究。ノートと8冊の作品の本を描いた紹介カード。';
-  const image = `${origin}/og-image.png?v=notes-20261028`;
-  const pageUrl = origin + (page.path || '/');
-  const og = { title, description, type: 'website', site_name: 'AMZ / Notes & Works', locale: 'ja_JP', url: pageUrl, image, 'image:type': 'image/png', 'image:width': '1200', 'image:height': '630', 'image:alt': alt };
+  const title = page.title || siteName;
+  const description = page.description || homeDescription;
+  const image = `${origin}/og-image.png?v=workshop-20261116`;
+  const alt = '北岡英磨のポートフォリオ。工房の制作ノートと、からくり修理屋のイラスト。';
+  const url = origin + (page.path || '/');
+  const og = { title, description, type: 'website', site_name: siteName, locale: 'ja_JP', url, image, 'image:type': 'image/png', 'image:width': '1200', 'image:height': '630', 'image:alt': alt };
   const twitter = { card: 'summary_large_image', title, description, image, 'image:alt': alt };
   return [
-    '<!-- social-meta:start -->',
+    `<title>${escape(title)}</title>`,
+    `<meta name="description" content="${escape(description)}">`,
     ...Object.entries(og).map(([key, value]) => `<meta property="og:${key}" content="${escape(value)}">`),
     ...Object.entries(twitter).map(([key, value]) => `<meta name="twitter:${key}" content="${escape(value)}">`),
-    `<link rel="canonical" href="${escape(pageUrl)}">`,
-    '<!-- social-meta:end -->'
-  ].join('\n  ');
+    `<link rel="canonical" href="${escape(url)}">`
+  ].join('\n    ');
+}
+
+async function needsCopy(sourcePath, outputPath) {
+  const sourceInfo = await stat(sourcePath);
+  if (sourceInfo.isDirectory()) return true;
+  try {
+    if ((await stat(outputPath)).size !== sourceInfo.size) return true;
+    const [sourceFile, outputFile] = await Promise.all([readFile(sourcePath), readFile(outputPath)]);
+    return !sourceFile.equals(outputFile);
+  } catch (error) {
+    if (error.code === 'ENOENT') return true;
+    throw error;
+  }
 }
 
 export async function buildSocialMetadata() {
-  const file = new URL('../dist/index.html', import.meta.url);
-  const html = await readFile(new URL('../site/index.html', import.meta.url), 'utf8');
-  const block = /<!-- social-meta:start -->[\s\S]*?<!-- social-meta:end -->/;
-  if (!block.test(html)) throw new Error('Social metadata block missing from index.html');
+  const template = await readFile(new URL('index.html', source), 'utf8');
+  const meta = '<!-- notebook-metadata -->';
+  const content = '<!-- notebook-content -->';
+  if (!template.includes(meta) || !template.includes(content)) throw new Error('Notebook template markers are missing.');
   const origin = siteOrigin();
-  for (const folder of ['music','assets','recreation','recordings','interaction-demos']) await cp(new URL(`../site/${folder}/`, import.meta.url), new URL(`../dist/${folder}/`, import.meta.url), {recursive:true});
-  await writeFile(file, html.replace(block, socialMetadata(origin)));
-  const pages = [{kind:'mania',title:'まにあう',summary:'いつもの駅で、今出たら何時何分の電車に乗れそうかを確かめるアプリです。'},...existingProjects];
-  for(const page of pages){
-    const folder=new URL(`../dist/projects/${page.kind}/`,import.meta.url);await mkdir(folder,{recursive:true});
-    const title=`${page.title} — AMZ / Notes & Works`, escape=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
-    await writeFile(new URL('index.html',folder),html.replace(block,socialMetadata(origin,{title,description:page.summary,path:`/projects/${page.kind}/`})).replace(/<meta name="description" content="[^"]*">/,`<meta name="description" content="${escape(page.summary)}">`).replace(/<title>[^<]*<\/title>/,`<title>${escape(title)}</title>`));
+  // The original data and media are still used by the project details and archival checks.
+  for (const name of ['music', 'assets', 'recreation', 'recordings', 'interaction-demos']) {
+    await cp(new URL(name + '/', source), new URL(name + '/', output), { recursive: true, filter: needsCopy });
   }
-  console.log(`Social sharing image: ${origin}/og-image.png`);
+  await cp(new URL('notebook/', source), new URL('notebook/', output), {
+    recursive: true,
+    filter: (from, to) => !from.endsWith('.mjs') && needsCopy(from, to)
+  });
+  const pages = [
+    { path: '/', title: siteName, description: homeDescription, render: renderHome },
+    { path: '/about/', title: `経歴とスキル ｜ ${siteName}`, description: '高校・大学・UBC交換留学・現在の4章から、北岡英磨の歩みと制作に使っている技術、資格を紹介します。', render: renderAbout },
+    ...projectList.map(project => ({
+      path: project.path, title: `${project.title} ｜ ${siteName}`,
+      description: project.summary, render: () => renderProject(project.kind)
+    }))
+  ];
+  for (const page of pages) {
+    const body = await page.render();
+    if (typeof body !== 'string' || !body.trim()) throw new Error(`Missing content for ${page.path}`);
+    let html = template.replace(meta, () => socialMetadata(origin, page)).replace(content, () => body);
+    if (page.path === '/about/') html = html.replace('<a href="/about/">About Me</a>', '<a href="/about/" aria-current="page">About Me</a>');
+    const folder = new URL('.' + page.path, output);
+    await mkdir(folder, { recursive: true });
+    await writeFile(new URL('index.html', folder), html.replace(/^[ \t]+(?=\r?$)/gm, ''));
+  }
+  console.log(`Built ${pages.length} static pages at ${origin}`);
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   await buildSocialMetadata();
   await import('./check.mjs');
 }

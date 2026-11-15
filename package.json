@@ -9,9 +9,13 @@
     "check": "node scripts/check.mjs",
     "build": "node scripts/build.mjs",
     "video:studio": "npm --prefix video run studio -- --no-open",
-    "video:render": "npm --prefix video run render"
+    "video:render": "npm --prefix video run render",
+    "lint": "eslint scripts/build.mjs scripts/serve.mjs scripts/check-notebook.mjs site/notebook/"
   },
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "eslint": "10.15.0"
   }
 }
