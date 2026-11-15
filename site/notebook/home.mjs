@@ -1,11 +1,11 @@
-import { aboutTools } from './about.mjs';
+import { aboutTools, renderToolName } from './about.mjs';
+import { renderOpening } from './opening.mjs';
 import { renderWorks } from './projects.mjs';
 
 const illustrations = '/assets/workshop';
 const message = [
   '「社会の役に立ってから死ぬ」。これは、私が大切にしている人生の抱負です。自分がつくったもので誰かの困りごとを減らす。その小さな貢献を、積み重ねていきたいです。',
   '私の夢は、2112年にドラえもんをつくることです。世界中の「のび太」を助けたい。困ったときや、一人ではうまくいかないときに、その人に寄り添い、挑戦を支えられる存在を技術で実現したいと考えています。',
-  'この夢に向けた一歩として、身近な課題の解決策を形にする個人開発と、AIの行動判断や影響評価を考える個人研究に取り組んでいます。',
   '私は、つくることだけでなく、誰のどんな課題を解決するのか、何を優先してつくるのかを考えることにも面白さを感じています。利用者の声と実際の使われ方を確かめ、異なる専門性を持つ方々と協力しながら、使われ続けるプロダクトに育てていきたいです。',
 ];
 
@@ -51,7 +51,7 @@ function renderAboutPreview() {
     </div>
     <div class="about-info">
       <h3>ツール使用歴</h3>
-      <ul class="tool-summary">${aboutTools.map(tool => `<li><div><span>${tool.name}</span><small>${tool.duration}</small></div><i aria-hidden="true" style="--period:${100 * tool.months / 60}%"></i></li>`).join('')}</ul>
+      <ul class="tool-summary">${aboutTools.map(tool => `<li><div>${renderToolName(tool)}<small>${tool.duration}</small></div><i aria-hidden="true" style="--period:${100 * tool.months / 60}%"></i></li>`).join('')}</ul>
       <h3>スキル</h3>
       <ul class="skill-stamps"><li>画面設計</li><li>ボット開発</li><li>AI研究</li></ul>
       <p>誰かが挑戦するとき、そばにいるロボットはいつ手を貸し、いつ見守るといいだろう。そんな人と技術の関わりに興味があります。小さく作って使ってもらい、その人の声を聞いて作り直すことを大切にしています。</p>
@@ -61,5 +61,5 @@ function renderAboutPreview() {
 }
 
 export function renderHome() {
-  return renderProfile() + renderMessage() + renderWorks() + renderAboutPreview();
+  return renderOpening() + renderProfile() + renderMessage() + renderWorks() + renderAboutPreview();
 }

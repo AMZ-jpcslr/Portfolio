@@ -24,6 +24,7 @@ for (const pathname of routes) {
   assert.match(html, /<title>[^<]+<\/title>/);
   assert.match(html, /<main id="main"[^>]*>[\s\S]*?<h1\b/, `Content must be rendered without JavaScript on ${pathname}`);
   assert.equal((html.match(/<h1\b/g) || []).length, 1, `Invalid primary heading count on ${pathname}`);
+  assert.equal(html.includes('<dialog class="notebook-opening"'), pathname === '/', `Unexpected opening placement on ${pathname}`);
   assert.doesNotMatch(html, /<!-- notebook-content -->|採用担当の方へ|href="[^"]*#search"|role="search"|id="search"/);
   const pageIds = [...html.matchAll(/\sid="([^"]+)"/g)].map(match => match[1]);
   assert.equal(new Set(pageIds).size, pageIds.length, `Duplicate id on ${pathname}`);
@@ -47,6 +48,12 @@ for (const [page, target] of links) {
   checkedFiles.add(filename);
 }
 for (const kind of kinds) assert.ok(pages.get('/').includes(`href="/projects/${kind}/"`), `Missing work link: ${kind}`);
+assert.doesNotMatch(pages.get('/'), /この夢に向けた一歩として/);
+for (const variant of ['pc', 'sp']) {
+  const asset = await readFile(new URL(`assets/opening/${variant}.webp`, dist));
+  assert.equal(asset.toString('ascii', 8, 12), 'WEBP');
+  assert.ok(asset.includes(Buffer.from('ANIM')) && asset.includes(Buffer.from('ANMF')), `Missing animation for ${variant}`);
+}
 const aboutText = pages.get('/about/').replace(/<[^>]+>/g, '').replaceAll('&amp;', '&').replace(/\s+/g, '');
 for (const label of ['UBC', 'MATLAB', 'TOEIC Listening & Reading 公開テスト 905点', '2026年10月25日受験', 'TOEFL iBT 72点', '2025年7月', '実用英語技能検定準1級', '日商簿記検定3級']) {
   assert.ok(aboutText.includes(label.replace(/\s+/g, '')), `Missing About Me information: ${label}`);

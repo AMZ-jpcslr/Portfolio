@@ -141,6 +141,6 @@ export function renderProject(kind) {
     <nav class="work-links" aria-label="作品の関連リンク">
       <a class="work-back" href="/#works">← 作品一覧に戻る</a>
       ${project.live ? `<a href="${project.live}">公開アプリを開く ↗</a>` : ''}
-      <a href="${project.repository}">GitHubで作品を見る ↗</a></nav>
+      <a class="github-link" href="${project.repository}"><img src="/notebook/icons/github.svg" alt="" width="16" height="16">GitHubで作品を見る <span aria-hidden="true">↗</span></a></nav>
   </article>`;
 }

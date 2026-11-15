@@ -1,0 +1,53 @@
+.tool-brand,
+.github-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.tool-brand {
+  gap: .55rem;
+  min-width: 0;
+}
+
+.tool-brand img {
+  box-sizing: border-box;
+  flex: none;
+  width: 1.875rem;
+  height: 1.875rem;
+  padding: .26rem;
+  object-fit: contain;
+  border: 1px solid var(--line);
+  border-radius: .34rem .26rem .38rem .24rem;
+  background: #fffcf5;
+}
+
+.tool-brand img[src$="/railway.svg"] {
+  background: #26232a;
+  border-color: #26232a;
+}
+
+.tool-summary li div,
+.bio-tool-heading {
+  align-items: center;
+}
+
+.github-link {
+  gap: .33em;
+}
+
+.github-link img {
+  flex: none;
+  width: 1.06em;
+  height: 1.06em;
+}
+
+@media (forced-colors: active) {
+  .tool-brand img {
+    forced-color-adjust: none;
+  }
+  .github-link img {
+    forced-color-adjust: none;
+    background: white;
+    border-radius: 50%;
+  }
+}

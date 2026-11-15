@@ -57,13 +57,13 @@ const skills = [
 ];
 
 export const aboutTools = [
-  { name: 'Figma', duration: '5か月', months: 5, use: '画面設計とプロトタイプ制作' },
-  { name: 'VS Code', duration: '5年', months: 60, use: 'コードの編集と開発' },
-  { name: 'Google Colab', duration: '1年', months: 12, use: 'Pythonノートブックでの実験' },
-  { name: 'Blender', duration: '1年', months: 12, use: '3Dモデリング' },
-  { name: 'MATLAB', duration: '6か月', months: 6, use: '数値計算とデータの可視化' },
-  { name: 'Vercel', duration: '約6か月', months: 6, use: 'Webサイト・アプリの公開' },
-  { name: 'Railway', duration: '約2年', months: 24, use: 'サーバー上でのアプリ運用' },
+  { name: 'Figma', icon: 'figma', duration: '5か月', months: 5, use: '画面設計とプロトタイプ制作' },
+  { name: 'VS Code', icon: 'vscode', duration: '5年', months: 60, use: 'コードの編集と開発' },
+  { name: 'Google Colab', icon: 'googlecolab', duration: '1年', months: 12, use: 'Pythonノートブックでの実験' },
+  { name: 'Blender', icon: 'blender', duration: '1年', months: 12, use: '3Dモデリング' },
+  { name: 'MATLAB', icon: 'matlab', duration: '6か月', months: 6, use: '数値計算とデータの可視化' },
+  { name: 'Vercel', icon: 'vercel', duration: '約6か月', months: 6, use: 'Webサイト・アプリの公開' },
+  { name: 'Railway', icon: 'railway', duration: '約2年', months: 24, use: 'サーバー上でのアプリ運用' },
 ];
 
 const qualifications = [
@@ -89,9 +89,13 @@ function renderChapter(chapter, index) {
   </li>`;
 }
 
+export function renderToolName(tool) {
+  return `<span class="tool-brand"><img src="/notebook/icons/${tool.icon}.svg" alt="" width="30" height="30" loading="lazy">${tool.name}</span>`;
+}
+
 function renderTool(tool) {
   return `<li class="bio-tool">
-    <div class="bio-tool-heading"><strong>${tool.name}</strong><span>${tool.duration}</span></div>
+    <div class="bio-tool-heading"><strong>${renderToolName(tool)}</strong><span>${tool.duration}</span></div>
     <div class="bio-tool-track" aria-hidden="true"><span style="width: ${tool.months / 60 * 100}%"></span></div>
     <p>${tool.use}</p>
   </li>`;
