@@ -54,7 +54,7 @@ function renderAboutPreview() {
       <ul class="tool-summary">${aboutTools.map(tool => `<li><div>${renderToolName(tool)}<small>${tool.duration}</small></div><i aria-hidden="true" style="--period:${100 * tool.months / 60}%"></i></li>`).join('')}</ul>
       <h3>スキル</h3>
       <ul class="skill-stamps"><li>画面設計</li><li>ボット開発</li><li>AI研究</li></ul>
-      <p>誰かが挑戦するとき、そばにいるロボットはいつ手を貸し、いつ見守るといいだろう。そんな人と技術の関わりに興味があります。小さく作って使ってもらい、その人の声を聞いて作り直すことを大切にしています。</p>
+      <p>2005年生まれ、兵庫県出身です。小学3年生のとき、初めてプログラミングに触れました。昔から人助けが好きで、誰かの力になれるとうれしくなります。今は、技術を使って人の困りごとを解決する仕事に就きたくて、就職活動に奔走しています。</p>
       <a class="chapter-link" href="/about/">経歴とスキルを見る <span aria-hidden="true">→</span></a>
     </div>
   </section>`;
