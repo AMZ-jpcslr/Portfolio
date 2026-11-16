@@ -53,9 +53,12 @@ function rememberWorkPosition() {
 function wirePortrait() {
   const portrait = document.querySelector('[data-portrait]');
   if (!portrait) return;
-  const alternate = portrait.querySelector('.portrait-looking');
+  const images = portrait.querySelectorAll('img');
   let pointerType;
-  alternate.decode().then(() => { portrait.disabled = false; }, () => { /* Keep the working pose. */ });
+  Promise.all(Array.from(images, image => image.decode())).then(
+    () => { portrait.disabled = false; },
+    () => { /* Leave the available artwork static. */ }
+  );
   portrait.addEventListener('pointerdown', event => { pointerType = event.pointerType; });
   portrait.addEventListener('pointerenter', event => {
     if (event.pointerType === 'mouse') portrait.setAttribute('aria-pressed', 'true');
@@ -112,6 +115,32 @@ function wireNotebookGears() {
   });
 }
 
+function trackReadingProgress() {
+  const meter = document.querySelector('.reading-progress');
+  const root = document.scrollingElement;
+  let frame = 0;
+  function update() {
+    frame = 0;
+    const range = root.scrollHeight - root.clientHeight;
+    meter.hidden = range <= 0;
+    if (meter.hidden) return;
+    const position = Math.max(0, root.scrollTop);
+    // Fractional pixels can leave the bottom just short of the integer scroll height.
+    const ratio = position > 0 && range - position < 1 ? 1 : Math.min(1, position / range);
+    meter.style.setProperty('--reading-ratio', ratio);
+    const percent = String(Math.round(ratio * 100));
+    if (meter.getAttribute('aria-valuenow') !== percent) meter.setAttribute('aria-valuenow', percent);
+  }
+  function schedule() {
+    if (!frame) frame = requestAnimationFrame(update);
+  }
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  window.addEventListener('pageshow', schedule);
+  if ('ResizeObserver' in window) new ResizeObserver(schedule).observe(document.body);
+  update();
+}
+
 function addNotebookStamp() {
   const footer = document.querySelector('.site-footer');
   if (!footer) return;
@@ -145,6 +174,7 @@ function animateNotebookEntries() {
 
 openLegacyBookmark();
 rememberWorkPosition();
+trackReadingProgress();
 window.addEventListener('hashchange', openLegacyBookmark);
 wirePortrait();
 introduceWelcome();

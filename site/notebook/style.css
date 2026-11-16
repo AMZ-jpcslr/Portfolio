@@ -1,5 +1,6 @@
 @import url("./about.css");
 @import url("./projects.css");
+@import url("./hand-gear.css");
 
 @font-face {
   font-family: "Workshop Klee";
@@ -81,6 +82,35 @@ html:has(.notebook-opening[open]) { overflow: hidden; }
 ::selection { color: #302822; background: #e8c78d; }
 .skip-link { position: absolute; left: 1rem; top: 0; z-index: 10; transform: translateY(-130%); padding: .6rem 1.2rem; background: var(--green); color: white; }
 .skip-link:focus { transform: none; }
+.reading-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 6px;
+  z-index: 8;
+  pointer-events: none;
+  --reading-ratio: 0;
+}
+.reading-track { position: absolute; inset: 0; overflow: hidden; }
+.reading-track::before, .reading-fill { position: absolute; inset: 0 0 2px; }
+.reading-track::before { content: ""; background: #ded4bd; }
+.reading-fill { background: var(--green); transform-origin: left; transform: scaleX(var(--reading-ratio)); }
+.reading-track::after {
+  content: "";
+  position: absolute;
+  inset: 3px 0 0;
+  border-top: 1px solid #92734c;
+  background: repeating-linear-gradient(105deg, #a78859 0 2px, transparent 2px 5px);
+}
+.reading-pinion { position: absolute; top: 4px; right: 3px; width: 18px; height: 18px; }
+@media (prefers-reduced-motion: no-preference) {
+  .reading-track::after { background-position-x: calc(var(--reading-ratio) * 120px); }
+  .reading-pinion { transform: rotate(calc(var(--reading-ratio) * 2turn)); }
+}
+@media (forced-colors: active) {
+  .reading-track::before { background: Canvas; }
+  .reading-fill { background: Highlight; forced-color-adjust: none; }
+}
+@media print { .reading-progress { display: none; } }
 .site-header, .paper-width, .site-footer {
   width: min(calc(100% - var(--gutter) * 2), 74rem);
   margin-inline: auto;
