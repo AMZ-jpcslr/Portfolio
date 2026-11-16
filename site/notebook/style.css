@@ -123,16 +123,12 @@ html:has(.notebook-opening[open]) { overflow: hidden; }
 .workshop-entry:is(:hover,:focus-visible) { text-decoration-color: var(--rust); }
 .workshop-entry-arrow { color: var(--rust); font-family: var(--hand); }
 .welcome-drawing { position: relative; isolation: isolate; grid-area: 1 / 2 / 3; align-self: center; display: grid; justify-items: center; }
-.portrait { cursor: pointer; display: block; position: relative; width: min(83%, 23rem); aspect-ratio: 689 / 887; background: none; padding: 0; border: 0; border-radius: .3rem; }
+.portrait { cursor: pointer; display: block; position: relative; width: min(83%, 23rem); aspect-ratio: 736 / 920; background: none; padding: 0; border: 0; border-radius: .3rem; }
 .portrait img { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; }
 .portrait-paper { position: absolute; z-index: -1; inset: 15% 0 2%; background: #dfe5d6 url("./gears/drafting-sheet.svg") center / cover; border: 1px solid #aeb9a5; transform: rotate(-2deg); box-shadow: 5px 5px 0 #d3c8a459; }
 .portrait-paper::after { content: ""; position: absolute; top: -.45rem; right: 4%; width: clamp(2.6rem, 5vw, 4.5rem); height: .95rem; background: #d6b975bb; transform: rotate(11deg); }
-.portrait-wave, .portrait[aria-pressed=true] .portrait-front { opacity: 0; }
-.portrait[aria-pressed=true] .portrait-wave { opacity: 1; }
-@media (hover:hover) and (pointer:fine) {
-  .portrait:not(:disabled):hover .portrait-front { opacity: 0; }
-  .portrait:not(:disabled):hover .portrait-wave { opacity: 1; }
-}
+.portrait-looking, .portrait:enabled[aria-pressed=true] .portrait-working { opacity: 0; }
+.portrait:enabled[aria-pressed=true] .portrait-looking { opacity: 1; }
 .gear-pair { display: inline-block; flex: none; position: relative; width: 5.2rem; aspect-ratio: 150 / 106; pointer-events: none; }
 .workshop-entry .gear-pair { width: 3.35rem; }
 .gear-wheel { position: absolute; display: block; height: auto; transform-origin: center; }
@@ -203,17 +199,22 @@ html:has(.notebook-opening[open]) { overflow: hidden; }
 @media (prefers-reduced-motion:no-preference) {
   body:has(.notebook-opening[open]) .welcome :is(h1,.portrait,.ink-lettering) { opacity: 0; }
   .welcome.welcome-writing h1 span { color: transparent; }
-  .welcome-writing h1 span:last-child::after { transform-origin: left; animation: ink-underline .13s 1.65s ease-out both; }
-  .portrait-waiting { opacity: 0; }
-  .portrait-arriving { animation: welcome-figure .6s .08s ease-out backwards; }
-  .ink-trace { stroke-dasharray: 1; animation: ink-track var(--duration) var(--start) linear both; }
-  .ink-finish { animation: ink-spread .035s var(--start) linear both; }
+  .welcome-writing h1 span:last-child::after { transform-origin: left; transform: scaleX(0); }
+  .welcome-writing .portrait { opacity: 0; }
+  .welcome-finishing {
+    --underline-duration: 130ms;
+  }
+  .welcome-finishing h1 span:last-child::after { animation: ink-underline var(--underline-duration) var(--underline-start) ease-out both; }
+  .welcome-finishing .portrait { animation: welcome-figure calc(var(--underline-start) + var(--underline-duration)) ease-in-out both; }
+  .ink-final-word { --row-delay: calc(var(--underline-start) - var(--ending-duration)); }
+  .ink-trace { stroke-dasharray: 1; animation: ink-track var(--duration) calc(var(--row-delay, 0ms) + var(--start)) linear both; }
+  .ink-finish { animation: ink-spread .035s calc(var(--row-delay, 0ms) + var(--start)) linear both; }
   .gear-wheel--brass { transform: rotate(var(--gear-scroll, 0deg)); rotate: var(--gear-kick, 0deg); }
   .gear-wheel--green { transform: rotate(calc(-1.5 * var(--gear-scroll, 0deg))); rotate: calc(-1.5 * var(--gear-kick, 0deg)); }
   .gear-wheel { transition: rotate .32s cubic-bezier(.2,.65,.3,1); }
   .site-header::after { animation: draw-line .48s ease-out both; }
   .wordmark img { animation: stamp-in .3s ease-out; }
-  .portrait img { transition: opacity .16s ease-out; }
+  .portrait img { transition: opacity .42s ease-in-out; }
   .ink-appears { animation: enter-note .35s ease-out both; }
   .bio-story.ink-appears { animation-delay: .07s; }
   .stamp-button[aria-pressed=true] .stamp-imprint { animation: stamp-in .18s ease-out; }

@@ -17,9 +17,9 @@ function renderWelcome() {
     </div>
     <div class="welcome-drawing">
       <span class="portrait-paper" aria-hidden="true"></span>
-      <button type="button" class="portrait" data-portrait aria-label="からくり修理屋に挨拶する" aria-pressed="false" disabled>
-        <img src="${illustrations}/front.webp" class="portrait-front" width="689" height="887" alt="正面を向いて歯車を手にしたからくり修理屋" fetchpriority="high">
-        <img src="${illustrations}/wave.webp" class="portrait-wave" width="689" height="887" alt="" aria-hidden="true">
+      <button type="button" class="portrait" data-portrait aria-label="からくり修理屋に顔を上げてもらう" aria-pressed="false" disabled>
+        <img src="${illustrations}/working.webp" class="portrait-working" width="736" height="920" alt="懐中時計の歯車を調整しているからくり修理屋" fetchpriority="high">
+        <img src="${illustrations}/looking-up.webp" class="portrait-looking" width="736" height="920" alt="" aria-hidden="true">
       </button>
     </div>
     <div class="welcome-entry">

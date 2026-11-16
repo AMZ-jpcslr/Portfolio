@@ -19,6 +19,8 @@ const strokes = {
 
 const inkWidth = { W: 19, m: 22, i: 64, l: 64, '.': 140 };
 const svgNS = 'http://www.w3.org/2000/svg';
+const lineDuration = 800;
+const lineBreak = 50;
 
 function svgElement(name, attributes) {
   const element = document.createElementNS(svgNS, name);
@@ -54,8 +56,11 @@ function renderLettering(heading) {
   const canvas = document.createElement('canvas').getContext('2d');
   if (!canvas || !bounds.width || !bounds.height) return null;
   const svg = svgElement('svg', { class: 'ink-lettering', 'aria-hidden': 'true', focusable: 'false', viewBox: '0 0 ' + bounds.width + ' ' + bounds.height, preserveAspectRatio: 'none' });
-  const definitions = svgElement('defs', {});
-  svg.append(definitions);
+  const ending = svgElement('g', { class: 'ink-final-word' });
+  const endingMasks = svgElement('defs', {});
+  ending.append(endingMasks);
+  let lastLine;
+  let endingDuration;
   const lines = [...heading.querySelectorAll('span')];
   if (lines.some(line => [...line.textContent].some(letter => letter !== ' ' && !strokes[letter]))) return null;
   const range = document.createRange();
@@ -69,7 +74,9 @@ function renderLettering(heading) {
     probe.remove();
     canvas.font = [font.fontStyle, font.fontWeight, font.fontSize, font.fontFamily].join(' ');
     const group = svgElement('g', { fill: font.color, 'font-family': font.fontFamily, 'font-size': font.fontSize, 'font-style': font.fontStyle, 'font-weight': font.fontWeight });
-    const duration = 800 / content.length;
+    const definitions = svgElement('defs', {});
+    const duration = lineDuration / content.length;
+    const lastWord = content.data.lastIndexOf(' ') + 1;
     for (let i = 0; i < content.length; i++) {
       const letter = content.data[i];
       if (letter === ' ') continue;
@@ -79,53 +86,59 @@ function renderLettering(heading) {
       const m = canvas.measureText(letter);
       const box = { x: x - m.actualBoundingBoxLeft, y: baseline - m.actualBoundingBoxAscent, w: m.actualBoundingBoxLeft + m.actualBoundingBoxRight, h: m.actualBoundingBoxAscent + m.actualBoundingBoxDescent };
       const id = 'welcome-stroke-' + row + '-' + i;
-      const start = (row ? 850 : 0) + i * duration;
-      definitions.append(strokeMask(id, letter, box, row === 1, start, duration));
+      const isEnding = row === lines.length - 1 && i >= lastWord;
+      const start = isEnding ? (i - lastWord) * duration : row * (lineDuration + lineBreak) + i * duration;
+      const masks = isEnding ? endingMasks : definitions;
+      masks.append(strokeMask(id, letter, box, row === 1, start, duration));
       const glyph = svgElement('text', { x, y: baseline, mask: 'url(#' + id + ')' });
       glyph.textContent = letter;
-      group.append(glyph);
+      (isEnding ? ending : group).append(glyph);
     }
-    svg.append(group);
+    svg.append(definitions, group);
+    lastLine = group;
+    endingDuration = (content.length - lastWord) * duration;
   }
-  return svg;
+  return { svg, lastLine, ending, endingDuration };
 }
 
 export function introduceWelcome() {
   const cover = document.querySelector('.welcome');
   if (!cover) return;
   const heading = cover.querySelector('h1');
-  const portrait = cover.querySelector('.portrait');
-  const front = portrait.querySelector('.portrait-front');
+  const working = cover.querySelector('.portrait-working');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  let cleanup;
   let visit = 0;
-  function finishWriting() {
-    clearTimeout(cleanup);
-    cover.classList.remove('welcome-writing');
-    heading.parentElement.querySelector('.ink-lettering')?.remove();
-  }
   function showStatic() {
     visit++;
-    portrait.classList.remove('portrait-waiting', 'portrait-arriving');
-    finishWriting();
+    cover.classList.remove('welcome-writing', 'welcome-finishing');
+    heading.parentElement.querySelector('.ink-lettering')?.remove();
   }
   function arrive() {
     showStatic();
     if (reduced.matches || document.hidden || location.hash) return;
-    // Start the fade when the illustration can paint, even on a cold mobile connection.
-    const currentVisit = visit;
-    portrait.classList.add('portrait-waiting');
-    front.decode().then(() => {
-      if (currentVisit === visit) portrait.classList.replace('portrait-waiting', 'portrait-arriving');
-    }, () => {
-      if (currentVisit === visit) portrait.classList.remove('portrait-waiting');
-    });
     const lettering = renderLettering(heading);
     if (!lettering) return;
-    heading.after(lettering);
+    const currentVisit = visit;
+    const started = performance.now();
+    heading.after(lettering.svg);
     cover.classList.add('welcome-writing');
-    cleanup = setTimeout(finishWriting, 1810);
+    // Even on a slow connection, "Welcome to my portfolio" writes immediately.
+    // The final word and underline share a finish with the decoded portrait.
+    function finishTogether() {
+      if (currentVisit !== visit) return;
+      const remaining = 2 * lineDuration + lineBreak - (performance.now() - started);
+      // With the 130ms underline, even a late portrait gets a full 600ms fade.
+      const untilUnderline = Math.max(470, lettering.endingDuration, remaining);
+      cover.style.setProperty('--underline-start', untilUnderline + 'ms');
+      cover.style.setProperty('--ending-duration', lettering.endingDuration + 'ms');
+      lettering.lastLine.append(lettering.ending);
+      cover.classList.add('welcome-finishing');
+    }
+    working.decode().then(finishTogether, finishTogether);
   }
+  cover.addEventListener('animationend', event => {
+    if (event.animationName === 'ink-underline') showStatic();
+  });
   document.addEventListener('notebook:openingstart', showStatic);
   document.addEventListener('notebook:openingend', arrive);
   reduced.addEventListener('change', showStatic);

@@ -53,8 +53,16 @@ function rememberWorkPosition() {
 function wirePortrait() {
   const portrait = document.querySelector('[data-portrait]');
   if (!portrait) return;
-  portrait.disabled = false;
-  portrait.addEventListener('click', () => {
+  const alternate = portrait.querySelector('.portrait-looking');
+  let pointerType;
+  alternate.decode().then(() => { portrait.disabled = false; }, () => { /* Keep the working pose. */ });
+  portrait.addEventListener('pointerdown', event => { pointerType = event.pointerType; });
+  portrait.addEventListener('pointerenter', event => {
+    if (event.pointerType === 'mouse') portrait.setAttribute('aria-pressed', 'true');
+  });
+  portrait.addEventListener('click', event => {
+    // WebKit can label the synthesized click after a tap as a mouse click.
+    if (event.detail > 0 && pointerType === 'mouse') return;
     portrait.setAttribute('aria-pressed', String(portrait.getAttribute('aria-pressed') !== 'true'));
   });
   portrait.addEventListener('pointerleave', event => {
