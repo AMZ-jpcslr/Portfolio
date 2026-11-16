@@ -204,7 +204,8 @@ html:has(.notebook-opening[open]) { overflow: hidden; }
   body:has(.notebook-opening[open]) .welcome :is(h1,.portrait,.ink-lettering) { opacity: 0; }
   .welcome.welcome-writing h1 span { color: transparent; }
   .welcome-writing h1 span:last-child::after { transform-origin: left; animation: ink-underline .13s 1.65s ease-out both; }
-  .welcome-writing .portrait { animation: welcome-figure .6s .08s ease-out both; }
+  .portrait-waiting { opacity: 0; }
+  .portrait-arriving { animation: welcome-figure .6s .08s ease-out backwards; }
   .ink-trace { stroke-dasharray: 1; animation: ink-track var(--duration) var(--start) linear both; }
   .ink-finish { animation: ink-spread .035s var(--start) linear both; }
   .gear-wheel--brass { transform: rotate(var(--gear-scroll, 0deg)); rotate: var(--gear-kick, 0deg); }

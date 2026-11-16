@@ -12,6 +12,44 @@ function openLegacyBookmark() {
   if (legacyProjects.has(id)) location.replace('/projects/' + legacyProjects.get(id) + '/');
 }
 
+function rememberWorkPosition() {
+  const gallery = document.getElementById('works');
+  const key = 'notebook-work-position';
+  try {
+    const storage = window.sessionStorage;
+    const from = document.referrer ? new URL(document.referrer) : null;
+    if (!gallery) {
+      // A direct visit should not inherit a position from an earlier visit.
+      if (performance.getEntriesByType('navigation')[0]?.type === 'navigate' &&
+          (from?.origin !== location.origin || from.pathname !== '/')) storage.removeItem(key);
+      return;
+    }
+    gallery.addEventListener('click', event => {
+      const card = event.target.closest('a.work-card');
+      if (!card || event.defaultPrevented || event.button !== 0 || event.ctrlKey ||
+          event.metaKey || event.altKey || event.shiftKey) return;
+      try {
+        storage.setItem(key, JSON.stringify({
+          id: card.id, top: card.getBoundingClientRect().top, width: innerWidth,
+        }));
+      } catch { /* The card fragment still works if storage is full. */ }
+    });
+
+    const card = document.getElementById(location.hash.slice(1));
+    const saved = storage.getItem(key);
+    storage.removeItem(key);
+    if (!card?.matches('a.work-card') || !saved || !from) return;
+    const position = JSON.parse(saved);
+    if (from.origin !== location.origin || from.pathname !== card.pathname || position.id !== card.id ||
+        position.width !== innerWidth || !Number.isFinite(position.top) || position.top >= innerHeight ||
+        position.top + card.offsetHeight <= 0) return;
+    const padding = getComputedStyle(document.documentElement).scrollPaddingTop;
+    card.style.scrollMarginTop = 'calc(' + position.top + 'px - ' + padding + ')';
+    card.focus({ preventScroll: true });
+    card.scrollIntoView({ behavior: 'instant', block: 'start' });
+  } catch { /* Native fragment navigation works without session storage. */ }
+}
+
 function wirePortrait() {
   const portrait = document.querySelector('[data-portrait]');
   if (!portrait) return;
@@ -98,6 +136,7 @@ function animateNotebookEntries() {
 }
 
 openLegacyBookmark();
+rememberWorkPosition();
 window.addEventListener('hashchange', openLegacyBookmark);
 wirePortrait();
 introduceWelcome();

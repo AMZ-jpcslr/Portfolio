@@ -82,7 +82,7 @@
   async function playIfVisible() {
     if (!pending || document.hidden) return;
     pending = false;
-    if (motion.matches) return;
+    if (motion.matches || location.hash.startsWith('#work-')) return;
 
     const controller = new AbortController();
     const { signal } = controller;
@@ -211,35 +211,35 @@
     <img class="gear-wheel gear-wheel--brass" src="/notebook/gears/brass-12.svg" width="96" height="96" alt="">
     <img class="gear-wheel gear-wheel--green" src="/notebook/gears/green-8.svg" width="68" height="68" alt="">
   </span></span></header>
-    <ul class="work-grid"><li><a class="work-card" href="/projects/mania/">
+    <ul class="work-grid"><li><a id="work-mania" class="work-card" href="/projects/mania/">
     <div class="work-stage stage-mania" aria-hidden="true"><div class="work-device device-phone"><img src="/assets/works/mania-mobile.webp" alt="" loading="lazy" decoding="async"></div></div>
     <div class="work-card-copy"><span class="work-category">交通アプリ</span><span class="work-arrow" aria-hidden="true">↗</span>
       <h3>まにあう</h3><p>次に乗れる電車を、駅までの徒歩時間から調べる。</p>
-    </div></a></li><li><a class="work-card" href="/projects/career/">
+    </div></a></li><li><a id="work-career" class="work-card" href="/projects/career/">
     <div class="work-stage stage-career" aria-hidden="true"><div class="work-device device-laptop"><img src="/assets/works/career.webp" alt="" loading="lazy" decoding="async"></div></div>
     <div class="work-card-copy"><span class="work-category">就活カレンダー</span><span class="work-arrow" aria-hidden="true">↗</span>
       <h3>しゅうかつ手帳</h3><p>応募の締切と選考予定をカレンダーで管理。</p>
-    </div></a></li><li><a class="work-card" href="/projects/stream/">
+    </div></a></li><li><a id="work-stream" class="work-card" href="/projects/stream/">
     <div class="work-stage stage-stream" aria-hidden="true"><div class="work-device device-monitor"><img src="/assets/works/stream.webp" alt="" loading="lazy" decoding="async"></div></div>
     <div class="work-card-copy"><span class="work-category">配信ツール</span><span class="work-arrow" aria-hidden="true">↗</span>
       <h3>Streaming Screen</h3><p>OBSの配信レイアウトを画面上で編集。</p>
-    </div></a></li><li><a class="work-card" href="/projects/voice/">
+    </div></a></li><li><a id="work-voice" class="work-card" href="/projects/voice/">
     <div class="work-stage stage-voice" aria-hidden="true"><div class="work-device device-laptop"><img src="/interaction-demos/media/voice.jpg" alt="" loading="lazy" decoding="async"></div></div>
     <div class="work-card-copy"><span class="work-category">読み上げBot</span><span class="work-arrow" aria-hidden="true">↗</span>
       <h3>Yomiage Bot</h3><p>Discordの通話で入力した文章を読み上げる。</p><small class="work-media-type">操作例（再現）</small>
-    </div></a></li><li><a class="work-card" href="/projects/weather/">
+    </div></a></li><li><a id="work-weather" class="work-card" href="/projects/weather/">
     <div class="work-stage stage-weather" aria-hidden="true"><div class="work-device device-tablet"><img src="/assets/works/weather.webp" alt="" loading="lazy" decoding="async"></div></div>
     <div class="work-card-copy"><span class="work-category">防災通知Bot</span><span class="work-arrow" aria-hidden="true">↗</span>
       <h3>Shindo Bot</h3><p>地震や気象の情報をDiscordに通知。</p><small class="work-media-type">Botの出力画像</small>
-    </div></a></li><li><a class="work-card" href="/projects/moral/">
+    </div></a></li><li><a id="work-moral" class="work-card" href="/projects/moral/">
     <div class="work-stage stage-moral" aria-hidden="true"><div class="work-device device-laptop"><img src="/recordings/media/moral.jpg" alt="" loading="lazy" decoding="async"></div></div>
     <div class="work-card-copy"><span class="work-category">個人研究</span><span class="work-arrow" aria-hidden="true">↗</span>
       <h3>Artificial Moral Architecture</h3><p>AIが行動する前に、周囲への影響を評価。</p>
-    </div></a></li><li><a class="work-card" href="/projects/proxy/">
+    </div></a></li><li><a id="work-proxy" class="work-card" href="/projects/proxy/">
     <div class="work-stage stage-proxy" aria-hidden="true"><div class="work-device device-monitor"><img src="/recordings/media/proxy.jpg" alt="" loading="lazy" decoding="async"></div></div>
     <div class="work-card-copy"><span class="work-category">通信検査ツール</span><span class="work-arrow" aria-hidden="true">↗</span>
       <h3>Inspection Proxy</h3><p>通信の内容を検査し、ログを確認。</p>
-    </div></a></li><li><a class="work-card" href="/projects/soccer/">
+    </div></a></li><li><a id="work-soccer" class="work-card" href="/projects/soccer/">
     <div class="work-stage stage-soccer" aria-hidden="true"><div class="work-device device-monitor"><img src="/recordings/media/soccer.jpg" alt="" loading="lazy" decoding="async"></div></div>
     <div class="work-card-copy"><span class="work-category">2Dシミュレーション</span><span class="work-arrow" aria-hidden="true">↗</span>
       <h3>SSL Robot AI</h3><p>位置を評価してロボットサッカーの戦略を試す。</p>

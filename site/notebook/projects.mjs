@@ -88,7 +88,7 @@ const esc = value => String(value).replace(/[&<>"']/g, c => ({
 })[c]);
 
 function renderCard(project) {
-  return `<li><a class="work-card" href="${project.path}">
+  return `<li><a id="work-${project.kind}" class="work-card" href="${project.path}">
     <div class="work-stage stage-${project.kind}" aria-hidden="true"><div class="work-device device-${project.device}"><img src="${project.thumb || project.image}" alt="" loading="lazy" decoding="async"></div></div>
     <div class="work-card-copy"><span class="work-category">${esc(project.category)}</span><span class="work-arrow" aria-hidden="true">↗</span>
       <h3>${esc(project.title)}</h3><p>${esc(project.summary)}</p>${project.mediaType ? `<small class="work-media-type">${esc(project.mediaType)}</small>` : ''}
@@ -132,7 +132,7 @@ export function renderProject(kind) {
   if (!project) return '';
   const copy = narratives[kind];
   return `<article class="work-story work-story-${kind}">
-    <header class="work-story-head"><div class="work-story-nav"><a class="work-back" href="/#works">← 作品一覧へ</a>${renderGearRule()}</div>
+    <header class="work-story-head"><div class="work-story-nav"><a class="work-back" href="/#work-${kind}">← 作品一覧へ</a>${renderGearRule()}</div>
       <p class="work-category">${esc(project.category)}</p><h1>${esc(project.title)}</h1>
       <p class="work-story-intro">${esc(kind === 'mania' ? '今出たら、何時の電車に乗れる？' : copy.summary)}</p></header>
     <div class="work-spread"><div>${renderProjectImage(project)}</div><aside class="work-margin">
@@ -140,7 +140,7 @@ export function renderProject(kind) {
       <ul aria-label="使用技術">${project.tags.map(tag => `<li>${esc(tag)}</li>`).join('')}</ul></aside></div>
     <div class="work-notes">${renderNotes(project, copy)}${renderMedia(project)}</div>
     <nav class="work-links" aria-label="作品の関連リンク">
-      <a class="work-back" href="/#works">← 作品一覧に戻る</a>
+      <a class="work-back" href="/#work-${kind}">← 作品一覧に戻る</a>
       ${project.live ? `<a href="${project.live}">公開アプリを開く ↗</a>` : ''}
       <a class="github-link" href="${project.repository}"><img src="/notebook/icons/github.svg" alt="" width="16" height="16">GitHubで作品を見る <span aria-hidden="true">↗</span></a></nav>
   </article>`;

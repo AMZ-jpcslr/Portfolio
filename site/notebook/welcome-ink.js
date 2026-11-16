@@ -94,21 +94,37 @@ export function introduceWelcome() {
   const cover = document.querySelector('.welcome');
   if (!cover) return;
   const heading = cover.querySelector('h1');
+  const portrait = cover.querySelector('.portrait');
+  const front = portrait.querySelector('.portrait-front');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let cleanup;
-  function showStatic() {
+  let visit = 0;
+  function finishWriting() {
     clearTimeout(cleanup);
     cover.classList.remove('welcome-writing');
     heading.parentElement.querySelector('.ink-lettering')?.remove();
   }
+  function showStatic() {
+    visit++;
+    portrait.classList.remove('portrait-waiting', 'portrait-arriving');
+    finishWriting();
+  }
   function arrive() {
     showStatic();
     if (reduced.matches || document.hidden || location.hash) return;
+    // Start the fade when the illustration can paint, even on a cold mobile connection.
+    const currentVisit = visit;
+    portrait.classList.add('portrait-waiting');
+    front.decode().then(() => {
+      if (currentVisit === visit) portrait.classList.replace('portrait-waiting', 'portrait-arriving');
+    }, () => {
+      if (currentVisit === visit) portrait.classList.remove('portrait-waiting');
+    });
     const lettering = renderLettering(heading);
     if (!lettering) return;
     heading.after(lettering);
     cover.classList.add('welcome-writing');
-    cleanup = setTimeout(showStatic, 1810);
+    cleanup = setTimeout(finishWriting, 1810);
   }
   document.addEventListener('notebook:openingstart', showStatic);
   document.addEventListener('notebook:openingend', arrive);

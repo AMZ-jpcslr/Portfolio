@@ -48,7 +48,11 @@ for (const [page, target] of links) {
   assert.ok((await stat(new URL('.' + filename, dist))).isFile(), `Missing file at ${page.pathname}: ${target}`);
   checkedFiles.add(filename);
 }
-for (const kind of kinds) assert.ok(pages.get('/').includes(`href="/projects/${kind}/"`), `Missing work link: ${kind}`);
+for (const kind of kinds) {
+  assert.ok(pages.get('/').includes(`id="work-${kind}" class="work-card" href="/projects/${kind}/"`), `Missing work card: ${kind}`);
+  const backLinks = [...pages.get(`/projects/${kind}/`).matchAll(/class="work-back" href="([^"]+)"/g)];
+  assert.deepEqual(backLinks.map(link => link[1]), Array(2).fill(`/#work-${kind}`), `Incorrect return destination for ${kind}`);
+}
 assert.doesNotMatch(pages.get('/'), /この夢に向けた一歩として/);
 for (const variant of ['pc', 'sp']) {
   const asset = await readFile(new URL(`assets/opening/${variant}.webp`, dist));

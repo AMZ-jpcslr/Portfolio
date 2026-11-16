@@ -37,7 +37,7 @@ function startOpening() {
   async function playIfVisible() {
     if (!pending || document.hidden) return;
     pending = false;
-    if (motion.matches) return;
+    if (motion.matches || location.hash.startsWith('#work-')) return;
 
     const controller = new AbortController();
     const { signal } = controller;
