@@ -15,11 +15,13 @@ function renderWelcome() {
     <div class="welcome-copy">
       <h1 id="welcome-title" lang="en"><span>Welcome to my</span> <span>portfolio site.</span></h1>
     </div>
-    <button type="button" class="portrait" data-portrait aria-label="からくり修理屋に挨拶する" aria-pressed="false" disabled>
+    <div class="welcome-drawing">
       <span class="portrait-paper" aria-hidden="true"></span>
-      <img src="${illustrations}/front.webp" class="portrait-front" width="689" height="887" alt="正面を向いて歯車を手にしたからくり修理屋" fetchpriority="high">
-      <img src="${illustrations}/wave.webp" class="portrait-wave" width="689" height="887" alt="" aria-hidden="true">
-    </button>
+      <button type="button" class="portrait" data-portrait aria-label="からくり修理屋に挨拶する" aria-pressed="false" disabled>
+        <img src="${illustrations}/front.webp" class="portrait-front" width="689" height="887" alt="正面を向いて歯車を手にしたからくり修理屋" fetchpriority="high">
+        <img src="${illustrations}/wave.webp" class="portrait-wave" width="689" height="887" alt="" aria-hidden="true">
+      </button>
+    </div>
     <div class="welcome-entry">
       <a href="#message" class="workshop-entry" data-turn-gears>${renderGearPair()}<span>メッセージを読む</span><span class="workshop-entry-arrow" aria-hidden="true">↓</span></a>
     </div>

@@ -5,20 +5,18 @@
   padding-inline: clamp(1.05rem, 4.4vw, 3.75rem);
   color: var(--ink, #3d3433);
 }
-.work-gallery { padding-block: clamp(2rem, 6vw, 5rem); scroll-margin-top: 2rem; }
-.work-gallery-header { display: flex; align-items: baseline; gap: 1.25rem; margin-bottom: 2rem; }
+.work-gallery { padding-block: clamp(1.5rem, 4vw, 3rem) clamp(2rem, 6vw, 5rem); scroll-margin-top: 2rem; }
+.work-gallery-header { display: grid; grid-template-columns: 1fr auto; gap: .25rem 1rem; align-items: center; margin-bottom: clamp(1.2rem, 2.8vw, 2.2rem); border-top: 1px solid var(--line); padding-top: clamp(1.4rem, 3.5vw, 2.8rem); }
 .work-gallery-header h2 {
   position: relative;
   width: fit-content;
   margin: 0;
   color: var(--green, #405a50);
-  font: 500 clamp(3rem, 6.5vw, 5.5rem)/1.2 var(--hand, cursive);
+  font: 400 clamp(3.1rem, 6.8vw, 6rem)/1.05 Georgia, "Times New Roman", serif;
+  letter-spacing: -.055em;
 }
-.work-gallery-header h2::after {
-  content: ""; display: block; width: 80%; margin-top: .18rem;
-  border-bottom: 2px solid var(--rust, #985333); border-radius: 50%; transform: rotate(-2deg);
-}
-.work-gallery-header > span { font-size: .94rem; }
+.work-gallery-header > span:not(.gear-rule) { grid-area: 2 / 1; color: var(--green); font-size: .9rem; }
+.work-gallery-header .gear-rule { grid-area: 1 / 2 / 3; width: clamp(4.5rem, 15vw, 12rem); }
 .work-grid {
   display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: clamp(.85rem, 1.65vw, 1.5rem); padding: 0; margin: 0; list-style: none;

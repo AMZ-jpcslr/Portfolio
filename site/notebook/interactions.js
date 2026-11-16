@@ -22,6 +22,19 @@ function wirePortrait() {
   });
 }
 
+function introduceWelcome() {
+  const cover = document.querySelector('.welcome');
+  if (!cover) return;
+  function arrive() {
+    if (!location.hash && !document.hidden && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      cover.classList.add('welcome-arriving');
+    }
+  }
+  const intro = document.querySelector('.notebook-opening[open]');
+  if (intro) intro.addEventListener('close', arrive, { once: true });
+  else arrive();
+}
+
 function wireNotebookGears() {
   const pairs = document.querySelectorAll('[data-gears]');
   if (!pairs.length) return;
@@ -98,6 +111,7 @@ function animateNotebookEntries() {
 openLegacyBookmark();
 window.addEventListener('hashchange', openLegacyBookmark);
 wirePortrait();
+introduceWelcome();
 wireNotebookGears();
 addNotebookStamp();
 animateNotebookEntries();
