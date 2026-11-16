@@ -1,3 +1,5 @@
+import { introduceWelcome } from './welcome-ink.js';
+
 const legacyProjects = new Map([
   ['mania', 'mania'], ['Syukatu-Note', 'career'], ['Streaming-Screen', 'stream'],
   ['Yomiage_Discord_Bot', 'voice'], ['Shindo_Discord_Bot', 'weather'],
@@ -20,19 +22,6 @@ function wirePortrait() {
   portrait.addEventListener('pointerleave', event => {
     if (event.pointerType === 'mouse') portrait.setAttribute('aria-pressed', 'false');
   });
-}
-
-function introduceWelcome() {
-  const cover = document.querySelector('.welcome');
-  if (!cover) return;
-  function arrive() {
-    if (!location.hash && !document.hidden && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      cover.classList.add('welcome-arriving');
-    }
-  }
-  const intro = document.querySelector('.notebook-opening[open]');
-  if (intro) intro.addEventListener('close', arrive, { once: true });
-  else arrive();
 }
 
 function wireNotebookGears() {

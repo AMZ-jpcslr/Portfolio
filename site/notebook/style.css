@@ -201,9 +201,12 @@ html:has(.notebook-opening[open]) { overflow: hidden; }
 .stamp-imprint { position: absolute; right: .3rem; top: -1.5rem; font: bold 1rem var(--hand); padding: .05rem .35rem; border: 2px double var(--rust); color: var(--rust); opacity: 0; transform: rotate(-9deg); }
 .stamp-button[aria-pressed=true] .stamp-imprint { opacity: 1; }
 @media (prefers-reduced-motion:no-preference) {
-  .welcome-arriving h1 span { animation: welcome-ink .26s ease-out backwards; }
-  .welcome-arriving h1 span:last-child { animation-delay: .05s; }
-  .welcome-arriving .portrait { animation: welcome-figure .32s .08s ease-out backwards; }
+  body:has(.notebook-opening[open]) .welcome :is(h1,.portrait,.ink-lettering) { opacity: 0; }
+  .welcome.welcome-writing h1 span { color: transparent; }
+  .welcome-writing h1 span:last-child::after { transform-origin: left; animation: ink-underline .13s 1.65s ease-out both; }
+  .welcome-writing .portrait { animation: welcome-figure .6s .08s ease-out both; }
+  .ink-trace { stroke-dasharray: 1; animation: ink-track var(--duration) var(--start) linear both; }
+  .ink-finish { animation: ink-spread .035s var(--start) linear both; }
   .gear-wheel--brass { transform: rotate(var(--gear-scroll, 0deg)); rotate: var(--gear-kick, 0deg); }
   .gear-wheel--green { transform: rotate(calc(-1.5 * var(--gear-scroll, 0deg))); rotate: calc(-1.5 * var(--gear-kick, 0deg)); }
   .gear-wheel { transition: rotate .32s cubic-bezier(.2,.65,.3,1); }
@@ -217,8 +220,11 @@ html:has(.notebook-opening[open]) { overflow: hidden; }
   .chapter-link:is(:hover,:focus-visible) span { transform: translateX(3px); }
   .works-guide:is(:hover,:focus-visible) b { transform: translateY(3px); }
 }
-@keyframes welcome-ink { from { opacity: .74; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-@keyframes welcome-figure { from { opacity: .82; transform: translate(8px,3px); } to { opacity: 1; transform: none; } }
+.ink-lettering { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; user-select: none; }
+@keyframes ink-track { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes ink-spread { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ink-underline { from { transform: rotate(-1.65deg) scaleX(0); } to { transform: rotate(-1.65deg) scaleX(1); } }
+@keyframes welcome-figure { from { opacity: 0; } to { opacity: 1; } }
 @keyframes draw-line { from { transform: scaleX(.07); } to { transform: scaleX(1); } }
 @keyframes stamp-in { from { opacity: .3; scale: 1.15; } to { opacity: 1; scale: 1; } }
 @keyframes enter-note { from { opacity: .35; transform: translateY(8px); } to { opacity: 1; transform: none; } }

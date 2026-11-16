@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderAbout } from '../site/notebook/about.mjs';
 import { renderHome } from '../site/notebook/home.mjs';
+import { renderOpening } from '../site/notebook/opening.mjs';
 import { projectList, renderProject } from '../site/notebook/projects.mjs';
 
 const source = new URL('../site/', import.meta.url);
@@ -78,7 +79,7 @@ export async function buildSocialMetadata() {
   for (const page of pages) {
     const body = await page.render();
     if (typeof body !== 'string' || !body.trim()) throw new Error(`Missing content for ${page.path}`);
-    let html = template.replace(meta, () => socialMetadata(origin, page)).replace(content, () => body);
+    let html = template.replace(meta, () => socialMetadata(origin, page)).replace(content, () => renderOpening() + body);
     if (page.path === '/about/') html = html.replace('<a href="/about/">About Me</a>', '<a href="/about/" aria-current="page">About Me</a>');
     const folder = new URL('.' + page.path, output);
     await mkdir(folder, { recursive: true });
