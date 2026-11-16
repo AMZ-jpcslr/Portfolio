@@ -1,5 +1,6 @@
 import { aboutTools, renderToolName } from './about.mjs';
 import { renderWorks } from './projects.mjs';
+import { renderOpening } from './opening.mjs';
 import { renderGearPair, renderGearRule } from './gears.mjs';
 
 const illustrations = '/assets/workshop';
@@ -63,5 +64,5 @@ function renderAboutPreview() {
 }
 
 export function renderHome() {
-  return renderWelcome() + renderMessage() + renderWorks() + renderAboutPreview();
+  return renderOpening() + renderWelcome() + renderMessage() + renderWorks() + renderAboutPreview();
 }

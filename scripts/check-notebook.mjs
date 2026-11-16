@@ -24,7 +24,8 @@ for (const pathname of routes) {
   assert.match(html, /<title>[^<]+<\/title>/);
   assert.match(html, /<main id="main"[^>]*>[\s\S]*?<h1\b/, `Content must be rendered without JavaScript on ${pathname}`);
   assert.equal((html.match(/<h1\b/g) || []).length, 1, `Invalid primary heading count on ${pathname}`);
-  assert.equal((html.match(/<dialog class="notebook-opening"/g) || []).length, 1, `Expected one opening dialog on ${pathname}`);
+  const openingCount = (html.match(/<dialog class="notebook-opening"/g) || []).length;
+  assert.equal(openingCount, pathname === '/' ? 1 : 0, `Unexpected opening dialog count on ${pathname}`);
   assert.doesNotMatch(html, /<!-- notebook-content -->|採用担当の方へ|href="[^"]*#search"|role="search"|id="search"/);
   const pageIds = [...html.matchAll(/\sid="([^"]+)"/g)].map(match => match[1]);
   assert.equal(new Set(pageIds).size, pageIds.length, `Duplicate id on ${pathname}`);
