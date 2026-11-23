@@ -415,6 +415,104 @@ function hide2112() {
   });
 }
 
+// Toy: grab any gear pair beside a heading and fling it; it spins on with momentum and lets off steam.
+function spinnableGears() {
+  if (reduced.matches) return;
+  for (const pair of document.querySelectorAll(':is(.gear-rule, .welcome-mechanism) [data-gears]')) {
+    if (pair.closest('a, button')) continue;
+    pair.classList.add('gear-toy');
+    let angle = 0;
+    let speed = 0;
+    let frame = 0;
+    let travelled = 0;
+    const set = () => pair.style.setProperty('--gear-kick', angle.toFixed(1) + 'deg');
+    const pointerAngle = event => {
+      const box = pair.querySelector('.gear-wheel--brass').getBoundingClientRect();
+      return Math.atan2(event.clientY - (box.top + box.height / 2), event.clientX - (box.left + box.width / 2)) * 180 / Math.PI;
+    };
+    function coast(last) {
+      frame = requestAnimationFrame(now => {
+        const step = Math.min(48, now - last);
+        angle += speed * step;
+        travelled += Math.abs(speed * step);
+        speed *= Math.pow(.965, step / 16);
+        set();
+        if (travelled > 1440) { travelled = 0; puff(pair); }
+        if (Math.abs(speed) > .01) coast(now);
+        else { frame = 0; pair.style.removeProperty('--gear-turn'); }
+      });
+    }
+    pair.addEventListener('pointerdown', event => {
+      event.preventDefault();
+      cancelAnimationFrame(frame);
+      angle = parseFloat(pair.style.getPropertyValue('--gear-kick')) || 0;
+      pair.style.setProperty('--gear-turn', '0s');
+      pair.setPointerCapture(event.pointerId);
+      pair.classList.add('gear-grabbed');
+      let previous = pointerAngle(event);
+      let lastTime = event.timeStamp;
+      speed = 0;
+      const move = moveEvent => {
+        const now = pointerAngle(moveEvent);
+        let delta = now - previous;
+        if (delta > 180) delta -= 360;
+        if (delta < -180) delta += 360;
+        previous = now;
+        angle += delta;
+        travelled += Math.abs(delta);
+        const elapsed = Math.max(1, moveEvent.timeStamp - lastTime);
+        lastTime = moveEvent.timeStamp;
+        speed = speed * .5 + (delta / elapsed) * .5;
+        set();
+      };
+      const release = () => {
+        pair.classList.remove('gear-grabbed');
+        pair.removeEventListener('pointermove', move);
+        // A tap with no drag still gives the wheel a friendly nudge.
+        if (Math.abs(speed) < .05 && travelled < 4) speed = .6;
+        speed = Math.max(-3, Math.min(3, speed));
+        const belt = pair.closest('.gear-rule');
+        if (belt && Math.abs(speed) > .3) { belt.classList.remove('belt-run'); void belt.offsetWidth; belt.classList.add('belt-run'); }
+        coast(performance.now());
+      };
+      pair.addEventListener('pointermove', move);
+      pair.addEventListener('pointerup', release, { once: true });
+      pair.addEventListener('pointercancel', release, { once: true });
+    });
+  }
+}
+
+function puff(anchor) {
+  const box = anchor.getBoundingClientRect();
+  const cloud = document.createElement('span');
+  cloud.className = 'steam-puff';
+  cloud.setAttribute('aria-hidden', 'true');
+  cloud.style.left = box.left + box.width * .3 + 'px';
+  cloud.style.top = box.top + 'px';
+  document.body.append(cloud);
+  cloud.addEventListener('animationend', () => cloud.remove());
+}
+
+// Toy: a click on bare paper strikes a little brass cog and a few sparks off the page.
+function paperSparks() {
+  if (reduced.matches) return;
+  let live = 0;
+  document.addEventListener('click', event => {
+    if (live > 6 || event.target.closest('a, button, input, textarea, select, label, img, svg, video, iframe, dialog, .gear-toy, .reading-hanger, .work-card')) return;
+    if (String(getSelection()).trim()) return;
+    const spark = document.createElement('span');
+    spark.className = 'paper-spark';
+    spark.setAttribute('aria-hidden', 'true');
+    spark.style.left = event.clientX + 'px';
+    spark.style.top = event.clientY + 'px';
+    spark.style.setProperty('--drift', (Math.random() * 40 - 20).toFixed(0) + 'px');
+    spark.innerHTML = '<img src="/notebook/gears/brass-12.svg" alt="" width="18" height="18"><i></i><i></i><i></i><i></i>';
+    document.body.append(spark);
+    live++;
+    setTimeout(() => { spark.remove(); live--; }, 900);
+  });
+}
+
 export function wireWorkshopMechanisms() {
   pinCurrentPlate();
   wireFlaps();
@@ -425,6 +523,8 @@ export function wireWorkshopMechanisms() {
   wireCases();
   rollCounters();
   hangReadingTag();
+  spinnableGears();
+  paperSparks();
   addLantern();
   hide2112();
 }
