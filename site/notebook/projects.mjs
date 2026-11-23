@@ -10,7 +10,7 @@ const catalogue = [
     alt: '駅と方面を選び、発車時刻と徒歩時間の目安を確認する画面',
     caption: '公開版の画面。駅と方面を選ぶと、発車順に電車が並びます。',
     tags: ['React', 'TypeScript', 'Vite'], live: 'https://train-time-three.vercel.app/',
-    clipCaption: '駅検索と徒歩時間の確認。テスト用の位置情報で動かした実アプリの記録。'
+    clipCaption: '駅検索と徒歩時間の確認。テスト用の位置情報で動かした実際のアプリの記録。'
   },
   {
     kind: 'career', title: 'しゅうかつ手帳', category: '就活カレンダー', device: 'laptop', repo: 'Syukatu-Note',
@@ -18,7 +18,7 @@ const catalogue = [
     image: '/assets/works/career.webp', alt: '応募の締切や選考の予定をまとめたカレンダー',
     caption: '日程が集まるカレンダー画面。表示している応募予定はデモ用です。',
     tags: ['Next.js', 'TypeScript', 'Supabase'], live: 'https://syukatu-note.vercel.app/',
-    clipCaption: '実アプリのデモモードで架空の日程を開く操作。'
+    clipCaption: '実際のアプリのデモモードで、架空の日程を開く操作。'
   },
   {
     kind: 'stream', title: 'Streaming Screen', category: '配信ツール', device: 'monitor', repo: 'Streaming-Screen',
@@ -26,7 +26,7 @@ const catalogue = [
     image: '/assets/works/stream.webp', alt: 'レイヤー、キャンバス、選択中の要素の設定が並ぶ配信画面エディター',
     caption: 'レイヤーを選び、中央のキャンバスで配置を調整する編集画面。',
     tags: ['JavaScript', 'Node.js', 'OBS'],
-    clipCaption: '実エディターで表題の位置を変え、変更を戻して保存する操作。'
+    clipCaption: '実際のエディターで表題の位置を変え、変更を戻して保存する操作。'
   },
   {
     kind: 'voice', title: 'Yomiage Bot', category: '読み上げBot', device: 'laptop', repo: 'Yomiage_Discord_Bot',
@@ -77,9 +77,9 @@ export const projectList = catalogue.map(project => ({
 
 const maniaText = [
   'いつもの駅から出かけるたびに同じ経路を検索し直していました。駅まで歩く時間を含めて、次に乗れそうな電車の時刻をすぐ確かめたいと考えました。',
-  '個人開発として課題設定、画面設計、実装を担当。プロトタイプと画面の別案を利用者に見せ、最初に必要な情報を聞きました。',
+  '個人開発として課題設定、画面設計、実装を担当しました。プロトタイプと画面の別案を利用者に見せ、最初に必要な情報を聞きました。',
   '慣れた経路なら発車時刻だけで判断できます。初めての出発地点では徒歩時間も必要です。そこで発車時刻を先に示し、必要に応じて歩く時間を確認できる順序にしました。',
-  '経路検索で足りる人や、次の電車に乗ればよいと感じる人もいました。この声をもとに、どんな出発場面で必要とされるかを見直しています。配置を変えたことによる使いやすさは検証中です。'
+  '経路検索で足りる人や、次の電車に乗ればよいと感じる人もいました。この声をもとに、どのような場面でこのアプリが必要とされるかを見直しています。配置の変更で使いやすくなったかは、まだ検証しているところです。'
 ];
 
 const mediaCredit = '<a href="https://www.jma.go.jp/bosai/nowc/">気象庁</a>・<a href="https://maps.gsi.go.jp/development/ichiran.html">地理院タイル</a>';
