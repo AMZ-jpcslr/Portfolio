@@ -1,76 +1,101 @@
-# Kitaoka Yoma / AMZ — Notes & Works
+# 北岡英磨の制作ノート / Yoma Kitaoka Portfolio
 
-社会や身近な問題に取り組む、北岡英磨の個人開発と研究の記録です。
+社会や身近な困りごとに取り組む、北岡英磨の個人開発と研究をまとめたポートフォリオサイトです。からくり修理屋の工房と制作ノートをテーマに、8つの作品を実際の画面と操作動画で紹介しています。
 
-[公開サイト](https://portfolio-amz-jpcslr.vercel.app/) · [作品一覧](https://portfolio-amz-jpcslr.vercel.app/#works) · [開発記録](https://portfolio-amz-jpcslr.vercel.app/#records) · [GitHub](https://github.com/AMZ-jpcslr)
+[公開サイト](https://portfolio-amz-jpcslr.vercel.app/) · [作品一覧](https://portfolio-amz-jpcslr.vercel.app/#works) · [About Me](https://portfolio-amz-jpcslr.vercel.app/about/) · [GitHub](https://github.com/AMZ-jpcslr)
 
 ## サイトの構成
 
-- 本の背表紙を押すと、8作品の短い説明がすぐに表示されます。「さらに詳しく」から詳細へ移動します。概要では操作と結果を再現する短いアニメーションを表示します。概要の開閉もブラウザーの戻る・進むでたどれます。
-- 詳細では目的・きっかけ・アプローチ・結果と現状、担当とAIの活用を紹介します。
-- リポジトリの作成記録はノートのタブで選び、左のノートで概要・同じ短尺の動作デモ・つくった理由・得られた反応を確認できます。タブは右端に並び、ノートの右端が浮く向きで切り替わります。
-- 最近の公開GitHub更新は、1件ずつ独立した付箋として表示します。新しい記録が上です。
-- 理念は「課題を理解する」「試して改善する」「伝え方と研究姿勢」の3区分・9項目です。行動指針と、作品ごとの実施状況を区別しています。
+| ページ | URL | 内容 |
+| --- | --- | --- |
+| トップ | `/` | オープニング、Welcome、メッセージ、作品一覧（Works）、About Meの概要 |
+| 経歴とスキル | `/about/` | 高校・大学・UBC交換留学・現在の4章の歩み、制作で使っている技術、資格、ツール使用歴 |
+| 作品詳細 | `/projects/<作品>/` | 8作品それぞれの画面、課題・自分の担当・設計判断・試して分かったこと、操作動画、公開アプリとGitHubへのリンク |
 
-8作品すべて、実際の操作と機能の流れを簡略再現したアニメーションです。概要・作成記録は約8秒、詳細は20〜22秒。動画内はアプリのラベル・入力・結果のみで、説明テロップや紹介用の導入はありません。自動再生・消音・ループ・任意停止に対応し、動きを減らす設定では手動再生します。実アプリの録画やサービスへの実送信ではありません。
+### トップページ
 
-採用担当の方へのメッセージに続き、ページ末尾の本棚でサイト内を検索できます。作品に加え、自己紹介・理念・活動・作成記録・最近の開発記録・メッセージの見出しや本文、関連語をローカルで照合し、本が棚から出てくる短い演出とともに結果を表示します。検索結果は演出を待たずに開けます。外部LLM/APIへ検索語を送りません。
+- **オープニング**：トップページを開くたびに、からくり修理屋が登場する短いイントロを再生します（スキップできます）。動きを減らす設定のときや、作品カードへのリンクで戻ってきたときは再生しません。
+- **Welcome**：懐中時計を修理するからくり修理屋のイラストです。押すと修理屋が顔を上げ、手元の歯車が回ります。
+- **Message**：「社会の役に立ってから死ぬ」という抱負と、一緒につくりたいことを書いています。
+- **Works**：8作品のカードです。カードから詳細ページへ移動し、「作品一覧へ」で元のカード位置に戻ります。
+- **About Me**：プロフィール、スキル、ツール使用歴の概要です。続きは `/about/` にあります。
 
-固定メニューは作品・記録・理念・メッセージ・検索・GitHubへの移動に対応し、狭い画面では開閉できます。キーボード・タッチ操作、動きを減らす設定に対応します。区画の短い描画と付箋の貼り付けは、画面内に十分入ってから始まり、同じ付箋を小さなスクロールのたびに貼り直しません。
+### 全ページ共通の動き
 
-作品の現在地は、作品一覧・詳細・検索結果のラベルで示します。運用・活動成果・研究を区別しています。Botを含むサービスの運用状況は作者の説明を反映しています。再現範囲・合成データ・外部接続の有無は動画の外に注記しています。
+- スクロールに合わせて見出し横の歯車が回り、画面上部のラックとピニオンで読み進めた位置を示します。
+- 見出しと本文は画面に入ったとき、インクで書くように表示します。
+- フッターの「検印」ボタンで、制作ノートに歯車の判を押せます。
+- 本文はビルド時にHTMLとして生成しているので、JavaScriptが動かない環境でも読めます。動きを減らす設定では演出を止めます。
+- 以前のサイトの `#project=...` 形式のリンクは、対応する作品詳細ページへ移動します。
 
-## 操作再現アニメーション
+## 掲載作品
 
-[今回の仕様・機能照合・検証](docs/interaction-demos-2026-11-06.md)を参照してください。`site/music/interaction-scenes.js` が8作品の再現画面と操作順、`site/music/interaction-demos.js` が表示素材、`site/interaction-demos/manifest.json` が出典・長さ・ハッシュです。以前の創作PVと実録画は保存していますが、現在の表示には使いません。
+| 作品 | 分類 | 主な技術 | リンク |
+| --- | --- | --- | --- |
+| まにあう | 交通アプリ | React / TypeScript / Vite | [公開版](https://train-time-three.vercel.app/) · [GitHub](https://github.com/AMZ-jpcslr/train_time) |
+| しゅうかつ手帳 | 就活カレンダー | Next.js / TypeScript / Supabase | [公開版](https://syukatu-note.vercel.app/) · [GitHub](https://github.com/AMZ-jpcslr/Syukatu-Note) |
+| Streaming Screen | 配信ツール | JavaScript / Node.js / OBS | [GitHub](https://github.com/AMZ-jpcslr/Streaming-Screen) |
+| Yomiage Bot | 読み上げBot | TypeScript / VOICEVOX / DeepL | [GitHub](https://github.com/AMZ-jpcslr/Yomiage_Discord_Bot) |
+| Shindo Bot | 防災通知Bot | TypeScript / WebSocket / 気象データ | [GitHub](https://github.com/AMZ-jpcslr/Shindo_Discord_Bot) |
+| Artificial Moral Architecture | 個人研究 | Python | [GitHub](https://github.com/AMZ-jpcslr/Artificial-Moral-Architecture) |
+| Inspection Proxy | 通信検査ツール | JavaScript / Node.js / Docker | [GitHub](https://github.com/AMZ-jpcslr/ssl-inspection-prodxy) |
+| SSL Robot AI | 2Dシミュレーション | Java | [GitHub](https://github.com/AMZ-jpcslr/SSL-DEMO) |
 
-## 作成の記録
+作品詳細の動画は、6作品が実アプリやCLIの操作記録です。Yomiage BotとShindo BotはDiscord上の操作を再現したもので、ユーザー名・会話・地震情報は架空です。Shindo Botの雨雲レーダー画像はBotが実際に生成した出力で、出典（気象庁・地理院タイル）をページ内に記載しています。
 
-GitHubの `created_at` を基準とした**日本時間（Asia/Tokyo）の作成年月**です。開発開始・完成・リリース日ではありません。同月内も実際のタイムスタンプ順で並べます。
+## 技術構成
 
-| 作成年月（日本時間） | 作品 |
-| --- | --- |
-| 2025.06 | [Shindo Bot](https://github.com/AMZ-jpcslr/Shindo_Discord_Bot) |
-| 2025.07 | [Yomiage Bot](https://github.com/AMZ-jpcslr/Yomiage_Discord_Bot) |
-| 2025.12 | [Streaming Screen](https://github.com/AMZ-jpcslr/Streaming-Screen) |
-| 2026.01 | [SSL Robot AI](https://github.com/AMZ-jpcslr/SSL-DEMO) |
-| 2026.05 | [Inspection Proxy](https://github.com/AMZ-jpcslr/ssl-inspection-prodxy) |
-| 2026.09 | [Artificial Moral Architecture](https://github.com/AMZ-jpcslr/Artificial-Moral-Architecture) |
-| 2026.09 | [しゅうかつ手帳](https://github.com/AMZ-jpcslr/Syukatu-Note) |
-| 2026.10 | [まにあう](https://github.com/AMZ-jpcslr/train_time) |
+- **静的サイト**：フレームワークは使っていません。`scripts/build.mjs` が `site/notebook/*.mjs` の描画関数を実行し、10ページのHTMLを `dist/` に書き出します。OGP・Xカード・canonicalもここで生成します。
+- **画面の動き**：素のJavaScript（`site/notebook/interactions.js`、`welcome-ink.js`）とCSSで実装しています。
+- **フォント**：見出しの手書き風フォントに Klee One、本文に Noto Sans JP を使い、どちらもサイト内に置いて配信しています。
+- **公開**：Vercelで `npm run build` を実行し、`dist/` を配信します（`vercel.json`）。公開URLを変える場合は環境変数 `SITE_URL` にオリジンを指定します。
+- **動画**：作品の操作動画は `video/` の Remotion と、Playwright を使った録画スクリプトで作成しています。
 
-Yomiage Botの作成日時は `2025-06-30T15:01:25Z` のため、日本時間では7月です。日付が月境界をまたぐ場合も表示を変換し、年月しか分からない資料に日単位の精度を追加しません。
+## ディレクトリ
 
-## 公開GitHub更新の取得
-
-対象は本人 `AMZ-jpcslr` と紹介している8作品の公開イベントだけです。各付箋にイベント日時と関連するGitHubリンクがあります。pushをリリースとは表示しません。最終取得日時も日本時間で表示します。
-
-認証なしの公開APIを必要時に取得し、15分のクールダウンを設けています。利用上限・通信失敗時は最終取得日付きの保存データを表示します。APIの反映には遅延があり、完全な活動履歴ではありません。認証情報や非公開活動は使いません。
+```text
+site/
+  index.html        全ページ共通のテンプレート
+  notebook/         現行サイトの描画関数・CSS・JavaScript・歯車とアイコン
+  assets/           イラスト（workshop/）、作品画面（works/）、オープニング画像
+  recordings/       実アプリの操作記録動画
+  interaction-demos/ Discord Botの再現動画
+  music/            以前のデザインの本文データ（作品詳細の文章で使用）
+dist/               公開出力（ビルドで更新）
+scripts/            ビルド、開発サーバー、検証、動画作成
+video/              Remotionの動画プロジェクト
+docs/               設計メモと検証記録
+```
 
 ## 開発と確認
 
 Node.js 22以上を使用します。
 
 ```sh
-npm run build
-npm run check
-npm run dev
+npm run build   # dist/ を生成し、続けて全チェックを実行
+npm run check   # 生成済みの dist/ を検証
+npm run dev     # http://127.0.0.1:4173/ で dist/ を配信（PORTで変更可）
+npm run lint    # ESLint
 ```
 
-開発サーバーの既定は `http://127.0.0.1:4173/`。`site/` が現行画面のソース、`dist/` が公開出力です。`npm run build` は現行の入口と8つの詳細ページ・素材を `dist/` に反映します。Vercelは既存設定の `dist` を配信します。
+`npm run check` は次を確認します。
 
-`scripts/check-site.mjs` は現行8作品・出力の一致・日時変換・公開データの範囲を確認し、`scripts/check-legacy.mjs` は保持した既存7作品の資料・動画素材を確認します。旧入口は検証用の `scripts/fixtures/legacy-index.html` に保存し、公開の入口には使いません。
+- `scripts/check-notebook.mjs`：10ページのメタデータ、見出し、画像の代替テキスト、ローカル素材とページ内リンクの存在、ソースと出力の一致
+- `scripts/check-site.mjs`：作品データ・動画素材・日本時間の変換
+- `scripts/check-legacy.mjs`：以前のデザインの資料・動画素材、OGP画像、下記の旧画面記録
 
-本文データは既存の `dist/projects.js` を土台に、`site/music/content.js` で8作品にまとめています。公開するファイルへローカル比較案、試験画面、認証情報、依存関係のキャッシュを含めません。
+ブラウザーでの確認や動画の再生成に使うスクリプト（`scripts/review-*.mjs`、`scripts/verify-*.mjs`、`video/`）の詳細は `docs/` の各記録を参照してください。
 
-## 団体の表示と素材
+## 素材とライセンス
 
-Ri-oneの紹介は、本人の活動と個人制作のSSL試作の範囲を区別しています。[公式サイト](https://rione.org/)のロゴとURLを掲載しています。ロゴとGitHubマークの出典・ライセンスは `site/music/assets/OFFICIAL-SOURCES.md` と `site/assets/OCTICONS-LICENSE.txt` を参照してください。
+- フォント：Klee One、Noto Sans JP（SIL Open Font License）。`site/assets/workshop/Klee-One-OFL.txt` などを同梱しています。
+- ツールのアイコン：Devicon の SVG をそのまま使用しています（`site/notebook/icons/LICENSE.txt`）。
+- 各製品名・ロゴはそれぞれの権利者に帰属します。
 
 <details>
 <summary>以前の公開版の画面記録</summary>
 
-以下は旧デザインの記録です。現在のサイトの画面とは異なります。
+以下は以前のデザインの記録です。現在のサイトの画面とは異なります。
 
 ![旧デザインのトップページ](docs/images/portfolio-home.jpg)
 ![旧デザインの制作年表](docs/images/project-timeline.jpg)
@@ -78,9 +103,3 @@ Ri-oneの紹介は、本人の活動と個人制作のSSL試作の範囲を区�
 ![旧デザインの作品一覧](docs/images/spatial-gallery.jpg)
 
 </details>
-
-## ブラウザーでの回帰確認
-
-`npm run build`、`npm run dev` の後、`node scripts/review-interactions.mjs` を実行します。`PORTFOLIO_REVIEW_URL` で別ポートを指定できます。PC・390px・320px幅、自動再生・任意停止・履歴復帰・動きを減らす設定と8作品の動画を検査し、`.review/ui-interactions/` に結果と画面写真を保存します。
-
-動画は `node video/recreations/render-interactions.mjs` で再生成。`REMOTION_BROWSER_EXECUTABLE` にChromiumを指定し、`ONLY=mania` などで1作品、`STILL=1` で主要画面のみを生成できます。`node scripts/verify-interactions.mjs` は16本の全編デコードと出力一致を確認します。以前の録画・PV用スクリプトは履歴用です。
