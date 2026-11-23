@@ -45,11 +45,11 @@
 
 ## 技術構成
 
-- **静的サイト**：フレームワークは使っていません。`scripts/build.mjs` が `site/notebook/*.mjs` の描画関数を実行し、10ページのHTMLを `dist/` に書き出します。OGP・Xカード・canonicalもここで生成します。
+- **静的サイト**：フレームワークは使っていません。`scripts/build.mjs` が `site/` の素材を `dist/` にコピーし、`site/notebook/*.mjs` の描画関数で10ページのHTMLを書き出します。`dist/` は毎回作り直す出力なので、Gitでは管理していません。OGP・Xカード・canonicalもここで生成します。
 - **画面の動き**：素のJavaScript（`site/notebook/interactions.js`、`welcome-ink.js`）とCSSで実装しています。
 - **フォント**：見出しの手書き風フォントに Klee One、本文に Noto Sans JP を使い、どちらもサイト内に置いて配信しています。
 - **公開**：Vercelで `npm run build` を実行し、`dist/` を配信します（`vercel.json`）。公開URLを変える場合は環境変数 `SITE_URL` にオリジンを指定します。
-- **動画**：作品の操作動画は `video/` の Remotion と、Playwright を使った録画スクリプトで作成しています。
+- **動画**：6作品は実アプリの操作を録画したもの（`site/recordings/`）です。Yomiage BotとShindo Botの再現動画（`site/interaction-demos/`）は `video/recreations/` の Remotion で作成しています。
 
 ## ディレクトリ
 
@@ -58,12 +58,14 @@ site/
   index.html        全ページ共通のテンプレート
   notebook/         現行サイトの描画関数・CSS・JavaScript・歯車とアイコン
   assets/           イラスト（workshop/）、作品画面（works/）、オープニング画像
+  assets/fonts/     本文フォント（Noto Sans JP のサブセット）
+  data/             作品詳細の本文データ
   recordings/       実アプリの操作記録動画
   interaction-demos/ Discord Botの再現動画
-  music/            以前のデザインの本文データ（作品詳細の文章で使用）
-dist/               公開出力（ビルドで更新）
-scripts/            ビルド、開発サーバー、検証、動画作成
-video/              Remotionの動画プロジェクト
+  fonts.css, favicon.svg, og-image.png
+dist/               公開出力（npm run build で生成、Git管理外）
+scripts/            ビルド、開発サーバー、検証
+video/recreations/  再現動画のRemotionプロジェクト
 docs/               設計メモと検証記録
 ```
 
@@ -78,18 +80,15 @@ npm run dev     # http://127.0.0.1:4173/ で dist/ を配信（PORTで変更可�
 npm run lint    # ESLint
 ```
 
-`npm run check` は次を確認します。
+`npm run check`（`scripts/check-notebook.mjs`）は、10ページのメタデータ、見出し、画像の代替テキスト、ローカル素材とページ内リンクの存在、ソースと出力の一致を確認します。
 
-- `scripts/check-notebook.mjs`：10ページのメタデータ、見出し、画像の代替テキスト、ローカル素材とページ内リンクの存在、ソースと出力の一致
-- `scripts/check-site.mjs`：作品データ・動画素材・日本時間の変換
-- `scripts/check-legacy.mjs`：以前のデザインの資料・動画素材、OGP画像、下記の旧画面記録
-
-ブラウザーでの確認や動画の再生成に使うスクリプト（`scripts/review-*.mjs`、`scripts/verify-*.mjs`、`video/`）の詳細は `docs/` の各記録を参照してください。
+再現動画は `node video/recreations/render-interactions.mjs` で再生成します。`REMOTION_BROWSER_EXECUTABLE` にChromiumを指定し、`ONLY=voice` などで1作品、`STILL=1` で主要画面のみを生成できます。
 
 ## 素材とライセンス
 
-- フォント：Klee One、Noto Sans JP（SIL Open Font License）。`site/assets/workshop/Klee-One-OFL.txt` などを同梱しています。
+- フォント：Klee One、Noto Sans JP（SIL Open Font License）。`site/assets/workshop/Klee-One-OFL.txt` と `site/assets/fonts/OFL-Noto-Sans-JP.txt` を同梱しています。
 - ツールのアイコン：Devicon の SVG をそのまま使用しています（`site/notebook/icons/LICENSE.txt`）。
+- GitHubマーク：`site/assets/OCTICONS-LICENSE.txt` を参照してください。
 - 各製品名・ロゴはそれぞれの権利者に帰属します。
 
 <details>
