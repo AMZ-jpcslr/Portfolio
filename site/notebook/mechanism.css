@@ -621,3 +621,23 @@ html.door-arriving::after { animation: door-close-right .75s .3s cubic-bezier(.5
   .sky-dial { transition: rotate .9s cubic-bezier(.45, 0, .2, 1.15); }
 }
 @media (forced-colors: active) { .sky-window { display: none; } }
+
+/* ---------- Toys: fling the gears, strike sparks off the paper ---------- */
+.gear-pair.gear-toy { pointer-events: auto; cursor: grab; touch-action: none; }
+.gear-pair.gear-grabbed { cursor: grabbing; }
+.gear-toy:hover .gear-wheel--brass { filter: drop-shadow(0 0 4px #f3c46b99); }
+.steam-puff {
+  position: fixed; z-index: 30; width: 26px; height: 18px; pointer-events: none; border-radius: 50%;
+  background: radial-gradient(circle at 30% 60%, #fffcf2 0 30%, transparent 32%), radial-gradient(circle at 65% 45%, #f4efe2 0 34%, transparent 36%), radial-gradient(circle at 50% 70%, #ece5d4 0 40%, transparent 42%);
+  animation: steam-rise .9s ease-out forwards;
+}
+@keyframes steam-rise { from { opacity: .95; translate: 0 0; scale: .6; } to { opacity: 0; translate: 6px -34px; scale: 1.8; } }
+.paper-spark { position: fixed; z-index: 30; width: 0; height: 0; pointer-events: none; }
+.paper-spark img { position: absolute; left: -11px; top: -11px; width: 22px; height: 22px; max-width: none; animation: spark-cog .85s cubic-bezier(.2, .7, .4, 1) forwards; }
+.paper-spark i { position: absolute; left: -2px; top: -2px; width: 4px; height: 4px; border-radius: 50%; background: var(--lamp); box-shadow: 0 0 4px var(--lamp); animation: spark-fly .5s ease-out forwards; }
+.paper-spark i:nth-of-type(1) { --x: -16px; --y: -12px; }
+.paper-spark i:nth-of-type(2) { --x: 15px; --y: -14px; }
+.paper-spark i:nth-of-type(3) { --x: -12px; --y: 10px; }
+.paper-spark i:nth-of-type(4) { --x: 14px; --y: 9px; }
+@keyframes spark-cog { 0% { scale: .3; opacity: 1; } 30% { scale: 1.15; opacity: 1; } 60% { opacity: 1; } 100% { translate: var(--drift) -40px; rotate: 300deg; scale: .8; opacity: 0; } }
+@keyframes spark-fly { to { translate: var(--x) var(--y); opacity: 0; scale: .4; } }
