@@ -2,6 +2,7 @@ import { aboutTools, renderDuration, renderToolName } from './about.mjs';
 import { renderWorks } from './projects.mjs';
 import { renderOpening } from './opening.mjs';
 import { renderGearPair, renderGearRule } from './gears.mjs';
+import { renderHomeContact } from './contact.mjs';
 
 const illustrations = '/assets/workshop';
 const message = [
@@ -88,5 +89,5 @@ function renderAboutPreview() {
 }
 
 export function renderHome() {
-  return renderOpening() + renderWelcome() + renderMessage() + renderWorks() + renderAboutPreview();
+  return renderOpening() + renderWelcome() + renderMessage() + renderWorks() + renderAboutPreview() + renderHomeContact(renderGearRule());
 }

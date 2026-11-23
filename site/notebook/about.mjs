@@ -1,4 +1,5 @@
 import { renderGearRule } from './gears.mjs';
+import { renderAboutContact } from './contact.mjs';
 
 const chapters = [
   {
@@ -117,7 +118,7 @@ export function renderAbout() {
       <h1 id="bio-title">経歴とスキル</h1>
       <p>北岡 英磨 <span lang="en">/ Yoma Kitaoka</span></p>
       <nav class="bio-index" aria-label="経歴とスキルの目次">
-        <a href="#history">経歴</a><a href="#skills">スキル</a><a href="#qualifications">資格</a><a href="#tools">ツール使用歴</a>
+        <a href="#history">経歴</a><a href="#skills">スキル</a><a href="#qualifications">資格</a><a href="#tools">ツール使用歴</a><a href="#contact">連絡先</a>
       </nav>
     </header>
     <section class="bio-section" aria-labelledby="history">
@@ -139,6 +140,7 @@ export function renderAbout() {
       <h2 id="tools">ツール使用歴</h2>
       <ul class="bio-tools">${aboutTools.map(renderTool).join('')}</ul>
     </section>
+    ${renderAboutContact()}
     <a class="bio-back" href="/#about"><span aria-hidden="true">←</span> About Me に戻る</a>
   </article>`;
 }
