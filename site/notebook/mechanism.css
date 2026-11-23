@@ -129,24 +129,25 @@
 @media (max-width: 360px) { .site-nav a::before { display: none; } }
 @media (forced-colors: active) { .site-nav a { border-color: LinkText; } }
 
-/* ---------- Typewriter labels ---------- */
+/* ---------- Split-flap lettering: labels are tiles on a departures board ---------- */
 .section-label, .type-label { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; color: var(--rust); }
 .section-label::before, .type-label::before { content: "§"; width: auto; border: 0; color: var(--rust); }
 .type-label {
   display: inline-flex; align-items: center; gap: .6rem;
   font-size: .78rem; line-height: 1.4; letter-spacing: .14em; text-transform: uppercase;
 }
-.type-text { display: inline-block; white-space: nowrap; overflow: hidden; vertical-align: bottom; }
+.type-text { display: inline-block; white-space: nowrap; vertical-align: bottom; letter-spacing: 0; }
 .welcome-copy .type-label { position: absolute; left: .1em; bottom: calc(100% + .8rem); }
 @media (max-width: 700px) { .welcome-copy .type-label { position: static; margin-bottom: .6rem; } }
-@media (prefers-reduced-motion: no-preference) {
-  .typing-ready .type-text { width: 0; }
-  .typing .type-text { width: var(--type-width); animation: type-in calc(var(--chars) * 70ms) steps(var(--chars)) both; }
-  /* The carriage reaches the end of the line and jumps back with a little bell. */
-  .typing { animation: carriage-bell .22s calc(var(--chars) * 70ms) var(--tick) both; }
+.flap-word { display: inline-block; white-space: nowrap; }
+.flapping .flap-char { overflow: hidden; vertical-align: bottom; }
+.flap-char { display: inline-block; text-align: center; backface-visibility: hidden; transform-origin: 50% 50%; }
+.type-text .flap-char {
+  min-width: 1.15em; margin-right: 2px; padding: .12em .1em; border-radius: 2px; color: var(--ivory); line-height: 1.2;
+  background: linear-gradient(#4a4039 0 48%, #1d1915 48% 52%, #3a322c 52%);
+  box-shadow: 0 1px 0 #0004, inset 0 1px #ffffff1a;
 }
-@keyframes type-in { from { width: 0; } }
-@keyframes carriage-bell { 40% { translate: 3px -1px; } }
+@media (forced-colors: active) { .type-text .flap-char { background: Canvas; color: CanvasText; border: 1px solid; } }
 
 /* ---------- Drive belts beside headings ---------- */
 .gear-rule::before {
@@ -440,3 +441,36 @@
   .site-header .gas-valve { order: 1; margin-left: auto; min-height: 40px; }
   .site-header .site-nav { order: 2; width: 100%; margin-left: 0; justify-content: flex-end; }
 }
+
+/* ---------- Page change: brass doors close on a split gear, then open on the next page ---------- */
+html::before, html::after {
+  content: ""; position: fixed; z-index: 60; top: 0; bottom: 0; width: 50%; pointer-events: none; visibility: hidden;
+  background:
+    url("/notebook/gears/brass-12.svg") no-repeat,
+    radial-gradient(circle, var(--brass-dark) 2.5px, transparent 3px) 0 0 / 100% 3.2rem repeat-y,
+    linear-gradient(90deg, #a8834b, #e6cd95 45%, #b48c52);
+  background-size: 10rem 10rem, 1.6rem 3.2rem, auto;
+}
+html::before { left: 0; translate: -101% 0; background-position: right -5rem center, right .5rem top 1.2rem, 0 0; box-shadow: inset -2px 0 var(--brass-dark); }
+html::after { right: 0; translate: 101% 0; background-position: left -5rem center, left .5rem top 1.2rem, 0 0; box-shadow: inset 2px 0 var(--brass-dark); }
+html.door-leaving::before { animation: door-close-left .42s cubic-bezier(.5, 0, .4, 1.25) both; }
+html.door-leaving::after { animation: door-close-right .42s cubic-bezier(.5, 0, .4, 1.25) both; }
+html.door-arriving::before { animation: door-close-left .5s .15s cubic-bezier(.6, 0, .3, 1) reverse both; }
+html.door-arriving::after { animation: door-close-right .5s .15s cubic-bezier(.6, 0, .3, 1) reverse both; }
+@keyframes door-close-left { from { visibility: visible; translate: -101% 0; } to { visibility: visible; translate: 0 0; } }
+@keyframes door-close-right { from { visibility: visible; translate: 101% 0; } to { visibility: visible; translate: 0 0; } }
+.door-board {
+  position: fixed; z-index: 61; left: 50%; top: calc(50% + 6rem); translate: -50% 0; max-width: calc(100% - 2rem);
+  padding: .45rem .6rem; border: 2px solid var(--brass-dark); border-radius: 6px; background: var(--iron);
+  font: 1rem/1.2 ui-monospace, "SFMono-Regular", Consolas, monospace; white-space: nowrap; pointer-events: none;
+  animation: board-drop .3s .15s var(--tick) both;
+}
+.door-board .flap-char {
+  min-width: 1.2em; margin-right: 2px; padding: .15em .1em; border-radius: 2px; color: var(--lamp);
+  background: linear-gradient(#4a4039 0 48%, #1d1915 48% 52%, #3a322c 52%);
+}
+@keyframes board-drop { from { opacity: 0; translate: -50% -.6rem; } }
+
+/* A pressed key springs back past its rest and settles, like a typewriter key. */
+.key-spring { animation: key-spring .32s var(--tick); }
+@keyframes key-spring { from { scale: .93; } 55% { scale: 1.04; } }

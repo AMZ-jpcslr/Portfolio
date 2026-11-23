@@ -27,15 +27,150 @@ function pinCurrentPlate() {
   }
 }
 
-function typeLabels() {
+// Split-flap lettering: each letter clacks through a few cards before landing on its own.
+const flapCards = {
+  upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  lower: 'abcdefghijklmnopqrstuvwxyz',
+  digit: '0123456789',
+  kana: 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン'
+};
+const wide = /[　-ヿ㐀-鿿＀-￯]/;
+
+function cardsFor(letter) {
+  if (/[A-Z]/.test(letter)) return flapCards.upper;
+  if (/[a-z]/.test(letter)) return flapCards.lower;
+  if (/[0-9]/.test(letter)) return flapCards.digit;
+  if (wide.test(letter)) return flapCards.kana;
+  return '';
+}
+
+// Splits text into letters. "text" keeps one readable copy for assistive tech,
+// "label" names a link by its words, and "hidden" is for text that is already decoration.
+function splitFlaps(element, mode) {
+  if ('flap' in element.dataset) return [...element.querySelectorAll('.flap-char')];
+  element.dataset.flap = '';
+  const words = element.textContent.replace(/[↗→↓]/g, '').replace(/\s+/g, ' ').trim();
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) {
+    const hidden = walker.currentNode.parentElement.closest('[aria-hidden="true"]');
+    if (!hidden || hidden === element || !element.contains(hidden)) nodes.push(walker.currentNode);
+  }
+  for (const node of nodes) {
+    const tokens = node.data.match(/\s+|[　-ヿ㐀-鿿＀-￯]|[^\s　-ヿ㐀-鿿＀-￯]+/g) || [];
+    // One wrapper per text run keeps flex gaps in buttons from opening up between letters.
+    const fragment = document.createElement('span');
+    fragment.className = 'flap-line';
+    for (const token of tokens) {
+      if (/^\s+$/.test(token)) { fragment.append(token); continue; }
+      const word = document.createElement('span');
+      word.className = 'flap-word';
+      for (const letter of Array.from(token)) {
+        const char = document.createElement('span');
+        char.className = 'flap-char';
+        char.textContent = letter;
+        word.append(char);
+      }
+      fragment.append(word);
+    }
+    node.replaceWith(fragment);
+  }
+  if (mode === 'text') {
+    const face = document.createElement('span');
+    face.setAttribute('aria-hidden', 'true');
+    face.append(...element.childNodes);
+    const copy = document.createElement('span');
+    copy.className = 'sr-only';
+    copy.textContent = words;
+    element.append(copy, face);
+  } else if (mode === 'label') {
+    element.setAttribute('aria-label', words);
+  }
+  return [...element.querySelectorAll('.flap-char')];
+}
+
+function flipFlaps(element, { stagger = 1, turns = 4 } = {}) {
+  if (reduced.matches) return;
+  const chars = splitFlaps(element).filter(char => cardsFor(char.dataset.final ?? char.textContent));
+  if (!chars.length) return;
+  clearInterval(element.flapTimer);
+  element.classList.add('flapping');
+  // Read every width first, then pin them, so the line does not shuffle while cards change.
+  const finals = chars.map(char => char.dataset.final ?? char.textContent);
+  const widths = chars.map(char => char.getBoundingClientRect().width);
+  chars.forEach((char, index) => {
+    char.dataset.final = finals[index];
+    if (!char.style.width) char.style.width = widths[index] + 'px';
+  });
+  let tick = 0;
+  const last = (chars.length - 1) * stagger + turns + 2;
+  element.flapTimer = setInterval(() => {
+    tick++;
+    chars.forEach((char, index) => {
+      const start = index * stagger;
+      if (tick <= start) return;
+      const end = start + turns + (index % 3);
+      if (tick > end + 1) return;
+      const cards = cardsFor(finals[index]);
+      char.textContent = tick > end ? finals[index] : cards[Math.floor(Math.random() * cards.length)];
+      char.animate([{ transform: 'rotateX(75deg)', filter: 'brightness(.6)' }, { transform: 'none' }], { duration: 55, easing: 'ease-out' });
+    });
+    if (tick > last) { clearInterval(element.flapTimer); element.classList.remove('flapping'); }
+  }, 60);
+}
+
+function wireFlaps() {
   const labels = [...document.querySelectorAll(':is(.section-label, .type-label) .type-text')];
-  if (!labels.length || reduced.matches || !('IntersectionObserver' in window)) return;
-  for (const text of labels) text.style.setProperty('--type-width', text.scrollWidth + 'px');
-  document.documentElement.classList.add('typing-ready');
-  whenVisible(labels, text => {
-    text.parentElement.style.setProperty('--chars', text.textContent.length);
-    text.parentElement.classList.add('typing');
-  }, { threshold: 1 });
+  for (const label of labels) splitFlaps(label, label.closest('[aria-hidden="true"]') ? 'hidden' : 'text');
+  const headings = [...document.querySelectorAll('main :is(h1:not(#welcome-title), h2)')];
+  for (const heading of headings) splitFlaps(heading, 'text');
+  const keys = [...document.querySelectorAll('.site-nav a, .chapter-link')];
+  for (const key of keys) splitFlaps(key, 'label');
+  if (reduced.matches) return;
+  whenVisible(labels, label => flipFlaps(label, { stagger: 1, turns: 5 }), { threshold: 1 });
+  whenVisible(headings, heading => flipFlaps(heading, { stagger: 1, turns: 3 }), { threshold: .6 });
+  for (const key of keys) {
+    key.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') flipFlaps(key, { stagger: 0, turns: 3 }); });
+    key.addEventListener('focus', () => flipFlaps(key, { stagger: 0, turns: 3 }));
+  }
+}
+
+// Every press springs back like a typewriter key.
+function springKeys() {
+  if (reduced.matches) return;
+  document.addEventListener('click', event => {
+    const key = event.target.closest('button, .site-nav a, .chapter-link, .workshop-entry, .github-link, .work-card');
+    if (!key) return;
+    key.classList.remove('key-spring');
+    void key.offsetWidth;
+    key.classList.add('key-spring');
+    key.addEventListener('animationend', () => key.classList.remove('key-spring'), { once: true });
+  });
+}
+
+// Moving between pages: brass doors close on a split gear while a flap board names the destination.
+function wireDoors() {
+  const root = document.documentElement;
+  if (root.classList.contains('door-arriving')) setTimeout(() => root.classList.remove('door-arriving'), 900);
+  addEventListener('pageshow', event => { if (event.persisted) root.classList.remove('door-leaving', 'door-arriving'); document.querySelector('.door-board')?.remove(); });
+  if (reduced.matches) return;
+  document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target.closest('a[href]');
+    if (!link || link.target || link.hasAttribute('download')) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin !== location.origin || url.pathname === location.pathname) return;
+    event.preventDefault();
+    try { sessionStorage.setItem('workshop-door', '1'); } catch { /* The doors only close on this side. */ }
+    const board = document.createElement('p');
+    board.className = 'door-board';
+    board.setAttribute('aria-hidden', 'true');
+    board.textContent = (link.getAttribute('aria-label') || link.textContent).replace(/[↗→↓]/g, '').trim().slice(0, 18);
+    document.body.append(board);
+    root.classList.add('door-leaving');
+    flipFlaps(board, { stagger: 1, turns: 3 });
+    setTimeout(() => { location.href = url.href; }, 620);
+  });
 }
 
 // Turning a gear pair by hand: the same --gear-kick the welcome button uses.
@@ -209,7 +344,9 @@ function hide2112() {
 
 export function wireWorkshopMechanisms() {
   pinCurrentPlate();
-  typeLabels();
+  wireFlaps();
+  springKeys();
+  wireDoors();
   runBelts();
   watchWelcome();
   wireCases();

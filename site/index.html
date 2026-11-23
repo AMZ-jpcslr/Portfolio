@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/notebook/style.css">
     <link rel="stylesheet" href="/notebook/icons.css">
     <link rel="stylesheet" href="/notebook/mechanism.css">
-    <script>try{if(localStorage.getItem('workshop-light')==='night')document.documentElement.dataset.workshop='night'}catch{}</script>
+    <script>try{if(localStorage.getItem('workshop-light')==='night')document.documentElement.dataset.workshop='night'}catch{}try{if(sessionStorage.getItem('workshop-door')){sessionStorage.removeItem('workshop-door');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('door-arriving')}}catch{}</script>
     <script type="module" src="/notebook/interactions.js"></script>
   </head>
   <body>
