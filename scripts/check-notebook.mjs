@@ -19,7 +19,7 @@ for (const pathname of routes) {
   assert.equal(url.origin, origin);
   assert.equal(url.pathname, pathname);
   assert.ok(html.includes(`property="og:url" content="${url.href}"`));
-  assert.ok(html.includes(`property="og:image" content="${origin}/og-image.png?v=workshop-20261116"`));
+  assert.ok(html.includes(`property="og:image" content="${origin}/og-image.png?v=workshop-20261124"`));
   assert.match(html, /<html lang="ja">/);
   assert.match(html, /<title>[^<]+<\/title>/);
   assert.match(html, /<main id="main"[^>]*>[\s\S]*?<h1\b/, `Content must be rendered without JavaScript on ${pathname}`);

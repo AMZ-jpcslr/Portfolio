@@ -7,8 +7,8 @@ import { projectList, renderProject } from '../site/notebook/projects.mjs';
 
 const source = new URL('../site/', import.meta.url);
 const output = new URL('../dist/', import.meta.url);
-const siteName = '北岡 英磨の制作ノート';
-const homeDescription = '北岡英磨の個人開発と研究の制作ノート。8つの作品を実際の画面とともに紹介します。';
+const siteName = 'AMZ-jpcslr';
+const homeDescription = 'AMZ-jpcslr（北岡 英磨）のポートフォリオ。個人開発と研究の8作品を、実際の画面と動画で紹介します。';
 
 export function siteOrigin(env = process.env) {
   const value = env.SITE_URL || 'https://portfolio-amz-jpcslr.vercel.app';
@@ -26,8 +26,8 @@ function escape(value) {
 export function socialMetadata(origin, page = {}) {
   const title = page.title || siteName;
   const description = page.description || homeDescription;
-  const image = `${origin}/og-image.png?v=workshop-20261116`;
-  const alt = '北岡英磨のポートフォリオ。工房の制作ノートと、からくり修理屋のイラスト。';
+  const image = `${origin}/og-image.png?v=workshop-20261124`;
+  const alt = 'AMZ-jpcslr（北岡 英磨）のポートフォリオ。からくり修理屋のイラスト。';
   const url = origin + (page.path || '/');
   const og = { title, description, type: 'website', site_name: siteName, locale: 'ja_JP', url, image, 'image:type': 'image/png', 'image:width': '1200', 'image:height': '630', 'image:alt': alt };
   const twitter = { card: 'summary_large_image', title, description, image, 'image:alt': alt };
@@ -59,7 +59,7 @@ export async function buildSocialMetadata() {
   }
   const pages = [
     { path: '/', title: siteName, description: homeDescription, render: renderHome },
-    { path: '/about/', title: `経歴とスキル ｜ ${siteName}`, description: '高校・大学・UBC交換留学・現在の4章から、北岡英磨の歩みと制作に使っている技術、資格を紹介します。', render: renderAbout },
+    { path: '/about/', title: `経歴とスキル ｜ ${siteName}`, description: '高校・大学・UBC交換留学・現在の4章から、北岡 英磨の歩みと制作に使っている技術、資格を紹介します。', render: renderAbout },
     ...projectList.map(project => ({
       path: project.path, title: `${project.title} ｜ ${siteName}`,
       description: project.summary, render: () => renderProject(project.kind)
