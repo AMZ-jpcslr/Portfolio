@@ -151,8 +151,8 @@ function springKeys() {
 // Moving between pages: brass doors close on a split gear while a flap board names the destination.
 function wireDoors() {
   const root = document.documentElement;
-  if (root.classList.contains('door-arriving')) setTimeout(() => root.classList.remove('door-arriving'), 900);
-  addEventListener('pageshow', event => { if (event.persisted) root.classList.remove('door-leaving', 'door-arriving'); document.querySelector('.door-board')?.remove(); });
+  if (root.classList.contains('door-arriving')) setTimeout(() => root.classList.remove('door-arriving'), 1200);
+  addEventListener('pageshow', event => { if (event.persisted) root.classList.remove('door-leaving', 'door-arriving'); document.querySelectorAll('.door-board, .door-lock').forEach(node => node.remove()); });
   if (reduced.matches) return;
   document.addEventListener('click', event => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -167,9 +167,17 @@ function wireDoors() {
     board.setAttribute('aria-hidden', 'true');
     board.textContent = (link.getAttribute('aria-label') || link.textContent).replace(/[↗→↓]/g, '').trim().slice(0, 18);
     document.body.append(board);
+    // The lock wheel is drawn at the doors' own scale so it lands exactly on the two halves.
+    const lock = document.createElement('img');
+    lock.className = 'door-lock';
+    lock.alt = '';
+    lock.src = '/notebook/doors/lock.svg';
+    const unit = Math.max(root.clientWidth / 2 / 900, innerHeight / 1000);
+    lock.width = lock.height = Math.round(428 * unit);
+    document.body.append(lock);
     root.classList.add('door-leaving');
-    flipFlaps(board, { stagger: 1, turns: 3 });
-    setTimeout(() => { location.href = url.href; }, 620);
+    setTimeout(() => flipFlaps(board, { stagger: 1, turns: 3 }), 700);
+    setTimeout(() => { location.href = url.href; }, 1300);
   });
 }
 
