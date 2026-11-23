@@ -157,14 +157,14 @@ function addNotebookStamp() {
   const button = document.createElement('button');
   button.type = 'button';
   button.className = 'stamp-button';
-  button.setAttribute('aria-label', '制作ノートに歯車の判を押す');
+  button.setAttribute('aria-label', 'ページに歯車の判を押す');
   button.setAttribute('aria-pressed', 'false');
   button.innerHTML = '<span class="stamp-imprint" aria-hidden="true">検印</span><span class="stamp-gear" aria-hidden="true">⚙</span>';
   footer.append(button);
   button.addEventListener('click', () => {
     const pressed = button.getAttribute('aria-pressed') === 'true';
     button.setAttribute('aria-pressed', String(!pressed));
-    button.setAttribute('aria-label', pressed ? '制作ノートに歯車の判を押す' : '歯車の判を戻す');
+    button.setAttribute('aria-label', pressed ? 'ページに歯車の判を押す' : '歯車の判を戻す');
   });
 }
 
