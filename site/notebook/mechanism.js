@@ -1,4 +1,4 @@
-// からくり仕掛けの工房: belts, ratchets, louvre shutters, counter drums and a gas lamp.
+// からくり仕掛けの工房: belts, ratchets, cranked viewing cases, counter drums and a gas valve.
 // Every effect is decoration on top of complete static HTML.
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const storageKey = 'workshop-light';
@@ -67,18 +67,62 @@ function watchWelcome() {
   new IntersectionObserver(([entry]) => welcome.classList.toggle('welcome-visible', entry.isIntersecting)).observe(welcome);
 }
 
-function wireShutters() {
+// Screenshots stay in view; a crank pans each one from top to bottom on hover, focus or touch.
+function wireCases() {
   const cards = [...document.querySelectorAll('.work-card')];
+  for (const image of document.querySelectorAll('.case-window > img')) {
+    if (image.complete) continue;
+    const frame = image.parentElement;
+    frame.classList.add('case-loading');
+    const done = () => frame.classList.remove('case-loading');
+    image.addEventListener('load', done, { once: true });
+    image.addEventListener('error', done, { once: true });
+  }
   if (!cards.length || reduced.matches) return;
-  document.documentElement.classList.add('shutter-ready');
   for (const card of cards) {
     card.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') card.classList.add('case-open'); });
     card.addEventListener('pointerleave', event => { if (event.pointerType === 'mouse') card.classList.remove('case-open'); });
     card.addEventListener('focus', () => card.classList.add('case-open'));
     card.addEventListener('blur', () => { if (!card.matches(':hover')) card.classList.remove('case-open'); });
   }
-  // Touch screens cannot hover, so each case opens once it is well inside the view.
-  if (!matchMedia('(hover: hover)').matches) whenVisible(cards, card => card.classList.add('case-open'), { threshold: 0.7 });
+  // Touch screens cannot hover, so each case is cranked once while it sits well inside the view.
+  if (!matchMedia('(hover: hover)').matches) {
+    whenVisible(cards, card => {
+      card.classList.add('case-open');
+      setTimeout(() => card.classList.remove('case-open'), 3200);
+    }, { threshold: 0.7 });
+  }
+}
+
+// The odometer hangs on a chain from the tip of the reading bar and swings as the page moves.
+function hangReadingTag() {
+  const meter = document.querySelector('.reading-progress');
+  const odometer = meter?.querySelector('.reading-odometer');
+  if (!odometer) return;
+  const hanger = document.createElement('span');
+  hanger.className = 'reading-hanger';
+  hanger.setAttribute('aria-hidden', 'true');
+  hanger.innerHTML = '<span class="reading-hook"></span><span class="reading-chain"></span>';
+  odometer.before(hanger);
+  hanger.append(odometer);
+  if (reduced.matches) return;
+  let last = scrollY;
+  let angle = 0;
+  let speed = 0;
+  let frame = 0;
+  function swing() {
+    speed = speed * .86 - angle * .07;
+    angle += speed;
+    hanger.style.setProperty('--swing', angle.toFixed(2) + 'deg');
+    frame = Math.abs(angle) > .05 || Math.abs(speed) > .05 ? requestAnimationFrame(swing) : 0;
+  }
+  addEventListener('scroll', () => {
+    const delta = scrollY - last;
+    last = scrollY;
+    // The tip runs ahead and the tag lags behind it, like a weight on a chain.
+    speed += Math.max(-3, Math.min(3, delta * .05));
+    if (!frame) frame = requestAnimationFrame(swing);
+  }, { passive: true });
 }
 
 function rollDrum(drum, digit, steps = 8) {
@@ -107,26 +151,24 @@ function setNight(on, switching) {
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', on ? '#29231f' : '#f7f3e9');
 }
 
-function addLampLever() {
-  const footer = document.querySelector('.site-footer');
-  if (!footer) return;
-  const lever = document.createElement('button');
-  lever.type = 'button';
-  lever.className = 'night-lever';
-  lever.setAttribute('role', 'switch');
-  lever.setAttribute('aria-label', 'ガス灯を絞って夜の工房にする');
-  lever.innerHTML = '<span class="night-lever-base" aria-hidden="true"><span class="night-lever-arm"></span></span><span class="night-lever-text" aria-hidden="true">夜の工房</span>';
+function addGasValve() {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+  const valve = document.createElement('button');
+  valve.type = 'button';
+  valve.className = 'gas-valve';
+  valve.setAttribute('role', 'switch');
+  valve.setAttribute('aria-label', 'ガス灯を絞って夜の工房にする');
+  valve.innerHTML = '<span class="valve-wheel" aria-hidden="true"></span><span class="valve-flame" aria-hidden="true"></span><span class="valve-text" aria-hidden="true">夜の工房</span>';
   const night = document.documentElement.dataset.workshop === 'night';
-  lever.setAttribute('aria-checked', String(night));
+  valve.setAttribute('aria-checked', String(night));
   setNight(night, false);
-  const stamp = footer.querySelector('.stamp-button');
-  if (stamp) stamp.before(lever);
-  else footer.append(lever);
-  lever.addEventListener('click', () => {
-    const on = lever.getAttribute('aria-checked') !== 'true';
-    lever.setAttribute('aria-checked', String(on));
+  header.append(valve);
+  valve.addEventListener('click', () => {
+    const on = valve.getAttribute('aria-checked') !== 'true';
+    valve.setAttribute('aria-checked', String(on));
     setNight(on, true);
-    try { localStorage.setItem(storageKey, on ? 'night' : 'day'); } catch { /* The lever still works for this page. */ }
+    try { localStorage.setItem(storageKey, on ? 'night' : 'day'); } catch { /* The valve still works for this page. */ }
   });
 }
 
@@ -154,8 +196,14 @@ function hide2112() {
       if (reduced.matches) drums[index].textContent = digit;
       else { drums[index].textContent = '0'; rollDrum(drums[index], digit, 6 + index * 3); }
     });
+    note.classList.remove('toast-leaving');
     clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => { note.hidden = true; }, 4500);
+    // Like a toast: it drops from the top, stays three seconds, then lifts away.
+    hideTimer = setTimeout(() => {
+      if (reduced.matches) { note.hidden = true; return; }
+      note.classList.add('toast-leaving');
+      hideTimer = setTimeout(() => { note.hidden = true; note.classList.remove('toast-leaving'); }, 300);
+    }, 3000);
   });
 }
 
@@ -164,8 +212,9 @@ export function wireWorkshopMechanisms() {
   typeLabels();
   runBelts();
   watchWelcome();
-  wireShutters();
+  wireCases();
   rollCounters();
-  addLampLever();
+  hangReadingTag();
+  addGasValve();
   hide2112();
 }

@@ -55,13 +55,31 @@
 }
 
 /* ---------- Reading progress: rack, pinion and an odometer ---------- */
+.reading-hanger {
+  position: absolute; top: 1px; left: clamp(14px, calc(var(--reading-ratio) * 100%), calc(100% - 44px));
+  display: grid; justify-items: center; translate: -50% 0; transform-origin: 50% 2px;
+  rotate: var(--swing, 0deg); opacity: 0; transition: opacity .2s;
+}
+.reading-moving .reading-hanger { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .reading-moving .reading-hanger { animation: tag-drop .8s var(--tick); }
+}
+@keyframes tag-drop { from { rotate: -70deg; } }
+.reading-hook { width: 7px; height: 7px; border: 2px solid var(--brass-dark); border-radius: 50%; background: var(--brass-light); }
+.reading-chain {
+  width: 3px; height: 14px; margin-top: -1px;
+  background: radial-gradient(circle at 50% 50%, transparent 1px, var(--brass-dark) 1.2px 1.6px, transparent 1.8px) 0 0 / 3px 4px;
+}
 .reading-odometer {
-  position: absolute; top: 12px; right: 6px; display: flex; align-items: center; gap: 1px; padding: 2px 4px;
-  border: 1px solid var(--brass-dark); border-radius: 4px; background: linear-gradient(var(--brass-light), #b48c52);
-  box-shadow: 0 2px 4px #3d343340; opacity: 0; translate: 0 -4px; transition: opacity .25s, translate .25s var(--tick);
+  position: relative; display: flex; align-items: center; gap: 1px; padding: 3px 5px 3px; margin-top: -1px;
+  border: 1px solid var(--brass-dark); border-radius: 4px 4px 7px 7px; background: linear-gradient(var(--brass-light), #b48c52);
+  box-shadow: 0 3px 5px #3d343340;
+}
+.reading-odometer::before {
+  content: ""; position: absolute; left: 50%; top: -3px; width: 5px; height: 5px; translate: -50% 0; border-radius: 50%;
+  background: var(--iron);
 }
 .reading-odometer small { margin-left: 2px; color: #3a291f; font: 700 9px/1 ui-monospace, monospace; }
-.reading-moving .reading-odometer { opacity: 1; translate: none; }
 .odometer-drum {
   display: block; width: 10px; height: 14px; overflow: hidden; border-radius: 2px;
   background: linear-gradient(#000a, transparent 30% 70%, #000a), var(--iron);
@@ -74,10 +92,10 @@
 @media (prefers-reduced-motion: no-preference) {
   .odometer-drum span { transition: transform .28s var(--tick); }
 }
-@media (forced-colors: active) { .reading-odometer { display: none; } }
+@media (forced-colors: active) { .reading-hanger { display: none; } }
 
 /* ---------- Header: brass name plates, ratchet gears and an enamel pin ---------- */
-.site-nav { gap: clamp(.4rem, 1.2vw, .9rem); }
+.site-nav { gap: clamp(.4rem, 1.2vw, .9rem); margin-left: auto; }
 .site-nav a {
   position: relative; gap: .4rem; min-height: 36px; margin-block: 4px; padding: 0 .8rem 0 .55rem;
   border: 1px solid var(--brass-dark); border-radius: 4px;
@@ -204,9 +222,9 @@
   100% { opacity: 1; transform: none; }
 }
 
-/* ---------- Work cards: display cases with brass louvre shutters ---------- */
+/* ---------- Work cards: brass viewing cases; a crank pans the whole screenshot ---------- */
 .work-grid { counter-reset: work; }
-.work-card { background: color-mix(in srgb, var(--paper) 93%, #fff); transition: border-color .2s, box-shadow .2s; }
+.work-card { background: color-mix(in srgb, var(--paper) 93%, #fff); transition: border-color .2s, box-shadow .2s, translate .25s var(--tick); }
 .case-bezel {
   position: relative; display: block; margin: .75rem .75rem 0; padding: .6rem .6rem 1.4rem;
   border: 1px solid var(--brass-dark); border-radius: .7rem;
@@ -218,38 +236,34 @@
   background: var(--brass-dark); box-shadow: 14px 0 var(--brass-dark);
 }
 .case-window { position: relative; overflow: hidden; aspect-ratio: 1.5; border-radius: .25rem; background: #e8e4d6; box-shadow: inset 0 0 0 1px #6f513b88; }
-.case-window > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
-.case-shutter { position: absolute; inset: 0; display: none; grid-template-rows: repeat(6, 1fr); perspective: 400px; }
-.case-shutter i {
-  display: block; transform-origin: 50% 0;
-  background: linear-gradient(#e2c58a, #b08a50 70%, #8a6a3c); border-bottom: 1px solid #5b4128;
-  box-shadow: 0 1px 2px #0003;
+.case-window > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
+/* Skeleton: a brass shimmer runs across the glass until the screenshot arrives. */
+.case-loading { background: linear-gradient(100deg, #e8e4d6 30%, #f6efdb 45%, #e8e4d6 60%) 0 0 / 300% 100%; }
+.case-loading > img { opacity: 0; }
+.case-glint {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, #fff8 48%, transparent 56%) 0 0 / 250% 100% no-repeat;
+  background-position: 120% 0; box-shadow: inset 0 0 0 1px #fff4, inset 0 8px 14px -10px #3d343366;
 }
-.case-plate {
-  position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: none; width: max-content; max-width: 86%;
-  padding: .2rem .7rem; border: 1px solid var(--brass-dark); border-radius: 3px; background: var(--ivory);
-  color: #3d3433; font: clamp(.82rem, 1.3vw, 1rem)/1.35 var(--hand); text-align: center; box-shadow: 0 2px 0 #6f513b55;
+.case-crank { position: absolute; right: .35rem; bottom: .2rem; width: 1.15rem; height: 1.15rem; }
+.case-gear { display: block; width: 100%; height: auto; }
+/* The crank handle rides on the gear and turns with it. */
+.case-crank i {
+  position: absolute; left: 50%; top: 50%; width: 2px; height: 70%; translate: -50% -100%; transform-origin: 50% 100%;
+  background: var(--iron); border-radius: 1px;
 }
-.case-gear { position: absolute; right: .45rem; bottom: .25rem; width: 1.15rem; height: auto; }
-.shutter-ready .case-shutter { display: grid; }
-.shutter-ready .case-plate { display: block; }
+.case-crank i::after { content: ""; position: absolute; left: -2px; top: -3px; width: 6px; height: 6px; border-radius: 50%; background: var(--enamel); }
 .work-card.case-open { border-color: var(--rust); box-shadow: 0 6px 16px #3d343329; }
-.shutter-ready .work-card.case-open .case-plate { opacity: 0; }
-.shutter-ready .work-card.case-open .case-shutter i { transform: rotateX(-90deg); opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
-  /* Slats swing one after another; each fades only once it is edge-on. */
-  .case-shutter i { --slat: 0s; transition: transform .3s var(--tick) var(--slat), opacity .08s linear calc(var(--slat) + .2s); }
-  .case-open .case-shutter i { transition: transform .3s var(--tick) var(--slat), opacity .08s linear calc(var(--slat) + .2s); }
-  .work-card:not(.case-open) .case-shutter i { transition: opacity 0s var(--slat), transform .3s var(--tick) var(--slat); }
-  .case-shutter i:nth-child(2) { --slat: .04s; }
-  .case-shutter i:nth-child(3) { --slat: .08s; }
-  .case-shutter i:nth-child(4) { --slat: .12s; }
-  .case-shutter i:nth-child(5) { --slat: .16s; }
-  .case-shutter i:nth-child(6) { --slat: .2s; }
-  .case-plate { transition: opacity .15s; }
-  .case-gear { transition: rotate .55s var(--tick); }
-  .work-card.case-open .case-gear { rotate: 180deg; }
+  .case-loading { animation: case-shimmer 1.2s linear infinite; }
+  .case-window > img { transition: object-position 2.4s cubic-bezier(.45, 0, .3, 1), scale 2.4s ease, opacity .35s; }
+  .case-crank :is(.case-gear, i) { transition: rotate 2.4s cubic-bezier(.45, 0, .3, 1); }
+  .work-card.case-open { translate: 0 -3px; }
+  .work-card.case-open .case-window > img { object-position: 50% 100%; scale: 1.03; }
+  .work-card.case-open .case-crank :is(.case-gear, i) { rotate: 3turn; }
+  .work-card.case-open .case-glint { background-position: -20% 0; transition: background-position .7s ease-out; }
 }
+@keyframes case-shimmer { to { background-position: -150% 0; } }
 .work-card-copy { padding-top: .75rem; }
 .work-category { display: inline-flex; align-items: center; gap: .45rem; }
 .work-no {
@@ -261,11 +275,9 @@
 @media (max-width: 30rem) {
   .case-bezel { margin: .45rem .45rem 0; padding: .35rem .35rem 1.1rem; border-radius: .5rem; }
   .case-bezel::before { left: .5rem; bottom: .35rem; width: 6px; height: 6px; box-shadow: 10px 0 var(--brass-dark); }
-  .case-gear { width: .9rem; right: .3rem; bottom: .15rem; }
-  .case-plate { padding: .1rem .4rem; }
+  .case-crank { width: .9rem; height: .9rem; right: .3rem; bottom: .15rem; }
   .work-category { flex-wrap: wrap; gap: .2rem .4rem; }
 }
-@media (forced-colors: active) { .case-shutter, .case-plate { display: none !important; } }
 
 /* ---------- Counter drums ---------- */
 .counter-row { display: inline-flex; align-items: center; gap: .2rem; color: var(--brass-dark); }
@@ -281,33 +293,46 @@
 @media (forced-colors: active) { .counter-drum { forced-color-adjust: auto; border-color: CanvasText; } }
 
 /* ---------- Gas lamp lever and the 2112 easter egg ---------- */
-.night-lever {
-  display: inline-flex; align-items: center; gap: .55rem; min-height: 44px; padding: .2rem .8rem .2rem .3rem;
+/* ---------- Header gas valve: turn the wheel to turn the lamp down ---------- */
+.gas-valve {
+  display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; padding: .2rem .7rem .2rem .25rem;
   border: 1px solid var(--line); border-radius: 2rem; background: transparent; color: var(--green);
-  font: .9rem/1 var(--hand); cursor: pointer;
+  font: .82rem/1 var(--hand); white-space: nowrap; cursor: pointer;
 }
-.night-lever-base {
-  position: relative; width: 2.6rem; height: 1.6rem; border: 1px solid var(--brass-dark); border-radius: .35rem;
-  background: linear-gradient(#ddc187, #a37d45);
+.gas-valve:is(:hover, :focus-visible) { border-color: var(--rust); }
+.gas-valve:active { scale: .93; }
+.valve-wheel {
+  position: relative; width: 2rem; height: 2rem; border-radius: 50%;
+  background:
+    radial-gradient(circle, var(--enamel) 0 .2rem, var(--brass-dark) .21rem .3rem, transparent .31rem),
+    linear-gradient(transparent calc(50% - 1.5px), var(--brass-dark) calc(50% - 1.5px) calc(50% + 1.5px), transparent calc(50% + 1.5px)),
+    linear-gradient(90deg, transparent calc(50% - 1.5px), var(--brass-dark) calc(50% - 1.5px) calc(50% + 1.5px), transparent calc(50% + 1.5px));
+  box-shadow: inset 0 0 0 3px var(--brass), inset 0 0 0 4px var(--brass-dark), 0 0 0 1px var(--brass-dark);
 }
-.night-lever-arm {
-  position: absolute; left: calc(50% - 2px); bottom: .3rem; width: 4px; height: 1.25rem;
-  border-radius: 2px; background: #efe0b8; transform-origin: 50% 100%; transform: rotate(-38deg);
+.valve-wheel::after {
+  content: ""; position: absolute; right: -2px; top: 50%; width: 5px; height: 5px; translate: 0 -50%; border-radius: 50%;
+  background: var(--brass-light); border: 1px solid var(--brass-dark);
 }
-.night-lever-arm::after {
-  content: ""; position: absolute; top: -.35rem; left: -.3rem; width: .65rem; height: .65rem; border-radius: 50%;
-  background: var(--rust); border: 1px solid var(--brass-dark);
+.valve-flame {
+  width: .55rem; height: .8rem; border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+  background: radial-gradient(circle at 50% 70%, #fff6d8, var(--lamp) 45%, #d9762c); box-shadow: 0 0 8px #f3c46b99;
+  transform-origin: 50% 100%;
 }
-.night-lever[aria-checked="true"] .night-lever-arm { transform: rotate(38deg); }
-.night-lever[aria-checked="true"] .night-lever-arm::after { background: var(--lamp); box-shadow: 0 0 8px #f3c46baa; }
-.night-lever:is(:hover, :focus-visible) { border-color: var(--rust); }
+.gas-valve[aria-checked="true"] .valve-wheel { rotate: 135deg; }
+.gas-valve[aria-checked="true"] .valve-flame { scale: .55; background: radial-gradient(circle at 50% 70%, #d9ecff, #6f8fd8 60%, #3b5aa8); box-shadow: 0 0 6px #6f8fd888; }
 @media (prefers-reduced-motion: no-preference) {
-  .night-lever-arm { transition: transform .3s var(--tick); }
+  .valve-wheel { transition: rotate .3s var(--tick); }
+  .valve-flame { transition: scale .3s var(--tick), background .3s; animation: flame-flicker 1.6s ease-in-out infinite alternate; }
 }
-@media (max-width: 700px) { .night-lever-text { display: none; } .night-lever { padding-right: .3rem; } }
+@keyframes flame-flicker { 50% { transform: scaleY(1.08) skewX(2deg); } 100% { transform: scaleY(.96) skewX(-2deg); } }
+@media (max-width: 700px) {
+  .valve-text { display: none; }
+  .gas-valve { padding-right: .4rem; min-width: 44px; }
+  .valve-wheel { width: 1.7rem; height: 1.7rem; }
+}
 
 .year-2112 {
-  position: fixed; z-index: 9; left: 50%; bottom: 7rem; translate: -50% 0; width: max-content; max-width: calc(100% - 2rem);
+  position: fixed; z-index: 9; left: 50%; top: 1rem; translate: -50% 0; width: max-content; max-width: calc(100% - 2rem);
   display: flex; align-items: center; gap: .8rem; padding: .7rem 1rem;
   border: 2px solid var(--brass-dark); border-radius: .5rem; background: linear-gradient(var(--brass-light), #c49b5c); color: #3a291f;
   font: .9rem/1.4 var(--hand); box-shadow: 0 8px 24px #3d343355;
@@ -315,7 +340,103 @@
 .year-2112 .counter-drum { font-size: 1.6rem; }
 .year-2112[hidden] { display: none; }
 @media (prefers-reduced-motion: no-preference) {
-  .year-2112 { animation: ratchet-in .45s both; }
+  .year-2112 { animation: toast-drop .45s var(--tick) both; }
+  .year-2112.toast-leaving { animation: toast-lift .3s ease-in both; }
+  .stamp-button.spinning { animation: stamp-pop .35s var(--tick); }
   .stamp-button.spinning .stamp-gear { display: inline-block; animation: gear-spin .8s var(--tick); }
 }
 @keyframes gear-spin { to { transform: rotate(3turn); } }
+@keyframes toast-drop { from { translate: -50% calc(-100% - 1.5rem); } }
+@keyframes toast-lift { to { translate: -50% calc(-100% - 1.5rem); opacity: 0; } }
+@keyframes stamp-pop { 40% { scale: 1.3; } }
+/* Every brass button gives a little under the thumb. */
+:is(.stamp-button, .workshop-entry, .site-nav a):active { scale: .93; }
+
+/* ---------- Opening: a small boiler fills the rack, overshoots, ticks and lifts away ---------- */
+.notebook-opening[open] { background: transparent; place-items: stretch; }
+.steam-loader {
+  --fill: 0;
+  position: relative; display: grid; grid-template-rows: auto 1fr auto; width: 100%; height: 100%;
+  padding: clamp(1rem, 3vw, 2rem); background: var(--paper, #f8f4e9);
+  background-image: radial-gradient(#6f513b14 .55px, transparent .8px); background-size: 14px 14px;
+  font-family: var(--hand);
+}
+.loader-head {
+  display: flex; justify-content: space-between; margin: 0; padding-bottom: .6rem;
+  border-bottom: 1px solid var(--line, #d9cdb4); color: var(--green); font-size: .85rem; letter-spacing: .18em;
+}
+.loader-body { display: grid; justify-items: center; align-content: center; gap: 1rem; }
+.loader-machine { width: min(20rem, 78vw); height: auto; overflow: visible; }
+.loader-gear { animation: loader-spin .8s linear infinite; }
+.loader-gear--small { animation-duration: .457s; animation-direction: reverse; }
+.loader-gear--tiny { animation-duration: .343s; animation-direction: reverse; }
+.loader-done .loader-gear { animation-play-state: paused; }
+.loader-needle { rotate: calc(var(--fill) * 115deg); }
+.loader-overshoot .loader-needle { animation: loader-tremble .09s steps(2) 6; }
+.loader-steam { opacity: 0; }
+.loader-overshoot .loader-steam { animation: loader-puff .9s ease-out forwards; }
+.loader-readout { display: flex; align-items: center; gap: .9rem; margin: 0; color: var(--green); letter-spacing: .2em; }
+.loader-label { font-size: .9rem; }
+.loader-counter {
+  display: flex; align-items: center; gap: 2px; padding: 4px 6px; border: 1px solid var(--brass-dark); border-radius: 5px;
+  background: linear-gradient(var(--brass-light), #b48c52); box-shadow: 0 2px 6px #3d343333;
+}
+.loader-counter small { margin-left: 3px; color: #3a291f; font: 700 12px/1 ui-monospace, monospace; letter-spacing: 0; }
+.loader-drum {
+  display: block; width: 16px; height: 22px; overflow: hidden; border-radius: 3px;
+  background: linear-gradient(#000a, transparent 30% 70%, #000a), var(--iron);
+}
+.loader-drum span {
+  display: block; width: 1ch; margin: 0 auto; word-break: break-all; color: var(--ivory);
+  font: 17px/22px ui-monospace, "SFMono-Regular", Consolas, monospace; text-align: center; letter-spacing: 0;
+  transform: translateY(calc(var(--digit, 0) * -22px)); transition: transform .12s var(--tick);
+}
+.loader-rack {
+  position: relative; width: min(22rem, 76vw); height: 12px; margin-top: .6rem; border: 1px solid var(--brass-dark);
+  border-radius: 2px; background: repeating-linear-gradient(90deg, #a78859 0 3px, #e3d3ab 3px 7px);
+}
+/* A short red zone past the stop: the overshoot runs into it and springs back. */
+.loader-rack::after {
+  content: ""; position: absolute; top: -1px; bottom: -1px; left: 100%; width: 8%;
+  border: 1px solid var(--enamel); border-left: 0; background: repeating-linear-gradient(135deg, #b0352a55 0 3px, transparent 3px 6px);
+}
+.loader-fill {
+  position: absolute; inset: 2px auto 2px 0; width: calc(var(--fill) * 100%); background: var(--green); border-radius: 1px;
+}
+.loader-stopper {
+  position: absolute; top: -7px; left: calc(100% - 3px); width: 6px; height: 24px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--brass-dark), var(--brass)); transform-origin: 50% 100%;
+}
+.loader-overshoot .loader-stopper { animation: loader-knock .5s var(--tick); }
+.loader-pinion {
+  position: absolute; top: -26px; left: calc(var(--fill) * 100%); width: 28px; height: 28px;
+  translate: -50% 0; rotate: calc(var(--fill) * 2turn);
+}
+.loader-check { width: 44px; height: 44px; opacity: 0; scale: .6; }
+.loader-check path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.loader-done .loader-check { opacity: 1; scale: 1; transition: opacity .15s, scale .3s var(--tick); }
+.loader-done .loader-check path { stroke-dashoffset: 0; transition: stroke-dashoffset .3s ease-out .08s; }
+.loader-ready { margin: 0; min-height: 1.5em; color: var(--rust); opacity: 0; translate: 0 6px; }
+.loader-done .loader-ready { opacity: 1; translate: none; transition: opacity .25s, translate .3s var(--tick); }
+.loader-lift { translate: 0 -100%; transition: translate .45s cubic-bezier(.6, 0, .8, .4); }
+.steam-loader .opening-skip {
+  justify-self: start; min-height: 44px; padding: .5rem 1rem; border: 1px solid var(--brass-dark); border-radius: 999px;
+  background: var(--ivory); color: var(--iron); font: .9rem/1.2 var(--hand); cursor: pointer;
+}
+.steam-loader .opening-skip:hover { background: var(--brass-light); }
+.steam-loader .opening-skip:active { scale: .93; }
+.steam-loader .opening-skip:focus-visible { outline-offset: 3px; }
+:root[data-workshop="night"] .loader-machine .loader-gauge > circle:first-child { fill: #3a312b; }
+@keyframes loader-spin { to { rotate: 1turn; } }
+@keyframes loader-tremble { 50% { translate: .6px -.4px; } }
+@keyframes loader-puff { 0% { opacity: 0; translate: 0 6px; } 30% { opacity: .9; } 100% { opacity: 0; translate: 0 -14px; } }
+@keyframes loader-knock { 30% { rotate: 14deg; } 60% { rotate: -5deg; } }
+@media (forced-colors: active) {
+  .loader-fill { background: Highlight; forced-color-adjust: none; }
+}
+/* Narrow screens: name and valve share the first row, the brass plates take the second. */
+@media (max-width: 700px) {
+  .site-header { flex-wrap: wrap; row-gap: .2rem; padding-block: .35rem .5rem; }
+  .site-header .gas-valve { order: 1; margin-left: auto; min-height: 40px; }
+  .site-header .site-nav { order: 2; width: 100%; margin-left: 0; justify-content: flex-end; }
+}
