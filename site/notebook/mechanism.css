@@ -477,3 +477,76 @@ html.door-arriving::after { animation: door-close-right .75s .3s cubic-bezier(.5
 /* A pressed key springs back past its rest and settles, like a typewriter key. */
 .key-spring { animation: key-spring .32s var(--tick); }
 @keyframes key-spring { from { scale: .93; } 55% { scale: 1.04; } }
+
+/* ---------- Site name: a brass maker's plate with a ratchet gear ---------- */
+.wordmark { gap: .5rem; color: #3a291f; letter-spacing: 0; }
+.wordmark img { flex: none; filter: drop-shadow(0 1px 1px #3d343355); }
+.wordmark-plate {
+  position: relative; display: grid; padding: .2rem .85rem .25rem; border: 1px solid var(--brass-dark); border-radius: 4px;
+  background: linear-gradient(var(--brass-light), #c49b5c); box-shadow: inset 0 1px #fff6d6aa, inset 0 -1px #6f513b55, 0 2px 0 #6f513b55;
+}
+/* Rivets in the four corners. */
+.wordmark-plate::before {
+  content: ""; position: absolute; inset: 3px; pointer-events: none;
+  background:
+    radial-gradient(circle at 2.5px 2.5px, var(--brass-dark) 1.6px, transparent 2px) 0 0,
+    radial-gradient(circle at calc(100% - 2.5px) 2.5px, var(--brass-dark) 1.6px, transparent 2px) 0 0,
+    radial-gradient(circle at 2.5px calc(100% - 2.5px), var(--brass-dark) 1.6px, transparent 2px) 0 0,
+    radial-gradient(circle at calc(100% - 2.5px) calc(100% - 2.5px), var(--brass-dark) 1.6px, transparent 2px) 0 0;
+}
+.wordmark-name { font: 600 clamp(1.05rem, 1.7vw, 1.3rem)/1.15 var(--hand); letter-spacing: .08em; text-shadow: 0 1px #fff3cf; }
+.wordmark-sub { font: .52rem/1.2 ui-monospace, "SFMono-Regular", Consolas, monospace; letter-spacing: .28em; color: #5b4128; }
+.wordmark:is(:hover, :focus-visible) .wordmark-plate { background: linear-gradient(#f3e0b0, #d2aa6b); }
+@media (prefers-reduced-motion: no-preference) {
+  .wordmark img { transition: rotate .45s var(--tick); }
+  .wordmark:is(:hover, :focus-visible) img { rotate: 60deg; }
+}
+:root[data-workshop="night"] .wordmark-plate { filter: brightness(.88); }
+@media (max-width: 700px) {
+  .wordmark img { width: 28px; height: 28px; }
+  .wordmark-plate { padding: .15rem .6rem .2rem; }
+  .wordmark-sub { font-size: .46rem; letter-spacing: .2em; }
+}
+@media (forced-colors: active) { .wordmark-plate { border-color: LinkText; } }
+
+/* ---------- Chapter link: an iron lever plate with a brass gear that turns as you reach for it ---------- */
+.chapter-link {
+  position: relative; align-items: center; gap: .7rem; padding: .7rem 1.2rem .7rem .85rem;
+  border: 1px solid #1d1915; border-radius: 5px; color: var(--ivory);
+  background: linear-gradient(#4a403a, #2c2521); box-shadow: inset 0 0 0 2px #c69a5666, inset 0 1px #ffffff22, 0 3px 0 #1d1915aa;
+}
+.chapter-link::before {
+  content: ""; flex: none; width: 1.2rem; height: 1.2rem; background: url("/notebook/gears/brass-12.svg") center / contain no-repeat;
+}
+.chapter-link:is(:hover, :focus-visible) { background: linear-gradient(#564b44, #352d28); }
+.chapter-link:active { translate: 0 2px; box-shadow: inset 0 0 0 2px #c69a5666, 0 1px 0 #1d1915aa; }
+.chapter-link > span[aria-hidden] { color: var(--lamp); }
+@media (prefers-reduced-motion: no-preference) {
+  .chapter-link::before { transition: rotate .5s var(--tick); }
+  .chapter-link:is(:hover, :focus-visible)::before { rotate: 120deg; }
+}
+:root[data-workshop="night"] .chapter-link, :root[data-workshop="night"] .chapter-link:is(:hover, :focus-visible) { color: var(--ivory); background: linear-gradient(#5a4e46, #3a312b); }
+
+/* ---------- Contact: a telegraph key for mail, a brass-edged card for GitHub ---------- */
+.contact-links a { border-radius: 5px; border-color: var(--brass-dark); background: color-mix(in srgb, var(--paper) 90%, #fff); box-shadow: 0 2px 0 #6f513b44; }
+.contact-links a:is(:hover, :focus-visible) { border-color: var(--rust); background: color-mix(in srgb, var(--paper) 80%, var(--brass-light)); }
+.contact-links .contact-mail {
+  position: relative; border-color: #1d1915; color: var(--ivory);
+  background: linear-gradient(#4a403a, #2c2521); box-shadow: inset 0 0 0 2px #c69a5666, 0 3px 0 #1d1915aa;
+}
+.contact-links .contact-mail:is(:hover, :focus-visible) { background: linear-gradient(#564b44, #352d28); }
+.contact-links .contact-mail svg { color: var(--lamp); }
+/* A wax seal on the envelope plate. */
+.contact-links .contact-mail::after {
+  content: ""; position: absolute; right: .8rem; top: 50%; width: 1.1rem; height: 1.1rem; translate: 0 -50%; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #d65a48, var(--enamel) 55%, #6e1d16); box-shadow: 0 1px 2px #0008;
+}
+.contact-links .contact-mail .contact-value { padding-right: 1.6rem; }
+.contact-links a:active { translate: 0 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .contact-links .contact-mail svg { transition: translate .25s var(--tick); }
+  .contact-links .contact-mail:is(:hover, :focus-visible) svg { translate: 0 -3px; }
+  .contact-links .contact-mail::after { transition: rotate .35s var(--tick); }
+  .contact-links .contact-mail:is(:hover, :focus-visible)::after { rotate: 25deg; }
+}
+:root[data-workshop="night"] .contact-links .contact-mail { color: var(--ivory); background: linear-gradient(#5a4e46, #3a312b); }
