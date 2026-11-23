@@ -26,8 +26,8 @@
   <circle cx="60" cy="152" r="7" fill="url(#rivet)" stroke="#2a1d10" stroke-width="1.2"/><circle cx="60" cy="848" r="7" fill="url(#rivet)" stroke="#2a1d10" stroke-width="1.2"/><circle cx="120" cy="152" r="7" fill="url(#rivet)" stroke="#2a1d10" stroke-width="1.2"/><circle cx="120" cy="848" r="7" fill="url(#rivet)" stroke="#2a1d10" stroke-width="1.2"/>
   <rect x="300" y="210" width="260" height="90" rx="8" fill="url(#brassRing)" stroke="#3a2a19" stroke-width="3"/>
   <rect x="312" y="222" width="236" height="66" rx="5" fill="none" stroke="#3a2a19" stroke-width="1.5"/>
-  <text x="430" y="256" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="30" letter-spacing="6" fill="#3a2a19">WORKSHOP</text>
-  <text x="430" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="15" letter-spacing="5" fill="#5b4128">No. 2112</text>
+  <text x="430" y="256" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="27" letter-spacing="2" fill="#3a2a19">Yoma Kitaoka</text>
+  <text x="430" y="280" text-anchor="middle" font-family="Georgia, serif" font-size="15" letter-spacing="5" fill="#5b4128">AMZ-jpcslr</text>
   <circle cx="318" cy="228" r="7" fill="url(#rivet)" stroke="#2a1d10" stroke-width="1.2"/><circle cx="318" cy="282" r="7" fill="url(#rivet)" stroke="#2a1d10" stroke-width="1.2"/><circle cx="542" cy="228" r="7" fill="url(#rivet)" stroke="#2a1d10" stroke-width="1.2"/><circle cx="542" cy="282" r="7" fill="url(#rivet)" stroke="#2a1d10" stroke-width="1.2"/>
   <g><rect x="560" y="300" width="340" height="30" rx="6" fill="url(#brassRing)" stroke="#3a2a19" stroke-width="2.5"/><rect x="560" y="670" width="340" height="30" rx="6" fill="url(#brassRing)" stroke="#3a2a19" stroke-width="2.5"/>
     <rect x="600" y="290" width="40" height="50" rx="4" fill="url(#iron)"/><rect x="600" y="660" width="40" height="50" rx="4" fill="url(#iron)"/></g>

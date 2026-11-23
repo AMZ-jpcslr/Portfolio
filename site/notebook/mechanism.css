@@ -291,45 +291,72 @@
 }
 .bio-dateline .counter-drum { font-size: 1.05rem; }
 .tool-summary .counter-drum, .bio-tool-heading .counter-drum { margin-right: .25em; font-size: .95em; }
+/* Tool durations: white figures on the iron drum, whatever colour the label around them uses. */
+:is(.tool-summary, .bio-tool-heading, .bio-dateline) span.counter-drum {
+  color: #fff; background: linear-gradient(#000b, transparent 32% 68%, #000b), var(--iron); border-color: var(--brass-dark);
+}
 @media (forced-colors: active) { .counter-drum { forced-color-adjust: auto; border-color: CanvasText; } }
 
 /* ---------- Gas lamp lever and the 2112 easter egg ---------- */
-/* ---------- Header gas valve: turn the wheel to turn the lamp down ---------- */
-.gas-valve {
-  display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; padding: .2rem .7rem .2rem .25rem;
+/* ---------- Header lantern: a gust blows it out for night, a struck match lights it for day ---------- */
+.lantern-switch {
+  position: relative; display: inline-flex; align-items: center; gap: .35rem; min-height: 48px; padding: .1rem .75rem .1rem .35rem;
   border: 1px solid var(--line); border-radius: 2rem; background: transparent; color: var(--green);
-  font: .82rem/1 var(--hand); white-space: nowrap; cursor: pointer;
+  font: .82rem/1 var(--hand); white-space: nowrap; cursor: pointer; overflow: visible;
 }
-.gas-valve:is(:hover, :focus-visible) { border-color: var(--rust); }
-.gas-valve:active { scale: .93; }
-.valve-wheel {
-  position: relative; width: 2rem; height: 2rem; border-radius: 50%;
-  background:
-    radial-gradient(circle, var(--enamel) 0 .2rem, var(--brass-dark) .21rem .3rem, transparent .31rem),
-    linear-gradient(transparent calc(50% - 1.5px), var(--brass-dark) calc(50% - 1.5px) calc(50% + 1.5px), transparent calc(50% + 1.5px)),
-    linear-gradient(90deg, transparent calc(50% - 1.5px), var(--brass-dark) calc(50% - 1.5px) calc(50% + 1.5px), transparent calc(50% + 1.5px));
-  box-shadow: inset 0 0 0 3px var(--brass), inset 0 0 0 4px var(--brass-dark), 0 0 0 1px var(--brass-dark);
-}
-.valve-wheel::after {
-  content: ""; position: absolute; right: -2px; top: 50%; width: 5px; height: 5px; translate: 0 -50%; border-radius: 50%;
-  background: var(--brass-light); border: 1px solid var(--brass-dark);
-}
-.valve-flame {
-  width: .55rem; height: .8rem; border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
-  background: radial-gradient(circle at 50% 70%, #fff6d8, var(--lamp) 45%, #d9762c); box-shadow: 0 0 8px #f3c46b99;
-  transform-origin: 50% 100%;
-}
-.gas-valve[aria-checked="true"] .valve-wheel { rotate: 135deg; }
-.gas-valve[aria-checked="true"] .valve-flame { scale: .55; background: radial-gradient(circle at 50% 70%, #d9ecff, #6f8fd8 60%, #3b5aa8); box-shadow: 0 0 6px #6f8fd888; }
+.lantern-switch:is(:hover, :focus-visible) { border-color: var(--rust); }
+.lantern-switch:active { scale: .93; }
+.lantern { position: relative; width: 28px; height: 40px; flex: none; transform-origin: 50% 8%; }
+.lantern svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.lantern-glass { fill: #f6d58a; transition: fill .3s; }
+.lantern-glow { fill: #f3c46b; opacity: .45; transition: opacity .3s; }
+.lantern-flame { transform-box: fill-box; transform-origin: 50% 100%; }
+.lantern-smoke { opacity: 0; transform-box: fill-box; transform-origin: 50% 100%; }
+.lantern-switch[aria-checked="true"] .lantern-glass { fill: #3a3f4f; }
+.lantern-switch[aria-checked="true"] .lantern-glow { opacity: 0; }
+.lantern-switch[aria-checked="true"] .lantern-flame { scale: 0; }
+/* Wind streaks and the match live beside the lantern and only show while they act. */
+.lantern-gust { position: absolute; left: -2.4rem; top: 30%; width: 2.2rem; height: 1rem; opacity: 0; pointer-events: none; }
+.lantern-gust i { position: absolute; left: 0; height: 2px; border-radius: 2px; background: currentColor; opacity: .7; }
+.lantern-gust i:nth-child(1) { top: 0; width: 70%; }
+.lantern-gust i:nth-child(2) { top: 7px; width: 100%; }
+.lantern-gust i:nth-child(3) { top: 14px; width: 55%; }
+.lantern-match { display: none; position: absolute; right: -1.6rem; top: -.4rem; width: 4px; height: 22px; opacity: 0; pointer-events: none; rotate: 35deg; transform-origin: 50% 100%;
+  background: linear-gradient(#b0352a 0 5px, #e8cf9a 5px); border-radius: 2px 2px 1px 1px; }
+.lantern-match::after { content: ""; position: absolute; left: 50%; top: -9px; width: 9px; height: 12px; translate: -50% 0; border-radius: 50% 50% 45% 45% / 65% 65% 35% 35%;
+  background: radial-gradient(circle at 50% 70%, #fff6d8, var(--lamp) 45%, #d9762c); opacity: 0; }
+/* Only on stage while striking, so it never widens the page. */
+.lantern-striking .lantern-match { display: block; }
 @media (prefers-reduced-motion: no-preference) {
-  .valve-wheel { transition: rotate .3s var(--tick); }
-  .valve-flame { transition: scale .3s var(--tick), background .3s; animation: flame-flicker 1.6s ease-in-out infinite alternate; }
+  .lantern-switch:not([aria-checked="true"]) .lantern-flame { animation: lantern-flicker 1.4s ease-in-out infinite alternate; }
+  .lantern-gusting .lantern-gust { animation: gust-sweep .5s ease-out both; }
+  .lantern-gusting .lantern { animation: lantern-sway .8s var(--tick); }
+  .lantern-gusting .lantern-flame { animation: flame-blown .45s ease-in both; }
+  .lantern-gusting .lantern-smoke { animation: smoke-rise .9s .35s ease-out both; }
+  .lantern-striking .lantern-match { animation: match-arrive .85s ease-in-out both; }
+  .lantern-striking .lantern-match::after { animation: match-flame .85s both; }
+  .lantern-striking .lantern-flame { animation: flame-catch .4s .5s var(--tick) both; }
+  .lantern-striking .lantern-glow { animation: glow-catch .5s .5s ease-out both; }
 }
-@keyframes flame-flicker { 50% { transform: scaleY(1.08) skewX(2deg); } 100% { transform: scaleY(.96) skewX(-2deg); } }
+@keyframes lantern-flicker { 50% { scale: 1.06 .94; } 100% { scale: .95 1.07; } }
+@keyframes gust-sweep { 0% { opacity: 0; translate: -10px 0; } 30% { opacity: 1; } 100% { opacity: 0; translate: 46px 0; } }
+@keyframes lantern-sway { 25% { rotate: 14deg; } 55% { rotate: -6deg; } 80% { rotate: 3deg; } }
+@keyframes flame-blown { 0% { scale: 1; skew: 0deg; } 40% { scale: 1 .8; skew: 35deg 0deg; translate: 2px 0; } 75% { scale: .35; skew: 45deg 0deg; } 100% { scale: 0; } }
+@keyframes smoke-rise { 0% { opacity: 0; translate: 0 0; } 25% { opacity: .8; } 100% { opacity: 0; translate: 3px -10px; scale: 1.4; } }
+@keyframes match-arrive {
+  0% { opacity: 0; translate: 14px -6px; rotate: 60deg; }
+  20% { opacity: 1; translate: 0 0; rotate: 35deg; }
+  32% { translate: -3px 3px; rotate: 30deg; }
+  60% { translate: -22px 12px; rotate: -20deg; }
+  80% { opacity: 1; translate: -22px 12px; rotate: -20deg; }
+  100% { opacity: 0; translate: -10px 2px; rotate: 20deg; }
+}
+@keyframes match-flame { 0%, 30% { opacity: 0; scale: .3; } 36% { opacity: 1; scale: 1.4; } 45%, 85% { opacity: 1; scale: 1; } 100% { opacity: 0; } }
+@keyframes flame-catch { from { scale: 0; } 60% { scale: 1.35; } }
+@keyframes glow-catch { from { opacity: 0; } 50% { opacity: .9; } }
 @media (max-width: 700px) {
-  .valve-text { display: none; }
-  .gas-valve { padding-right: .4rem; min-width: 44px; }
-  .valve-wheel { width: 1.7rem; height: 1.7rem; }
+  .lantern-text { display: none; }
+  .lantern-switch { padding-right: .5rem; min-width: 44px; }
 }
 
 .year-2112 {
@@ -438,7 +465,7 @@
 /* Narrow screens: name and valve share the first row, the brass plates take the second. */
 @media (max-width: 700px) {
   .site-header { flex-wrap: wrap; row-gap: .2rem; padding-block: .35rem .5rem; }
-  .site-header .gas-valve { order: 1; margin-left: auto; min-height: 40px; }
+  .site-header .lantern-switch { order: 1; margin-left: auto; min-height: 40px; }
   .site-header .site-nav { order: 2; width: 100%; margin-left: 0; justify-content: flex-end; }
 }
 
@@ -459,7 +486,7 @@ html.door-arriving::after { animation: door-close-right .75s .3s cubic-bezier(.5
 @keyframes door-thud { 0% { visibility: visible; translate: 0 0; } 20% { visibility: visible; translate: 0 5px; } 45% { visibility: visible; translate: 0 -3px; } 70% { visibility: visible; translate: 0 1px; } 100% { visibility: visible; translate: 0 0; } }
 .door-lock {
   position: fixed; z-index: 61; left: 50%; top: 50%; translate: -50% -50%; pointer-events: none;
-  opacity: 0; animation: lock-turn .65s .62s cubic-bezier(.3, 1.5, .5, 1) both;
+  opacity: 0; animation: lock-turn .65s .62s cubic-bezier(.3, 1.5, .5, 1) forwards;
 }
 @keyframes lock-turn { from { opacity: 1; rotate: 0deg; } to { opacity: 1; rotate: 150deg; } }
 .door-board {
@@ -550,3 +577,31 @@ html.door-arriving::after { animation: door-close-right .75s .3s cubic-bezier(.5
   .contact-links .contact-mail:is(:hover, :focus-visible)::after { rotate: 25deg; }
 }
 :root[data-workshop="night"] .contact-links .contact-mail { color: var(--ivory); background: linear-gradient(#5a4e46, #3a312b); }
+
+/* ---------- Back to About Me: the iron lever plate, with its gear turning the other way ---------- */
+.bio-back {
+  position: relative; border-color: #1d1915; border-radius: 5px; color: var(--ivory);
+  background: linear-gradient(#4a403a, #2c2521); box-shadow: inset 0 0 0 2px #c69a5666, inset 0 1px #ffffff22, 0 3px 0 #1d1915aa;
+}
+.bio-back::after {
+  content: ""; flex: none; order: -1; width: 1.15rem; height: 1.15rem; background: url("/notebook/gears/brass-12.svg") center / contain no-repeat;
+}
+.bio-back > span[aria-hidden] { color: var(--lamp); }
+.bio-back:is(:hover, :focus-visible) { background: linear-gradient(#564b44, #352d28); }
+.bio-back:active { translate: 0 2px; box-shadow: inset 0 0 0 2px #c69a5666, 0 1px 0 #1d1915aa; }
+@media (prefers-reduced-motion: no-preference) {
+  .bio-back::after { transition: rotate .5s var(--tick); }
+  .bio-back > span[aria-hidden] { display: inline-block; transition: translate .2s var(--tick); }
+  .bio-back:is(:hover, :focus-visible)::after { rotate: -120deg; }
+  .bio-back:is(:hover, :focus-visible) > span[aria-hidden] { translate: -3px 0; }
+}
+:root[data-workshop="night"] .bio-back, :root[data-workshop="night"] .bio-back:is(:hover, :focus-visible) { color: var(--ivory); background: linear-gradient(#5a4e46, #3a312b); }
+
+/* ---------- The hanging tag can be grabbed and dragged along the bar to scroll ---------- */
+.reading-hanger { pointer-events: none; cursor: grab; touch-action: none; padding: 0 8px 6px; }
+.reading-moving .reading-hanger { pointer-events: auto; }
+.reading-hanger.dragging { cursor: grabbing; }
+.reading-hanger.dragging .reading-odometer { box-shadow: 0 6px 10px #3d343366; scale: 1.08; }
+
+/* Night: the skip link keeps dark text on its light green plate. */
+:root[data-workshop="night"] .skip-link { color: #231d19; }

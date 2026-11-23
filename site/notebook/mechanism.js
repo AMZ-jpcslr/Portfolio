@@ -49,7 +49,7 @@ function cardsFor(letter) {
 function splitFlaps(element, mode) {
   if ('flap' in element.dataset) return [...element.querySelectorAll('.flap-char')];
   element.dataset.flap = '';
-  const words = element.textContent.replace(/[↗→↓]/g, '').replace(/\s+/g, ' ').trim();
+  const words = element.textContent.replace(/[←↗→↓]/g, '').replace(/\s+/g, ' ').trim();
   const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
   const nodes = [];
   while (walker.nextNode()) {
@@ -165,7 +165,7 @@ function wireDoors() {
     const board = document.createElement('p');
     board.className = 'door-board';
     board.setAttribute('aria-hidden', 'true');
-    board.textContent = (link.getAttribute('aria-label') || link.textContent).replace(/[↗→↓]/g, '').trim().slice(0, 18);
+    board.textContent = (link.getAttribute('aria-label') || link.textContent).replace(/[←↗→↓]/g, '').trim().slice(0, 18);
     document.body.append(board);
     // The lock wheel is drawn at the doors' own scale so it lands exactly on the two halves.
     const lock = document.createElement('img');
@@ -248,6 +248,25 @@ function hangReadingTag() {
   hanger.innerHTML = '<span class="reading-hook"></span><span class="reading-chain"></span>';
   odometer.before(hanger);
   hanger.append(odometer);
+  // Grab the tag and drag it along the bar to move through the page.
+  hanger.addEventListener('pointerdown', event => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    hanger.setPointerCapture(event.pointerId);
+    hanger.classList.add('dragging');
+    const move = moveEvent => {
+      const root = document.scrollingElement;
+      const ratio = Math.min(1, Math.max(0, moveEvent.clientX / meter.clientWidth));
+      root.scrollTop = ratio * (root.scrollHeight - root.clientHeight);
+    };
+    const release = () => {
+      hanger.classList.remove('dragging');
+      hanger.removeEventListener('pointermove', move);
+    };
+    hanger.addEventListener('pointermove', move);
+    hanger.addEventListener('pointerup', release, { once: true });
+    hanger.addEventListener('pointercancel', release, { once: true });
+  });
   if (reduced.matches) return;
   let last = scrollY;
   let angle = 0;
@@ -294,24 +313,50 @@ function setNight(on, switching) {
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', on ? '#29231f' : '#f7f3e9');
 }
 
-function addGasValve() {
+const lanternArt = `<svg viewBox="0 0 32 44" aria-hidden="true" focusable="false">
+  <circle class="lantern-glow" cx="16" cy="23" r="15"/>
+  <path d="M11 7a5 5 0 0 1 10 0" fill="none" stroke="#6f513b" stroke-width="2"/>
+  <path d="M10 11h12l-2.5-4h-7z" fill="#cba569" stroke="#6f513b" stroke-width="1.2" stroke-linejoin="round"/>
+  <rect class="lantern-glass" x="9.5" y="11" width="13" height="22" rx="3"/>
+  <g class="lantern-flame"><path d="M16 17.5c3.2 4 4 7.2 0 10.5c-4-3.3-3.2-6.5 0-10.5z" fill="#f39b3c"/><path d="M16 21c1.6 2.2 2 3.9 0 5.6c-2-1.7-1.6-3.4 0-5.6z" fill="#fff4cf"/></g>
+  <path class="lantern-smoke" d="M16 18q-2-3 0-6t0-6" fill="none" stroke="#9a9184" stroke-width="1.6" stroke-linecap="round"/>
+  <rect x="15" y="27.5" width="2" height="4" fill="#3a322c"/>
+  <g stroke="#6f513b" stroke-width="1.6"><path d="M9.8 11v22M22.2 11v22"/></g>
+  <rect x="7" y="32.5" width="18" height="5" rx="1.6" fill="#cba569" stroke="#6f513b" stroke-width="1.2"/>
+  <rect x="9.5" y="37.5" width="13" height="2.5" rx="1" fill="#6f513b"/>
+</svg>`;
+
+// A lantern in the header: a gust blows it out for the night workshop, a struck match lights it again.
+function addLantern() {
   const header = document.querySelector('.site-header');
   if (!header) return;
-  const valve = document.createElement('button');
-  valve.type = 'button';
-  valve.className = 'gas-valve';
-  valve.setAttribute('role', 'switch');
-  valve.setAttribute('aria-label', 'ガス灯を絞って夜の工房にする');
-  valve.innerHTML = '<span class="valve-wheel" aria-hidden="true"></span><span class="valve-flame" aria-hidden="true"></span><span class="valve-text" aria-hidden="true">夜の工房</span>';
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'lantern-switch';
+  button.setAttribute('role', 'switch');
+  button.setAttribute('aria-label', '夜の工房（ランタンの灯りを消す）');
+  button.innerHTML = '<span class="lantern">' + lanternArt + '<span class="lantern-gust" aria-hidden="true"><i></i><i></i><i></i></span><span class="lantern-match" aria-hidden="true"></span></span><span class="lantern-text" aria-hidden="true">夜の工房</span>';
   const night = document.documentElement.dataset.workshop === 'night';
-  valve.setAttribute('aria-checked', String(night));
+  button.setAttribute('aria-checked', String(night));
   setNight(night, false);
-  header.append(valve);
-  valve.addEventListener('click', () => {
-    const on = valve.getAttribute('aria-checked') !== 'true';
-    valve.setAttribute('aria-checked', String(on));
-    setNight(on, true);
-    try { localStorage.setItem(storageKey, on ? 'night' : 'day'); } catch { /* The valve still works for this page. */ }
+  header.append(button);
+  let timers = [];
+  button.addEventListener('click', () => {
+    const on = button.getAttribute('aria-checked') !== 'true';
+    timers.forEach(clearTimeout);
+    button.classList.remove('lantern-gusting', 'lantern-striking');
+    button.setAttribute('aria-checked', String(on));
+    try { localStorage.setItem(storageKey, on ? 'night' : 'day'); } catch { /* The lantern still works for this page. */ }
+    if (reduced.matches) { setNight(on, false); return; }
+    void button.offsetWidth;
+    // The room changes at the moment the flame goes out, or catches.
+    if (on) {
+      button.classList.add('lantern-gusting');
+      timers = [setTimeout(() => setNight(true, true), 380), setTimeout(() => button.classList.remove('lantern-gusting'), 1300)];
+    } else {
+      button.classList.add('lantern-striking');
+      timers = [setTimeout(() => setNight(false, true), 560), setTimeout(() => button.classList.remove('lantern-striking'), 950)];
+    }
   });
 }
 
@@ -360,6 +405,6 @@ export function wireWorkshopMechanisms() {
   wireCases();
   rollCounters();
   hangReadingTag();
-  addGasValve();
+  addLantern();
   hide2112();
 }
