@@ -1,5 +1,5 @@
-import { narratives } from '../music/author-narratives.js';
-import { insights } from '../music/case-insights.js';
+import { narratives } from '../data/author-narratives.js';
+import { insights } from '../data/case-insights.js';
 import { renderGearRule } from './gears.mjs';
 
 const catalogue = [

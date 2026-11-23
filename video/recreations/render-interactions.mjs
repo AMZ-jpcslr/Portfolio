@@ -3,7 +3,7 @@ import {mkdir,readFile,writeFile,stat} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {spawnSync,execFileSync} from 'node:child_process';
-import {interactionScenes} from '../../site/music/interaction-scenes.js';
+import {interactionScenes} from './interaction-scenes.js';
 const root=fileURLToPath(new URL('../../',import.meta.url)),require=createRequire(new URL('../package.json',import.meta.url));
 const {bundle}=require('@remotion/bundler'),{openBrowser,getCompositions,renderStill,renderMedia}=require('@remotion/renderer');
 const browserExecutable=process.env.REMOTION_BROWSER_EXECUTABLE||'C:/Users/yomas/AppData/Local/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-win64/chrome-headless-shell.exe';

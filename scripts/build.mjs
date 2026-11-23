@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderAbout } from '../site/notebook/about.mjs';
@@ -40,33 +40,23 @@ export function socialMetadata(origin, page = {}) {
   ].join('\n    ');
 }
 
-async function needsCopy(sourcePath, outputPath) {
-  const sourceInfo = await stat(sourcePath);
-  if (sourceInfo.isDirectory()) return true;
-  try {
-    if ((await stat(outputPath)).size !== sourceInfo.size) return true;
-    const [sourceFile, outputFile] = await Promise.all([readFile(sourcePath), readFile(outputPath)]);
-    return !sourceFile.equals(outputFile);
-  } catch (error) {
-    if (error.code === 'ENOENT') return true;
-    throw error;
-  }
-}
-
 export async function buildSocialMetadata() {
   const template = await readFile(new URL('index.html', source), 'utf8');
   const meta = '<!-- notebook-metadata -->';
   const content = '<!-- notebook-content -->';
   if (!template.includes(meta) || !template.includes(content)) throw new Error('Notebook template markers are missing.');
   const origin = siteOrigin();
-  // The original data and media are still used by the project details and archival checks.
-  for (const name of ['music', 'assets', 'recreation', 'recordings', 'interaction-demos']) {
-    await cp(new URL(name + '/', source), new URL(name + '/', output), { recursive: true, filter: needsCopy });
+  await rm(output, { recursive: true, force: true });
+  for (const name of ['assets', 'recordings', 'interaction-demos']) {
+    await cp(new URL(name + '/', source), new URL(name + '/', output), { recursive: true });
   }
   await cp(new URL('notebook/', source), new URL('notebook/', output), {
     recursive: true,
-    filter: (from, to) => !from.endsWith('.mjs') && needsCopy(from, to)
+    filter: from => !from.endsWith('.mjs')
   });
+  for (const file of ['fonts.css', 'favicon.svg', 'og-image.png']) {
+    await cp(new URL(file, source), new URL(file, output));
+  }
   const pages = [
     { path: '/', title: siteName, description: homeDescription, render: renderHome },
     { path: '/about/', title: `経歴とスキル ｜ ${siteName}`, description: '高校・大学・UBC交換留学・現在の4章から、北岡英磨の歩みと制作に使っている技術、資格を紹介します。', render: renderAbout },
