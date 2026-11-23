@@ -78,7 +78,7 @@ const qualifications = [
 function renderChapter(chapter, index) {
   const number = String(index + 1).padStart(2, '0');
   return `<li class="bio-chapter">
-    <div class="bio-dateline"><span>${chapter.period}</span><span aria-hidden="true">${number} / 04</span></div>
+    <div class="bio-dateline"><span>${chapter.period}</span><span class="nixie-row" aria-hidden="true">${renderNixie(number)}<span>/</span>${renderNixie('04')}</span></div>
     <div class="bio-chapter-layout">
       <figure class="bio-illustration bio-illustration--${chapter.key}" data-reveal>
         <img src="/assets/workshop/${chapter.key}.webp" alt="${chapter.illustration}" width="320" height="320" loading="lazy" decoding="async">
@@ -91,13 +91,20 @@ function renderChapter(chapter, index) {
   </li>`;
 }
 
+const renderNixie = digits => [...String(digits)].map(digit => `<span class="nixie" data-nixie>${digit}</span>`).join('');
+
+// Digits glow as nixie tubes; the readable duration stays as plain text for assistive technology.
+export function renderDuration(tool) {
+  return `<span class="sr-only">${tool.duration}</span><span aria-hidden="true">${tool.duration.replace(/\d+/g, renderNixie)}</span>`;
+}
+
 export function renderToolName(tool) {
   return `<span class="tool-brand"><img src="/notebook/icons/${tool.icon}.svg" alt="" width="30" height="30" loading="lazy">${tool.name}</span>`;
 }
 
 function renderTool(tool) {
   return `<li class="bio-tool">
-    <div class="bio-tool-heading"><strong>${renderToolName(tool)}</strong><span>${tool.duration}</span></div>
+    <div class="bio-tool-heading"><strong>${renderToolName(tool)}</strong><span>${renderDuration(tool)}</span></div>
     <div class="bio-tool-track" aria-hidden="true"><span style="width: ${tool.months / 60 * 100}%"></span></div>
     <p>${tool.use}</p>
   </li>`;

@@ -89,8 +89,9 @@ const esc = value => String(value).replace(/[&<>"']/g, c => ({
 
 function renderCard(project) {
   return `<li><a id="work-${project.kind}" class="work-card" href="${project.path}">
-    <div class="work-stage stage-${project.kind}" aria-hidden="true"><div class="work-device device-${project.device}"><img src="${project.thumb || project.image}" alt="" loading="lazy" decoding="async"></div></div>
-    <div class="work-card-copy"><span class="work-category">${esc(project.category)}</span><span class="work-arrow" aria-hidden="true">↗</span>
+    <div class="crt-bezel" aria-hidden="true"><div class="crt-screen"><img src="${project.image}" alt="" loading="lazy" decoding="async">
+      <span class="crt-idle" lang="en"><b>STANDBY</b><i lang="ja">${esc(project.title)}</i></span></div></div>
+    <div class="work-card-copy"><span class="work-category"><span class="work-no" aria-hidden="true"></span>${esc(project.category)}</span><span class="work-power" aria-hidden="true" lang="en">POWER ON</span><span class="work-arrow" aria-hidden="true">↗</span>
       <h3>${esc(project.title)}</h3><p>${esc(project.summary)}</p>${project.mediaType ? `<small class="work-media-type">${esc(project.mediaType)}</small>` : ''}
     </div></a></li>`;
 }
