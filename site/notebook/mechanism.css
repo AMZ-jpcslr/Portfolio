@@ -355,7 +355,6 @@
 @keyframes flame-catch { from { scale: 0; } 60% { scale: 1.35; } }
 @keyframes glow-catch { from { opacity: 0; } 50% { opacity: .9; } }
 @media (max-width: 700px) {
-  .lantern-text { display: none; }
   .lantern-switch { padding-right: .5rem; min-width: 44px; }
 }
 
@@ -605,3 +604,20 @@ html.door-arriving::after { animation: door-close-right .75s .3s cubic-bezier(.5
 
 /* Night: the skip link keeps dark text on its light green plate. */
 :root[data-workshop="night"] .skip-link { color: #231d19; }
+
+/* ---------- Sky dial behind the lantern: the sun rides one half, the moon the other ---------- */
+.lantern-switch {
+  justify-content: center; width: 4.8rem; min-height: 50px; padding: 0; overflow: hidden; isolation: isolate;
+  border: 2px solid var(--brass-dark); border-radius: 2.4rem 2.4rem .6rem .6rem;
+  box-shadow: inset 0 0 0 2px var(--brass-light), 0 2px 0 #6f513b55;
+}
+.sky-window { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.sky-dial {
+  position: absolute; left: 50%; top: 100%; width: 7rem; height: 7rem; translate: -50% -50%;
+  rotate: var(--sky-turn, 0deg);
+}
+.lantern-switch .lantern { margin-top: 4px; }
+@media (prefers-reduced-motion: no-preference) {
+  .sky-dial { transition: rotate .9s cubic-bezier(.45, 0, .2, 1.15); }
+}
+@media (forced-colors: active) { .sky-window { display: none; } }

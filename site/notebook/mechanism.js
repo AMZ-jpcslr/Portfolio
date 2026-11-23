@@ -326,6 +326,20 @@ const lanternArt = `<svg viewBox="0 0 32 44" aria-hidden="true" focusable="false
   <rect x="9.5" y="37.5" width="13" height="2.5" rx="1" fill="#6f513b"/>
 </svg>`;
 
+const skyDial = `<svg class="sky-dial" viewBox="-50 -50 100 100" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="sky-day" x1="0" y1="-50" x2="0" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8fc3dd"/><stop offset="1" stop-color="#f4e2b4"/></linearGradient>
+    <linearGradient id="sky-night" x1="0" y1="50" x2="0" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#141a33"/><stop offset="1" stop-color="#36406b"/></linearGradient>
+  </defs>
+  <path d="M-50 0a50 50 0 0 1 100 0z" fill="url(#sky-day)"/>
+  <path d="M-50 0a50 50 0 0 0 100 0z" fill="url(#sky-night)"/>
+  <g transform="translate(-19 -24) scale(.85)"><g stroke="#e0922f" stroke-width="2" stroke-linecap="round">${[0, 45, 90, 135, 180, 225, 270, 315].map(a => `<line x1="0" y1="-11" x2="0" y2="-14" transform="rotate(${a})"/>`).join('')}</g><circle r="8" fill="#f5b544" stroke="#c97a22" stroke-width="1.5"/></g>
+  <g transform="translate(19 24) rotate(180) scale(.9)"><path d="M-2-9a9 9 0 1 0 9 12a7 7 0 1 1-9-12z" fill="#f2e6c2" stroke="#c9b98a" stroke-width="1"/></g>
+  <g fill="#f2e6c2"><circle cx="-10" cy="30" r="1.3"/><circle cx="-30" cy="14" r="1"/><circle cx="8" cy="40" r="1"/><circle cx="40" cy="8" r="1.2"/></g>
+  <g fill="#fffaf0" opacity=".85"><path d="M14-30q4-5 9-1q5-3 7 2q4 1 2 4h-20q-2-3 2-5z"/></g>
+  <line x1="-50" y1="0" x2="50" y2="0" stroke="#6f513b" stroke-width="1.2"/>
+</svg>`;
+
 // A lantern in the header: a gust blows it out for the night workshop, a struck match lights it again.
 function addLantern() {
   const header = document.querySelector('.site-header');
@@ -335,7 +349,11 @@ function addLantern() {
   button.className = 'lantern-switch';
   button.setAttribute('role', 'switch');
   button.setAttribute('aria-label', '夜の工房（ランタンの灯りを消す）');
-  button.innerHTML = '<span class="lantern">' + lanternArt + '<span class="lantern-gust" aria-hidden="true"><i></i><i></i><i></i></span><span class="lantern-match" aria-hidden="true"></span></span><span class="lantern-text" aria-hidden="true">夜の工房</span>';
+  button.innerHTML = '<span class="lantern">' + lanternArt + '<span class="lantern-gust" aria-hidden="true"><i></i><i></i><i></i></span><span class="lantern-match" aria-hidden="true"></span></span>';
+  // Behind the lantern a sky dial turns half a revolution with each press: the sun sets and the moon rises.
+  button.insertAdjacentHTML('afterbegin', '<span class="sky-window" aria-hidden="true">' + skyDial + '</span>');
+  let turns = document.documentElement.dataset.workshop === 'night' ? 1 : 0;
+  button.style.setProperty('--sky-turn', turns * 180 + 'deg');
   const night = document.documentElement.dataset.workshop === 'night';
   button.setAttribute('aria-checked', String(night));
   setNight(night, false);
@@ -344,6 +362,8 @@ function addLantern() {
   button.addEventListener('click', () => {
     const on = button.getAttribute('aria-checked') !== 'true';
     timers.forEach(clearTimeout);
+    turns++;
+    button.style.setProperty('--sky-turn', turns * 180 + 'deg');
     button.classList.remove('lantern-gusting', 'lantern-striking');
     button.setAttribute('aria-checked', String(on));
     try { localStorage.setItem(storageKey, on ? 'night' : 'day'); } catch { /* The lantern still works for this page. */ }
