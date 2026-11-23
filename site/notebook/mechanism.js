@@ -1,0 +1,410 @@
+// からくり仕掛けの工房: belts, ratchets, cranked viewing cases, counter drums and a gas valve.
+// Every effect is decoration on top of complete static HTML.
+const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+const storageKey = 'workshop-light';
+
+function whenVisible(elements, callback, options = { threshold: 0.35 }) {
+  if (!elements.length) return;
+  if (!('IntersectionObserver' in window)) { elements.forEach(callback); return; }
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      observer.unobserve(entry.target);
+      callback(entry.target);
+    }
+  }, options);
+  for (const element of elements) observer.observe(element);
+}
+
+function pinCurrentPlate() {
+  const path = location.pathname;
+  for (const link of document.querySelectorAll('.site-nav a')) {
+    const target = new URL(link.href, location.href);
+    if (target.origin !== location.origin) continue;
+    if (target.pathname === path && !target.hash) link.setAttribute('aria-current', 'page');
+    // The works plate keeps its pin on the home page and on each work's own page.
+    else if (target.hash === '#works' && (path === '/' || path.startsWith('/projects/'))) link.dataset.current = '';
+  }
+}
+
+// Split-flap lettering: each letter clacks through a few cards before landing on its own.
+const flapCards = {
+  upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  lower: 'abcdefghijklmnopqrstuvwxyz',
+  digit: '0123456789',
+  kana: 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン'
+};
+const wide = /[　-ヿ㐀-鿿＀-￯]/;
+
+function cardsFor(letter) {
+  if (/[A-Z]/.test(letter)) return flapCards.upper;
+  if (/[a-z]/.test(letter)) return flapCards.lower;
+  if (/[0-9]/.test(letter)) return flapCards.digit;
+  if (wide.test(letter)) return flapCards.kana;
+  return '';
+}
+
+// Splits text into letters. "text" keeps one readable copy for assistive tech,
+// "label" names a link by its words, and "hidden" is for text that is already decoration.
+function splitFlaps(element, mode) {
+  if ('flap' in element.dataset) return [...element.querySelectorAll('.flap-char')];
+  element.dataset.flap = '';
+  const words = element.textContent.replace(/[←↗→↓]/g, '').replace(/\s+/g, ' ').trim();
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) {
+    const hidden = walker.currentNode.parentElement.closest('[aria-hidden="true"]');
+    if (!hidden || hidden === element || !element.contains(hidden)) nodes.push(walker.currentNode);
+  }
+  for (const node of nodes) {
+    const tokens = node.data.match(/\s+|[　-ヿ㐀-鿿＀-￯]|[^\s　-ヿ㐀-鿿＀-￯]+/g) || [];
+    // One wrapper per text run keeps flex gaps in buttons from opening up between letters.
+    const fragment = document.createElement('span');
+    fragment.className = 'flap-line';
+    for (const token of tokens) {
+      if (/^\s+$/.test(token)) { fragment.append(token); continue; }
+      const word = document.createElement('span');
+      word.className = 'flap-word';
+      for (const letter of Array.from(token)) {
+        const char = document.createElement('span');
+        char.className = 'flap-char';
+        char.textContent = letter;
+        word.append(char);
+      }
+      fragment.append(word);
+    }
+    node.replaceWith(fragment);
+  }
+  if (mode === 'text') {
+    const face = document.createElement('span');
+    face.setAttribute('aria-hidden', 'true');
+    face.append(...element.childNodes);
+    const copy = document.createElement('span');
+    copy.className = 'sr-only';
+    copy.textContent = words;
+    element.append(copy, face);
+  } else if (mode === 'label') {
+    element.setAttribute('aria-label', words);
+  }
+  return [...element.querySelectorAll('.flap-char')];
+}
+
+function flipFlaps(element, { stagger = 1, turns = 4 } = {}) {
+  if (reduced.matches) return;
+  const chars = splitFlaps(element).filter(char => cardsFor(char.dataset.final ?? char.textContent));
+  if (!chars.length) return;
+  clearInterval(element.flapTimer);
+  element.classList.add('flapping');
+  // Read every width first, then pin them, so the line does not shuffle while cards change.
+  const finals = chars.map(char => char.dataset.final ?? char.textContent);
+  const widths = chars.map(char => char.getBoundingClientRect().width);
+  chars.forEach((char, index) => {
+    char.dataset.final = finals[index];
+    if (!char.style.width) char.style.width = widths[index] + 'px';
+  });
+  let tick = 0;
+  const last = (chars.length - 1) * stagger + turns + 2;
+  element.flapTimer = setInterval(() => {
+    tick++;
+    chars.forEach((char, index) => {
+      const start = index * stagger;
+      if (tick <= start) return;
+      const end = start + turns + (index % 3);
+      if (tick > end + 1) return;
+      const cards = cardsFor(finals[index]);
+      char.textContent = tick > end ? finals[index] : cards[Math.floor(Math.random() * cards.length)];
+      char.animate([{ transform: 'rotateX(75deg)', filter: 'brightness(.6)' }, { transform: 'none' }], { duration: 55, easing: 'ease-out' });
+    });
+    if (tick > last) { clearInterval(element.flapTimer); element.classList.remove('flapping'); }
+  }, 60);
+}
+
+function wireFlaps() {
+  const labels = [...document.querySelectorAll(':is(.section-label, .type-label) .type-text')];
+  for (const label of labels) splitFlaps(label, label.closest('[aria-hidden="true"]') ? 'hidden' : 'text');
+  const headings = [...document.querySelectorAll('main :is(h1:not(#welcome-title), h2)')];
+  for (const heading of headings) splitFlaps(heading, 'text');
+  const keys = [...document.querySelectorAll('.site-nav a, .chapter-link')];
+  for (const key of keys) splitFlaps(key, 'label');
+  if (reduced.matches) return;
+  whenVisible(labels, label => flipFlaps(label, { stagger: 1, turns: 5 }), { threshold: 1 });
+  whenVisible(headings, heading => flipFlaps(heading, { stagger: 1, turns: 3 }), { threshold: .6 });
+  for (const key of keys) {
+    key.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') flipFlaps(key, { stagger: 0, turns: 3 }); });
+    key.addEventListener('focus', () => flipFlaps(key, { stagger: 0, turns: 3 }));
+  }
+}
+
+// Every press springs back like a typewriter key.
+function springKeys() {
+  if (reduced.matches) return;
+  document.addEventListener('click', event => {
+    const key = event.target.closest('button, .site-nav a, .chapter-link, .workshop-entry, .github-link, .work-card');
+    if (!key) return;
+    key.classList.remove('key-spring');
+    void key.offsetWidth;
+    key.classList.add('key-spring');
+    key.addEventListener('animationend', () => key.classList.remove('key-spring'), { once: true });
+  });
+}
+
+// Moving between pages: brass doors close on a split gear while a flap board names the destination.
+function wireDoors() {
+  const root = document.documentElement;
+  if (root.classList.contains('door-arriving')) setTimeout(() => root.classList.remove('door-arriving'), 1200);
+  addEventListener('pageshow', event => { if (event.persisted) root.classList.remove('door-leaving', 'door-arriving'); document.querySelectorAll('.door-board, .door-lock').forEach(node => node.remove()); });
+  if (reduced.matches) return;
+  document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target.closest('a[href]');
+    if (!link || link.target || link.hasAttribute('download')) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin !== location.origin || url.pathname === location.pathname) return;
+    event.preventDefault();
+    try { sessionStorage.setItem('workshop-door', '1'); } catch { /* The doors only close on this side. */ }
+    const board = document.createElement('p');
+    board.className = 'door-board';
+    board.setAttribute('aria-hidden', 'true');
+    board.textContent = (link.getAttribute('aria-label') || link.textContent).replace(/[←↗→↓]/g, '').trim().slice(0, 18);
+    document.body.append(board);
+    // The lock wheel is drawn at the doors' own scale so it lands exactly on the two halves.
+    const lock = document.createElement('img');
+    lock.className = 'door-lock';
+    lock.alt = '';
+    lock.src = '/notebook/doors/lock.svg';
+    const unit = Math.max(root.clientWidth / 2 / 900, innerHeight / 1000);
+    lock.width = lock.height = Math.round(428 * unit);
+    document.body.append(lock);
+    root.classList.add('door-leaving');
+    setTimeout(() => flipFlaps(board, { stagger: 1, turns: 3 }), 700);
+    setTimeout(() => { location.href = url.href; }, 1300);
+  });
+}
+
+// Turning a gear pair by hand: the same --gear-kick the welcome button uses.
+function turnGears(pair, degrees, seconds) {
+  if (!pair) return;
+  const current = parseFloat(pair.style.getPropertyValue('--gear-kick')) || 0;
+  pair.style.setProperty('--gear-turn', seconds + 's');
+  pair.style.setProperty('--gear-kick', (current + degrees) + 'deg');
+  setTimeout(() => pair.style.removeProperty('--gear-turn'), seconds * 1000 + 50);
+}
+
+// A belt runs only while the gear that drives it turns.
+function runBelts() {
+  if (reduced.matches) return;
+  const run = (belt, pair) => {
+    belt.classList.remove('belt-run');
+    void belt.offsetWidth;
+    belt.classList.add('belt-run');
+    turnGears(pair, -180, .9);
+  };
+  whenVisible([...document.querySelectorAll('.gear-rule')], rule => run(rule, rule.querySelector('[data-gears]')), { threshold: 1 });
+  const welcomeBelt = document.querySelector('.welcome-belt');
+  if (welcomeBelt) whenVisible([welcomeBelt], belt => setTimeout(() => run(belt, document.querySelector('.welcome-mechanism [data-gears]')), 1600), { threshold: 0 });
+}
+
+function watchWelcome() {
+  const welcome = document.querySelector('.welcome');
+  if (!welcome || !('IntersectionObserver' in window)) { welcome?.classList.add('welcome-visible'); return; }
+  new IntersectionObserver(([entry]) => welcome.classList.toggle('welcome-visible', entry.isIntersecting)).observe(welcome);
+}
+
+// Screenshots stay in view; a crank pans each one from top to bottom on hover, focus or touch.
+function wireCases() {
+  const cards = [...document.querySelectorAll('.work-card')];
+  for (const image of document.querySelectorAll('.case-window > img')) {
+    if (image.complete) continue;
+    const frame = image.parentElement;
+    frame.classList.add('case-loading');
+    const done = () => frame.classList.remove('case-loading');
+    image.addEventListener('load', done, { once: true });
+    image.addEventListener('error', done, { once: true });
+  }
+  if (!cards.length || reduced.matches) return;
+  for (const card of cards) {
+    card.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') card.classList.add('case-open'); });
+    card.addEventListener('pointerleave', event => { if (event.pointerType === 'mouse') card.classList.remove('case-open'); });
+    card.addEventListener('focus', () => card.classList.add('case-open'));
+    card.addEventListener('blur', () => { if (!card.matches(':hover')) card.classList.remove('case-open'); });
+  }
+  // Touch screens cannot hover, so each case is cranked once while it sits well inside the view.
+  if (!matchMedia('(hover: hover)').matches) {
+    whenVisible(cards, card => {
+      card.classList.add('case-open');
+      setTimeout(() => card.classList.remove('case-open'), 3200);
+    }, { threshold: 0.7 });
+  }
+}
+
+// The odometer hangs on a chain from the tip of the reading bar and swings as the page moves.
+function hangReadingTag() {
+  const meter = document.querySelector('.reading-progress');
+  const odometer = meter?.querySelector('.reading-odometer');
+  if (!odometer) return;
+  const hanger = document.createElement('span');
+  hanger.className = 'reading-hanger';
+  hanger.setAttribute('aria-hidden', 'true');
+  hanger.innerHTML = '<span class="reading-hook"></span><span class="reading-chain"></span>';
+  odometer.before(hanger);
+  hanger.append(odometer);
+  // Grab the tag and drag it along the bar to move through the page.
+  hanger.addEventListener('pointerdown', event => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    hanger.setPointerCapture(event.pointerId);
+    hanger.classList.add('dragging');
+    const move = moveEvent => {
+      const root = document.scrollingElement;
+      const ratio = Math.min(1, Math.max(0, moveEvent.clientX / meter.clientWidth));
+      root.scrollTop = ratio * (root.scrollHeight - root.clientHeight);
+    };
+    const release = () => {
+      hanger.classList.remove('dragging');
+      hanger.removeEventListener('pointermove', move);
+    };
+    hanger.addEventListener('pointermove', move);
+    hanger.addEventListener('pointerup', release, { once: true });
+    hanger.addEventListener('pointercancel', release, { once: true });
+  });
+  if (reduced.matches) return;
+  let last = scrollY;
+  let angle = 0;
+  let speed = 0;
+  let frame = 0;
+  function swing() {
+    speed = speed * .86 - angle * .07;
+    angle += speed;
+    hanger.style.setProperty('--swing', angle.toFixed(2) + 'deg');
+    frame = Math.abs(angle) > .05 || Math.abs(speed) > .05 ? requestAnimationFrame(swing) : 0;
+  }
+  addEventListener('scroll', () => {
+    const delta = scrollY - last;
+    last = scrollY;
+    // The tip runs ahead and the tag lags behind it, like a weight on a chain.
+    speed += Math.max(-3, Math.min(3, delta * .05));
+    if (!frame) frame = requestAnimationFrame(swing);
+  }, { passive: true });
+}
+
+function rollDrum(drum, digit, steps = 8) {
+  let tick = 0;
+  const timer = setInterval(() => {
+    drum.textContent = ++tick >= steps ? digit : String((Number(drum.textContent) + 1) % 10);
+    drum.animate([{ transform: 'translateY(-35%)' }, { transform: 'none' }], { duration: 70, easing: 'ease-out' });
+    if (tick >= steps) clearInterval(timer);
+  }, 80);
+}
+
+function rollCounters() {
+  const drums = [...document.querySelectorAll('[data-drum]')];
+  if (!drums.length || reduced.matches) return;
+  whenVisible(drums, drum => rollDrum(drum, drum.textContent), { threshold: 1 });
+}
+
+function setNight(on, switching) {
+  const root = document.documentElement;
+  if (switching && !reduced.matches) {
+    root.classList.add('workshop-switching');
+    setTimeout(() => root.classList.remove('workshop-switching'), 600);
+  }
+  if (on) root.dataset.workshop = 'night';
+  else delete root.dataset.workshop;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', on ? '#29231f' : '#f7f3e9');
+}
+
+const lanternArt = `<svg viewBox="0 0 32 44" aria-hidden="true" focusable="false">
+  <circle class="lantern-glow" cx="16" cy="23" r="15"/>
+  <path d="M11 7a5 5 0 0 1 10 0" fill="none" stroke="#6f513b" stroke-width="2"/>
+  <path d="M10 11h12l-2.5-4h-7z" fill="#cba569" stroke="#6f513b" stroke-width="1.2" stroke-linejoin="round"/>
+  <rect class="lantern-glass" x="9.5" y="11" width="13" height="22" rx="3"/>
+  <g class="lantern-flame"><path d="M16 17.5c3.2 4 4 7.2 0 10.5c-4-3.3-3.2-6.5 0-10.5z" fill="#f39b3c"/><path d="M16 21c1.6 2.2 2 3.9 0 5.6c-2-1.7-1.6-3.4 0-5.6z" fill="#fff4cf"/></g>
+  <path class="lantern-smoke" d="M16 18q-2-3 0-6t0-6" fill="none" stroke="#9a9184" stroke-width="1.6" stroke-linecap="round"/>
+  <rect x="15" y="27.5" width="2" height="4" fill="#3a322c"/>
+  <g stroke="#6f513b" stroke-width="1.6"><path d="M9.8 11v22M22.2 11v22"/></g>
+  <rect x="7" y="32.5" width="18" height="5" rx="1.6" fill="#cba569" stroke="#6f513b" stroke-width="1.2"/>
+  <rect x="9.5" y="37.5" width="13" height="2.5" rx="1" fill="#6f513b"/>
+</svg>`;
+
+// A lantern in the header: a gust blows it out for the night workshop, a struck match lights it again.
+function addLantern() {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'lantern-switch';
+  button.setAttribute('role', 'switch');
+  button.setAttribute('aria-label', '夜の工房（ランタンの灯りを消す）');
+  button.innerHTML = '<span class="lantern">' + lanternArt + '<span class="lantern-gust" aria-hidden="true"><i></i><i></i><i></i></span><span class="lantern-match" aria-hidden="true"></span></span><span class="lantern-text" aria-hidden="true">夜の工房</span>';
+  const night = document.documentElement.dataset.workshop === 'night';
+  button.setAttribute('aria-checked', String(night));
+  setNight(night, false);
+  header.append(button);
+  let timers = [];
+  button.addEventListener('click', () => {
+    const on = button.getAttribute('aria-checked') !== 'true';
+    timers.forEach(clearTimeout);
+    button.classList.remove('lantern-gusting', 'lantern-striking');
+    button.setAttribute('aria-checked', String(on));
+    try { localStorage.setItem(storageKey, on ? 'night' : 'day'); } catch { /* The lantern still works for this page. */ }
+    if (reduced.matches) { setNight(on, false); return; }
+    void button.offsetWidth;
+    // The room changes at the moment the flame goes out, or catches.
+    if (on) {
+      button.classList.add('lantern-gusting');
+      timers = [setTimeout(() => setNight(true, true), 380), setTimeout(() => button.classList.remove('lantern-gusting'), 1300)];
+    } else {
+      button.classList.add('lantern-striking');
+      timers = [setTimeout(() => setNight(false, true), 560), setTimeout(() => button.classList.remove('lantern-striking'), 950)];
+    }
+  });
+}
+
+// Five presses on the gear stamp roll the counter to the year the workshop is aiming for.
+function hide2112() {
+  const stamp = document.querySelector('.stamp-button');
+  if (!stamp) return;
+  const note = document.createElement('p');
+  note.className = 'year-2112';
+  note.setAttribute('role', 'status');
+  note.hidden = true;
+  note.innerHTML = '<span class="counter-row" aria-hidden="true">' + '<span class="counter-drum">0</span>'.repeat(4) +
+    '</span><span><span class="sr-only">2112年。</span>ドラえもんの生まれる年へ、修理は続きます。</span>';
+  document.body.append(note);
+  const drums = note.querySelectorAll('.counter-drum');
+  let presses = 0;
+  let hideTimer = 0;
+  stamp.addEventListener('click', () => {
+    if (++presses % 5) return;
+    stamp.classList.remove('spinning');
+    void stamp.offsetWidth;
+    stamp.classList.add('spinning');
+    note.hidden = false;
+    [...'2112'].forEach((digit, index) => {
+      if (reduced.matches) drums[index].textContent = digit;
+      else { drums[index].textContent = '0'; rollDrum(drums[index], digit, 6 + index * 3); }
+    });
+    note.classList.remove('toast-leaving');
+    clearTimeout(hideTimer);
+    // Like a toast: it drops from the top, stays three seconds, then lifts away.
+    hideTimer = setTimeout(() => {
+      if (reduced.matches) { note.hidden = true; return; }
+      note.classList.add('toast-leaving');
+      hideTimer = setTimeout(() => { note.hidden = true; note.classList.remove('toast-leaving'); }, 300);
+    }, 3000);
+  });
+}
+
+export function wireWorkshopMechanisms() {
+  pinCurrentPlate();
+  wireFlaps();
+  springKeys();
+  wireDoors();
+  runBelts();
+  watchWelcome();
+  wireCases();
+  rollCounters();
+  hangReadingTag();
+  addLantern();
+  hide2112();
+}

@@ -87,10 +87,13 @@ const esc = value => String(value).replace(/[&<>"']/g, c => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 })[c]);
 
+
 function renderCard(project) {
   return `<li><a id="work-${project.kind}" class="work-card" href="${project.path}">
-    <div class="work-stage stage-${project.kind}" aria-hidden="true"><div class="work-device device-${project.device}"><img src="${project.thumb || project.image}" alt="" loading="lazy" decoding="async"></div></div>
-    <div class="work-card-copy"><span class="work-category">${esc(project.category)}</span><span class="work-arrow" aria-hidden="true">↗</span>
+    <div class="case-bezel" aria-hidden="true"><div class="case-window"><img src="${project.image}" alt="" loading="lazy" decoding="async">
+      <span class="case-glint"></span></div>
+      <span class="case-crank"><img class="case-gear" src="/notebook/gears/brass-12.svg" width="96" height="96" alt=""><i></i></span></div>
+    <div class="work-card-copy"><span class="work-category"><span class="work-no" aria-hidden="true"></span>${esc(project.category)}</span><span class="work-arrow" aria-hidden="true">↗</span>
       <h3>${esc(project.title)}</h3><p>${esc(project.summary)}</p>${project.mediaType ? `<small class="work-media-type">${esc(project.mediaType)}</small>` : ''}
     </div></a></li>`;
 }

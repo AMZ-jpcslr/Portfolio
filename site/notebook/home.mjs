@@ -1,4 +1,4 @@
-import { aboutTools, renderToolName } from './about.mjs';
+import { aboutTools, renderDuration, renderToolName } from './about.mjs';
 import { renderWorks } from './projects.mjs';
 import { renderOpening } from './opening.mjs';
 import { renderGearPair, renderGearRule } from './gears.mjs';
@@ -14,10 +14,20 @@ const message = [
 function renderWelcome() {
   return `<section class="welcome paper-width" aria-labelledby="welcome-title">
     <div class="welcome-copy">
+      <span class="type-label" lang="en" aria-hidden="true"><span class="type-text">Welcome</span></span>
       <h1 id="welcome-title" lang="en"><span>Welcome to my</span> <span>portfolio site.</span></h1>
     </div>
     <div class="welcome-drawing">
       <span class="portrait-paper" aria-hidden="true"></span>
+      <svg class="pressure-gauge" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <circle cx="32" cy="34" r="25" fill="#efe6cf" stroke="#8a6a3c" stroke-width="5"/>
+        <path d="M15 42A18 18 0 0 1 49 42" fill="none" stroke="#985333" stroke-width="2" stroke-dasharray="1.5 3.5"/>
+        <path d="M40 27A12 12 0 0 1 47 37" fill="none" stroke="#b0352a" stroke-width="3"/>
+        <rect x="28" y="4" width="8" height="6" rx="1" fill="#8a6a3c"/>
+        <g class="gauge-needle"><path d="M32 34L21 25" stroke="#3d3433" stroke-width="2.4" stroke-linecap="round"/></g>
+        <circle cx="32" cy="34" r="3.2" fill="#3d3433"/>
+        <g class="gauge-steam" fill="none" stroke="#c9c0aa" stroke-width="2.5" stroke-linecap="round"><path d="M38 3q5-5 0-10q-5-5 0-10"/></g>
+      </svg>
       <button type="button" class="portrait" data-portrait aria-label="からくり修理屋に顔を上げてもらう" aria-pressed="false" disabled>
         <img src="${illustrations}/working.webp" class="portrait-working" width="736" height="920" alt="懐中時計の歯車を調整しているからくり修理屋" fetchpriority="high">
         <img src="${illustrations}/looking-up.webp" class="portrait-looking" width="736" height="920" alt="" aria-hidden="true">
@@ -36,16 +46,18 @@ function renderWelcome() {
       </button>
     </div>
     <div class="welcome-entry">
+      <p class="welcome-tagline">紙と真鍮と歯車でできた、からくり修理屋の工房へようこそ。</p>
       <a href="#message" class="workshop-entry" data-turn-gears>${renderGearPair()}<span>メッセージを読む</span><span class="workshop-entry-arrow" aria-hidden="true">↓</span></a>
     </div>
     <div class="welcome-mechanism" aria-hidden="true">${renderGearPair()}</div>
+    <span class="drive-belt welcome-belt" aria-hidden="true"></span>
   </section>`;
 }
 
 function renderMessage() {
   return `<section id="message" class="message paper-width" aria-labelledby="message-title" tabindex="-1">
     <div class="message-heading" data-reveal>
-      <span class="section-label" lang="en">Message</span>
+      <span class="section-label" lang="en"><span class="type-text">Message</span></span>
       <h2 class="ink-heading" id="message-title">一緒につくりたいこと</h2>
       ${renderGearRule()}
     </div>
@@ -67,7 +79,7 @@ function renderAboutPreview() {
     </div>
     <div class="about-info">
       <h3>ツール使用歴</h3>
-      <ul class="tool-summary">${aboutTools.map(tool => `<li><div>${renderToolName(tool)}<small>${tool.duration}</small></div><i aria-hidden="true" style="--period:${100 * tool.months / 60}%"></i></li>`).join('')}</ul>
+      <ul class="tool-summary">${aboutTools.map(tool => `<li><div>${renderToolName(tool)}<small>${renderDuration(tool)}</small></div><i aria-hidden="true" style="--period:${100 * tool.months / 60}%"></i></li>`).join('')}</ul>
       <h3>スキル</h3>
       <ul class="skill-stamps"><li>画面設計</li><li>Bot開発</li><li>AI研究</li></ul>
       <p>2005年生まれ、兵庫県出身です。小学3年生のとき、初めてプログラミングに触れました。昔から人助けが好きで、誰かの力になれるとうれしくなります。今は、技術を使って人の困りごとを解決する仕事に就くため、就職活動に取り組んでいます。</p>
