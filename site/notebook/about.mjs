@@ -78,7 +78,7 @@ const qualifications = [
 function renderChapter(chapter, index) {
   const number = String(index + 1).padStart(2, '0');
   return `<li class="bio-chapter">
-    <div class="bio-dateline"><span>${chapter.period}</span><span class="nixie-row" aria-hidden="true">${renderNixie(number)}<span>/</span>${renderNixie('04')}</span></div>
+    <div class="bio-dateline"><span>${chapter.period}</span><span class="counter-row" aria-hidden="true">${renderDrum(number)}<span>/</span>${renderDrum('04')}</span></div>
     <div class="bio-chapter-layout">
       <figure class="bio-illustration bio-illustration--${chapter.key}" data-reveal>
         <img src="/assets/workshop/${chapter.key}.webp" alt="${chapter.illustration}" width="320" height="320" loading="lazy" decoding="async">
@@ -91,11 +91,11 @@ function renderChapter(chapter, index) {
   </li>`;
 }
 
-const renderNixie = digits => [...String(digits)].map(digit => `<span class="nixie" data-nixie>${digit}</span>`).join('');
+const renderDrum = digits => [...String(digits)].map(digit => `<span class="counter-drum" data-drum>${digit}</span>`).join('');
 
-// Digits glow as nixie tubes; the readable duration stays as plain text for assistive technology.
+// Digits sit on counter drums; the readable duration stays as plain text for assistive technology.
 export function renderDuration(tool) {
-  return `<span class="sr-only">${tool.duration}</span><span aria-hidden="true">${tool.duration.replace(/\d+/g, renderNixie)}</span>`;
+  return `<span class="sr-only">${tool.duration}</span><span aria-hidden="true">${tool.duration.replace(/\d+/g, renderDrum)}</span>`;
 }
 
 export function renderToolName(tool) {

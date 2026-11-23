@@ -18,8 +18,15 @@ function renderWelcome() {
     </div>
     <div class="welcome-drawing">
       <span class="portrait-paper" aria-hidden="true"></span>
-      <span class="holo-hud" aria-hidden="true" lang="en"><b>REPAIR.LOG // UNIT-2112</b><i>SYNC · GEAR 12T</i>
-        <span class="holo-status" lang="ja">TARGET: 懐中時計<br>STATUS: 修理中<em></em></span></span>
+      <svg class="pressure-gauge" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <circle cx="32" cy="34" r="25" fill="#efe6cf" stroke="#8a6a3c" stroke-width="5"/>
+        <path d="M15 42A18 18 0 0 1 49 42" fill="none" stroke="#985333" stroke-width="2" stroke-dasharray="1.5 3.5"/>
+        <path d="M40 27A12 12 0 0 1 47 37" fill="none" stroke="#b0352a" stroke-width="3"/>
+        <rect x="28" y="4" width="8" height="6" rx="1" fill="#8a6a3c"/>
+        <g class="gauge-needle"><path d="M32 34L21 25" stroke="#3d3433" stroke-width="2.4" stroke-linecap="round"/></g>
+        <circle cx="32" cy="34" r="3.2" fill="#3d3433"/>
+        <g class="gauge-steam" fill="none" stroke="#c9c0aa" stroke-width="2.5" stroke-linecap="round"><path d="M38 3q5-5 0-10q-5-5 0-10"/></g>
+      </svg>
       <button type="button" class="portrait" data-portrait aria-label="からくり修理屋に顔を上げてもらう" aria-pressed="false" disabled>
         <img src="${illustrations}/working.webp" class="portrait-working" width="736" height="920" alt="懐中時計の歯車を調整しているからくり修理屋" fetchpriority="high">
         <img src="${illustrations}/looking-up.webp" class="portrait-looking" width="736" height="920" alt="" aria-hidden="true">
@@ -38,13 +45,11 @@ function renderWelcome() {
       </button>
     </div>
     <div class="welcome-entry">
-      <p class="welcome-tagline">紙と真鍮と、すこしの回路でできた工房へようこそ。</p>
+      <p class="welcome-tagline">紙と真鍮と歯車でできた、からくり修理屋の工房へようこそ。</p>
       <a href="#message" class="workshop-entry" data-turn-gears>${renderGearPair()}<span>メッセージを読む</span><span class="workshop-entry-arrow" aria-hidden="true">↓</span></a>
     </div>
     <div class="welcome-mechanism" aria-hidden="true">${renderGearPair()}</div>
-    <svg class="circuit-trace welcome-trace" viewBox="0 0 1000 24" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path class="trace-wire" d="M1000 2 V12 H640 L620 22 H0"/><path class="trace-spark" pathLength="1" d="M1000 2 V12 H640 L620 22 H0"/>
-    </svg>
+    <span class="drive-belt welcome-belt" aria-hidden="true"></span>
   </section>`;
 }
 

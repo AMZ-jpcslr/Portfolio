@@ -1,0 +1,321 @@
+/* からくり仕掛けの工房: paper, brass, copper and verdigris only.
+   Whatever moves shows the mechanism that moves it. */
+:root {
+  --brass: #cba569;
+  --brass-light: #ecd6a2;
+  --brass-dark: #6f513b;
+  --iron: #3a322c;
+  --ivory: #efe6cf;
+  --enamel: #b0352a;
+  --lamp: #f3c46b;
+  --tick: cubic-bezier(.3, 1.7, .5, 1);
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+/* ---------- Gas lamp turned down: the workshop at dusk ---------- */
+:root[data-workshop="night"] {
+  --paper: #29231f;
+  --ink: #efe6cf;
+  --green: #b5cdb1;
+  --rust: #f0a46c;
+  --line: #4d4239;
+  color-scheme: dark;
+}
+:root[data-workshop="night"] body { background-image: radial-gradient(#f3c46b14 .55px, transparent .8px); }
+:root[data-workshop="night"] :focus-visible { outline-color: var(--lamp); }
+:root[data-workshop="night"] ::selection { color: #29231f; background: var(--lamp); }
+:root[data-workshop="night"] .message { background: linear-gradient(90deg, transparent, #2f2823d9 22% 78%, transparent); }
+:root[data-workshop="night"] .reading-track::before { background: #3a312b; }
+:root[data-workshop="night"] .work-figure { background: #352d27; box-shadow: 0 4px 14px #0008; }
+:root[data-workshop="night"] .tool-summary i { background: linear-gradient(to right, var(--brass) var(--period), #40362f var(--period)); }
+:root[data-workshop="night"] .bio-illustration { background: #352d27; }
+:root[data-workshop="night"] .work-card { background: #322a25; }
+:root[data-workshop="night"] .portrait-paper { filter: sepia(.35) brightness(.82); }
+:root[data-workshop="night"] .site-footer .github-link img,
+:root[data-workshop="night"] .tool-brand img[src$="vercel.svg"],
+:root[data-workshop="night"] .tool-brand img[src$="github.svg"] { filter: invert(.9); }
+:root[data-workshop="night"] .chapter-link:is(:hover,:focus-visible) { background: #d3e2cf; }
+:root[data-workshop="night"] :is(.chapter-link, .bio-back) { color: #231d19; }
+@media (prefers-reduced-motion: no-preference) {
+  :root.workshop-switching :is(body, .site-header, .work-card) {
+    transition: background-color .5s ease, color .5s ease, border-color .5s ease;
+  }
+}
+
+/* ---------- Every gear can also be nudged by hover ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .gear-wheel--brass { rotate: calc(var(--gear-kick, 0deg) + var(--gear-hover, 0deg)); }
+  .gear-wheel--green { rotate: calc(-1.5 * (var(--gear-kick, 0deg) + var(--gear-hover, 0deg))); }
+  .gear-wheel { transition: rotate var(--gear-turn, .32s) var(--tick); }
+  .workshop-entry:is(:hover, :focus-visible) { --gear-hover: 90deg; }
+}
+
+/* ---------- Reading progress: rack, pinion and an odometer ---------- */
+.reading-odometer {
+  position: absolute; top: 12px; right: 6px; display: flex; align-items: center; gap: 1px; padding: 2px 4px;
+  border: 1px solid var(--brass-dark); border-radius: 4px; background: linear-gradient(var(--brass-light), #b48c52);
+  box-shadow: 0 2px 4px #3d343340; opacity: 0; translate: 0 -4px; transition: opacity .25s, translate .25s var(--tick);
+}
+.reading-odometer small { margin-left: 2px; color: #3a291f; font: 700 9px/1 ui-monospace, monospace; }
+.reading-moving .reading-odometer { opacity: 1; translate: none; }
+.odometer-drum {
+  display: block; width: 10px; height: 14px; overflow: hidden; border-radius: 2px;
+  background: linear-gradient(#000a, transparent 30% 70%, #000a), var(--iron);
+}
+.odometer-drum span {
+  display: block; width: 1ch; margin: 0 auto; word-break: break-all;
+  color: var(--ivory); font: 11px/14px ui-monospace, "SFMono-Regular", Consolas, monospace; text-align: center;
+  transform: translateY(calc(var(--digit, 0) * -14px));
+}
+@media (prefers-reduced-motion: no-preference) {
+  .odometer-drum span { transition: transform .28s var(--tick); }
+}
+@media (forced-colors: active) { .reading-odometer { display: none; } }
+
+/* ---------- Header: brass name plates, ratchet gears and an enamel pin ---------- */
+.site-nav { gap: clamp(.4rem, 1.2vw, .9rem); }
+.site-nav a {
+  position: relative; gap: .4rem; min-height: 36px; margin-block: 4px; padding: 0 .8rem 0 .55rem;
+  border: 1px solid var(--brass-dark); border-radius: 4px;
+  background: linear-gradient(var(--brass-light), #c49b5c); color: #3a291f; font-weight: 700;
+  box-shadow: inset 0 1px #fff6d6aa, 0 2px 0 #6f513b55;
+  text-decoration: none; white-space: nowrap;
+}
+.site-nav a::before {
+  content: ""; flex: none; width: 15px; height: 15px;
+  background: url("./gears/brass-12.svg") center / contain no-repeat; filter: sepia(.4) brightness(.72);
+}
+.site-nav a:is([aria-current="page"], [data-current])::after {
+  content: ""; position: absolute; top: -4px; right: -4px; width: 9px; height: 9px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #e46a5c, var(--enamel) 60%); border: 1px solid #5b1d16;
+}
+.site-nav a:is(:hover, :focus-visible) { background: linear-gradient(#f3e0b0, #d2aa6b); }
+.site-nav .github-link::before { display: none; }
+.site-nav .github-link img { width: 14px; height: 14px; }
+@media (prefers-reduced-motion: no-preference) {
+  .site-nav a::before { transition: rotate .35s var(--tick); }
+  .site-nav a:is(:hover, :focus-visible)::before { rotate: 90deg; }
+  .site-nav a:active { translate: 0 1px; box-shadow: inset 0 1px #fff6d6aa; }
+}
+@media (max-width: 700px) {
+  .wordmark { white-space: nowrap; }
+  .site-nav { gap: .3rem; }
+  .site-nav a { min-height: 34px; padding: 0 .45rem; gap: .25rem; font-size: .72rem; }
+  .site-nav a::before { width: 11px; height: 11px; }
+  .site-nav .github-link img { width: 12px; height: 12px; }
+}
+@media (max-width: 360px) { .site-nav a::before { display: none; } }
+@media (forced-colors: active) { .site-nav a { border-color: LinkText; } }
+
+/* ---------- Typewriter labels ---------- */
+.section-label, .type-label { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; color: var(--rust); }
+.section-label::before, .type-label::before { content: "§"; width: auto; border: 0; color: var(--rust); }
+.type-label {
+  display: inline-flex; align-items: center; gap: .6rem;
+  font-size: .78rem; line-height: 1.4; letter-spacing: .14em; text-transform: uppercase;
+}
+.type-text { display: inline-block; white-space: nowrap; overflow: hidden; vertical-align: bottom; }
+.welcome-copy .type-label { position: absolute; left: .1em; bottom: calc(100% + .8rem); }
+@media (max-width: 700px) { .welcome-copy .type-label { position: static; margin-bottom: .6rem; } }
+@media (prefers-reduced-motion: no-preference) {
+  .typing-ready .type-text { width: 0; }
+  .typing .type-text { width: var(--type-width); animation: type-in calc(var(--chars) * 70ms) steps(var(--chars)) both; }
+  /* The carriage reaches the end of the line and jumps back with a little bell. */
+  .typing { animation: carriage-bell .22s calc(var(--chars) * 70ms) var(--tick) both; }
+}
+@keyframes type-in { from { width: 0; } }
+@keyframes carriage-bell { 40% { translate: 3px -1px; } }
+
+/* ---------- Drive belts beside headings ---------- */
+.gear-rule::before {
+  height: 7px; border: 1.5px solid var(--brass-dark); border-radius: 4px;
+  background: repeating-linear-gradient(90deg, #985333b3 0 4px, transparent 4px 8px) 0 50% / 100% 3px no-repeat;
+  opacity: .8;
+}
+.drive-belt {
+  position: absolute; left: 0; bottom: -4px; height: 8px; width: calc(100% - clamp(4.5rem, 8vw, 7rem));
+  border: 1.5px solid var(--brass-dark); border-radius: 4px; pointer-events: none;
+  background: repeating-linear-gradient(90deg, #985333b3 0 4px, transparent 4px 8px) 0 50% / 100% 3px no-repeat;
+  opacity: .55;
+}
+.welcome-mechanism { opacity: .8; }
+@media (prefers-reduced-motion: no-preference) {
+  .belt-run.gear-rule::before, .drive-belt.belt-run { animation: belt-run var(--belt-time, .9s) cubic-bezier(.25, .6, .3, 1) both; }
+}
+@keyframes belt-run { from { background-position-x: 0; } to { background-position-x: -64px; } }
+
+/* ---------- Hero: brass clips and a pressure gauge on the drafting sheet ---------- */
+.portrait-paper::after {
+  inset: -6px; top: -6px; right: -6px; width: auto; height: auto; transform: none;
+  background:
+    linear-gradient(var(--brass), var(--brass)) left top / 22px 6px no-repeat,
+    linear-gradient(var(--brass), var(--brass)) left top / 6px 22px no-repeat,
+    linear-gradient(var(--brass), var(--brass)) right top / 22px 6px no-repeat,
+    linear-gradient(var(--brass), var(--brass)) right top / 6px 22px no-repeat,
+    linear-gradient(var(--brass), var(--brass)) left bottom / 22px 6px no-repeat,
+    linear-gradient(var(--brass), var(--brass)) left bottom / 6px 22px no-repeat,
+    linear-gradient(var(--brass), var(--brass)) right bottom / 22px 6px no-repeat,
+    linear-gradient(var(--brass), var(--brass)) right bottom / 6px 22px no-repeat;
+  filter: drop-shadow(0 1px 0 var(--brass-dark));
+}
+.pressure-gauge {
+  position: absolute; z-index: 1; top: 9%; right: -2%; width: clamp(3.2rem, 6vw, 4.6rem); height: auto;
+  filter: drop-shadow(1px 2px 0 #3d343333); pointer-events: none;
+}
+.gauge-needle { transform-box: view-box; transform-origin: 32px 34px; transform: rotate(68deg); }
+.gauge-steam { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .gauge-needle { animation: gauge-tremble 2.6s ease-in-out infinite; transition: transform .6s var(--tick); }
+  .welcome:not(.welcome-visible) .gauge-needle { animation-play-state: paused; }
+  .welcome-drawing:has(.portrait[aria-pressed="true"]) .gauge-needle { animation: none; transform: rotate(118deg); }
+  .welcome-drawing:has(.portrait[aria-pressed="true"]) .gauge-steam { animation: steam-puff .9s .25s ease-out both; }
+}
+@keyframes gauge-tremble {
+  0%, 100% { transform: rotate(64deg); }
+  20% { transform: rotate(74deg); }
+  45% { transform: rotate(69deg); }
+  70% { transform: rotate(78deg); }
+}
+@keyframes steam-puff { from { opacity: .9; translate: 0 4px; } to { opacity: 0; translate: 3px -10px; scale: 1.4; } }
+
+.welcome-tagline { margin: 0 0 1rem; font: clamp(.98rem, 1.3vw, 1.12rem)/1.7 var(--hand); color: var(--ink); }
+.workshop-entry {
+  padding: .4rem 1.1rem .4rem .6rem; border: 1px solid var(--brass-dark); border-radius: 5px;
+  background: linear-gradient(var(--brass-light), #c49b5c); color: #3a291f; text-decoration: none;
+  box-shadow: inset 0 1px #fff6d6aa, 0 3px 0 #6f513b66;
+}
+.workshop-entry:is(:hover, :focus-visible) { background: linear-gradient(#f3e0b0, #d2aa6b); }
+.workshop-entry:active { translate: 0 2px; box-shadow: inset 0 1px #fff6d6aa, 0 1px 0 #6f513b66; }
+.workshop-entry-arrow { color: var(--rust); }
+.workshop-entry .gear-pair { width: 2.7rem; }
+
+/* ---------- Section entries advance like a ratchet: tick, tick, tick ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .ink-appears { animation: ratchet-in .5s both; }
+}
+@keyframes ratchet-in {
+  0% { opacity: .2; transform: translateY(12px); animation-timing-function: var(--tick); }
+  33% { opacity: .55; transform: translateY(8px); animation-timing-function: var(--tick); }
+  66% { opacity: .85; transform: translateY(4px); animation-timing-function: var(--tick); }
+  100% { opacity: 1; transform: none; }
+}
+
+/* ---------- Work cards: display cases with brass louvre shutters ---------- */
+.work-grid { counter-reset: work; }
+.work-card { background: color-mix(in srgb, var(--paper) 93%, #fff); transition: border-color .2s, box-shadow .2s; }
+.case-bezel {
+  position: relative; display: block; margin: .75rem .75rem 0; padding: .6rem .6rem 1.4rem;
+  border: 1px solid var(--brass-dark); border-radius: .7rem;
+  background: linear-gradient(#e6cd95, #a8834b);
+  box-shadow: inset 0 1px #fff3cf, inset 0 -2px #6f513b66;
+}
+.case-bezel::before {
+  content: ""; position: absolute; left: .7rem; bottom: .45rem; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--brass-dark); box-shadow: 14px 0 var(--brass-dark);
+}
+.case-window { position: relative; overflow: hidden; aspect-ratio: 1.5; border-radius: .25rem; background: #e8e4d6; box-shadow: inset 0 0 0 1px #6f513b88; }
+.case-window > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.case-shutter { position: absolute; inset: 0; display: none; grid-template-rows: repeat(6, 1fr); perspective: 400px; }
+.case-shutter i {
+  display: block; transform-origin: 50% 0;
+  background: linear-gradient(#e2c58a, #b08a50 70%, #8a6a3c); border-bottom: 1px solid #5b4128;
+  box-shadow: 0 1px 2px #0003;
+}
+.case-plate {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: none; width: max-content; max-width: 86%;
+  padding: .2rem .7rem; border: 1px solid var(--brass-dark); border-radius: 3px; background: var(--ivory);
+  color: #3d3433; font: clamp(.82rem, 1.3vw, 1rem)/1.35 var(--hand); text-align: center; box-shadow: 0 2px 0 #6f513b55;
+}
+.case-gear { position: absolute; right: .45rem; bottom: .25rem; width: 1.15rem; height: auto; }
+.shutter-ready .case-shutter { display: grid; }
+.shutter-ready .case-plate { display: block; }
+.work-card.case-open { border-color: var(--rust); box-shadow: 0 6px 16px #3d343329; }
+.shutter-ready .work-card.case-open .case-plate { opacity: 0; }
+.shutter-ready .work-card.case-open .case-shutter i { transform: rotateX(-90deg); opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  /* Slats swing one after another; each fades only once it is edge-on. */
+  .case-shutter i { --slat: 0s; transition: transform .3s var(--tick) var(--slat), opacity .08s linear calc(var(--slat) + .2s); }
+  .case-open .case-shutter i { transition: transform .3s var(--tick) var(--slat), opacity .08s linear calc(var(--slat) + .2s); }
+  .work-card:not(.case-open) .case-shutter i { transition: opacity 0s var(--slat), transform .3s var(--tick) var(--slat); }
+  .case-shutter i:nth-child(2) { --slat: .04s; }
+  .case-shutter i:nth-child(3) { --slat: .08s; }
+  .case-shutter i:nth-child(4) { --slat: .12s; }
+  .case-shutter i:nth-child(5) { --slat: .16s; }
+  .case-shutter i:nth-child(6) { --slat: .2s; }
+  .case-plate { transition: opacity .15s; }
+  .case-gear { transition: rotate .55s var(--tick); }
+  .work-card.case-open .case-gear { rotate: 180deg; }
+}
+.work-card-copy { padding-top: .75rem; }
+.work-category { display: inline-flex; align-items: center; gap: .45rem; }
+.work-no {
+  counter-increment: work; padding: .05rem .4rem; border: 1px solid #a37d45; border-radius: 3px;
+  background: #cba56959; color: #5b4128; font: .66rem/1.5 ui-monospace, monospace; letter-spacing: .05em;
+}
+.work-no::before { content: "No." counter(work, decimal-leading-zero); }
+:root[data-workshop="night"] .work-no { color: #f1dcae; }
+@media (max-width: 30rem) {
+  .case-bezel { margin: .45rem .45rem 0; padding: .35rem .35rem 1.1rem; border-radius: .5rem; }
+  .case-bezel::before { left: .5rem; bottom: .35rem; width: 6px; height: 6px; box-shadow: 10px 0 var(--brass-dark); }
+  .case-gear { width: .9rem; right: .3rem; bottom: .15rem; }
+  .case-plate { padding: .1rem .4rem; }
+  .work-category { flex-wrap: wrap; gap: .2rem .4rem; }
+}
+@media (forced-colors: active) { .case-shutter, .case-plate { display: none !important; } }
+
+/* ---------- Counter drums ---------- */
+.counter-row { display: inline-flex; align-items: center; gap: .2rem; color: var(--brass-dark); }
+.counter-drum {
+  display: inline-block; min-width: 1.05em; padding: .05em .18em 0; overflow: hidden; vertical-align: middle;
+  border: 1px solid var(--brass-dark); border-radius: .2em;
+  background: linear-gradient(#000b, transparent 32% 68%, #000b), var(--iron);
+  color: var(--ivory); text-align: center;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-variant-numeric: tabular-nums; line-height: 1.35;
+}
+.bio-dateline .counter-drum { font-size: 1.05rem; }
+.tool-summary .counter-drum, .bio-tool-heading .counter-drum { margin-right: .25em; font-size: .95em; }
+@media (forced-colors: active) { .counter-drum { forced-color-adjust: auto; border-color: CanvasText; } }
+
+/* ---------- Gas lamp lever and the 2112 easter egg ---------- */
+.night-lever {
+  display: inline-flex; align-items: center; gap: .55rem; min-height: 44px; padding: .2rem .8rem .2rem .3rem;
+  border: 1px solid var(--line); border-radius: 2rem; background: transparent; color: var(--green);
+  font: .9rem/1 var(--hand); cursor: pointer;
+}
+.night-lever-base {
+  position: relative; width: 2.6rem; height: 1.6rem; border: 1px solid var(--brass-dark); border-radius: .35rem;
+  background: linear-gradient(#ddc187, #a37d45);
+}
+.night-lever-arm {
+  position: absolute; left: calc(50% - 2px); bottom: .3rem; width: 4px; height: 1.25rem;
+  border-radius: 2px; background: #efe0b8; transform-origin: 50% 100%; transform: rotate(-38deg);
+}
+.night-lever-arm::after {
+  content: ""; position: absolute; top: -.35rem; left: -.3rem; width: .65rem; height: .65rem; border-radius: 50%;
+  background: var(--rust); border: 1px solid var(--brass-dark);
+}
+.night-lever[aria-checked="true"] .night-lever-arm { transform: rotate(38deg); }
+.night-lever[aria-checked="true"] .night-lever-arm::after { background: var(--lamp); box-shadow: 0 0 8px #f3c46baa; }
+.night-lever:is(:hover, :focus-visible) { border-color: var(--rust); }
+@media (prefers-reduced-motion: no-preference) {
+  .night-lever-arm { transition: transform .3s var(--tick); }
+}
+@media (max-width: 700px) { .night-lever-text { display: none; } .night-lever { padding-right: .3rem; } }
+
+.year-2112 {
+  position: fixed; z-index: 9; left: 50%; bottom: 7rem; translate: -50% 0; width: max-content; max-width: calc(100% - 2rem);
+  display: flex; align-items: center; gap: .8rem; padding: .7rem 1rem;
+  border: 2px solid var(--brass-dark); border-radius: .5rem; background: linear-gradient(var(--brass-light), #c49b5c); color: #3a291f;
+  font: .9rem/1.4 var(--hand); box-shadow: 0 8px 24px #3d343355;
+}
+.year-2112 .counter-drum { font-size: 1.6rem; }
+.year-2112[hidden] { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .year-2112 { animation: ratchet-in .45s both; }
+  .stamp-button.spinning .stamp-gear { display: inline-block; animation: gear-spin .8s var(--tick); }
+}
+@keyframes gear-spin { to { transform: rotate(3turn); } }

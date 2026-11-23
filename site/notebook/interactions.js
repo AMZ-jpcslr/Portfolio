@@ -1,5 +1,5 @@
 import { introduceWelcome } from './welcome-ink.js';
-import { wireCircuitWorkshop } from './circuit.js';
+import { wireWorkshopMechanisms } from './mechanism.js';
 
 const legacyProjects = new Map([
   ['mania', 'mania'], ['Syukatu-Note', 'career'], ['Streaming-Screen', 'stream'],
@@ -119,10 +119,13 @@ function wireNotebookGears() {
 function trackReadingProgress() {
   const meter = document.querySelector('.reading-progress');
   const root = document.scrollingElement;
-  const nixie = document.createElement('span');
-  nixie.className = 'reading-nixie';
-  nixie.setAttribute('aria-hidden', 'true');
-  meter.append(nixie);
+  // A three-drum odometer reads the percentage; each drum rolls to its digit.
+  const odometer = document.createElement('span');
+  odometer.className = 'reading-odometer';
+  odometer.setAttribute('aria-hidden', 'true');
+  odometer.innerHTML = '<span class="odometer-drum"><span>0123456789</span></span>'.repeat(3) + '<small>%</small>';
+  const drums = odometer.querySelectorAll('.odometer-drum');
+  meter.append(odometer);
   let frame = 0;
   function update() {
     frame = 0;
@@ -135,7 +138,7 @@ function trackReadingProgress() {
     meter.style.setProperty('--reading-ratio', ratio);
     const percent = String(Math.round(ratio * 100));
     meter.classList.toggle('reading-moving', position > 64);
-    nixie.textContent = percent + '%';
+    percent.padStart(3, '0').split('').forEach((digit, index) => drums[index].style.setProperty('--digit', digit));
     if (meter.getAttribute('aria-valuenow') !== percent) meter.setAttribute('aria-valuenow', percent);
   }
   function schedule() {
@@ -188,4 +191,4 @@ introduceWelcome();
 wireNotebookGears();
 addNotebookStamp();
 animateNotebookEntries();
-wireCircuitWorkshop();
+wireWorkshopMechanisms();
