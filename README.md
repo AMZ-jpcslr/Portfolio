@@ -22,7 +22,7 @@
 
 ## 操作再現アニメーション
 
-[今回の仕様・機能照合・検証](docs/interaction-demos-2026-11-06.md)を参照してください。`site/music/interaction-scenes.js` が8作品の再現画面と操作順、`site/music/interaction-demos.js` が表示素材、`site/interaction-demos/manifest.json` が出典・長さ・ハッシュです。以前の創作PVと実録画は保存していますが、現在の表示には使いません。
+[今回の仕様・機能照合・検証](docs/interaction-demos-2026-11-06.md)を参照してください。`video/recreations/interaction-scenes.js` が再現画面と操作順、`site/interaction-demos/manifest.json` が出典・長さ・ハッシュです。現在の詳細ページで再現アニメーションを使うのは Yomiage Bot と Shindo Bot の2作品で、ほかの6作品は `site/recordings/` の操作記録を使います。以前の創作PVと短尺版はリポジトリから削除しました（Git履歴には残っています）。
 
 ## 作成の記録
 
@@ -57,15 +57,15 @@ npm run check
 npm run dev
 ```
 
-開発サーバーの既定は `http://127.0.0.1:4173/`。`site/` が現行画面のソース、`dist/` が公開出力です。`npm run build` は現行の入口と8つの詳細ページ・素材を `dist/` に反映します。Vercelは既存設定の `dist` を配信します。
+開発サーバーの既定は `http://127.0.0.1:4173/`。`site/` が公開サイトのソースで、`dist/` は `npm run build` が毎回作り直す公開出力です（Gitでは管理しません）。Vercelは `npm run build` を実行して `dist` を配信します。
 
-`scripts/check-site.mjs` は現行8作品・出力の一致・日時変換・公開データの範囲を確認し、`scripts/check-legacy.mjs` は保持した既存7作品の資料・動画素材を確認します。旧入口は検証用の `scripts/fixtures/legacy-index.html` に保存し、公開の入口には使いません。
+`scripts/check-notebook.mjs` は10ページの出力、メタデータ、ローカル素材、リンク先、ソースとの一致を確認します。
 
-本文データは既存の `dist/projects.js` を土台に、`site/music/content.js` で8作品にまとめています。公開するファイルへローカル比較案、試験画面、認証情報、依存関係のキャッシュを含めません。
+作品の本文データは `site/data/` にあります。公開するファイルへローカル比較案、試験画面、認証情報、依存関係のキャッシュを含めません。
 
 ## 団体の表示と素材
 
-Ri-oneの紹介は、本人の活動と個人制作のSSL試作の範囲を区別しています。[公式サイト](https://rione.org/)のロゴとURLを掲載しています。ロゴとGitHubマークの出典・ライセンスは `site/music/assets/OFFICIAL-SOURCES.md` と `site/assets/OCTICONS-LICENSE.txt` を参照してください。
+Ri-oneの紹介は、本人の活動と個人制作のSSL試作の範囲を区別しています。GitHubマークの出典・ライセンスは `site/assets/OCTICONS-LICENSE.txt` を参照してください。
 
 <details>
 <summary>以前の公開版の画面記録</summary>
@@ -79,8 +79,4 @@ Ri-oneの紹介は、本人の活動と個人制作のSSL試作の範囲を区�
 
 </details>
 
-## ブラウザーでの回帰確認
-
-`npm run build`、`npm run dev` の後、`node scripts/review-interactions.mjs` を実行します。`PORTFOLIO_REVIEW_URL` で別ポートを指定できます。PC・390px・320px幅、自動再生・任意停止・履歴復帰・動きを減らす設定と8作品の動画を検査し、`.review/ui-interactions/` に結果と画面写真を保存します。
-
-動画は `node video/recreations/render-interactions.mjs` で再生成。`REMOTION_BROWSER_EXECUTABLE` にChromiumを指定し、`ONLY=mania` などで1作品、`STILL=1` で主要画面のみを生成できます。`node scripts/verify-interactions.mjs` は16本の全編デコードと出力一致を確認します。以前の録画・PV用スクリプトは履歴用です。
+再現アニメーションは `node video/recreations/render-interactions.mjs` で再生成します。`REMOTION_BROWSER_EXECUTABLE` にChromiumを指定し、`ONLY=voice` などで1作品、`STILL=1` で主要画面のみを生成できます。
