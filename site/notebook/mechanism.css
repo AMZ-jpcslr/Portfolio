@@ -494,7 +494,7 @@ html.door-arriving::after { animation: door-close-right .75s .3s cubic-bezier(.5
     radial-gradient(circle at 2.5px calc(100% - 2.5px), var(--brass-dark) 1.6px, transparent 2px) 0 0,
     radial-gradient(circle at calc(100% - 2.5px) calc(100% - 2.5px), var(--brass-dark) 1.6px, transparent 2px) 0 0;
 }
-.wordmark-name { font: 600 clamp(1.05rem, 1.7vw, 1.3rem)/1.15 var(--hand); letter-spacing: .08em; text-shadow: 0 1px #fff3cf; }
+.wordmark-name { font: 600 clamp(.98rem, 1.6vw, 1.22rem)/1.15 var(--hand); letter-spacing: .04em; text-shadow: 0 1px #fff3cf; }
 .wordmark-sub { font: .52rem/1.2 ui-monospace, "SFMono-Regular", Consolas, monospace; letter-spacing: .28em; color: #5b4128; }
 .wordmark:is(:hover, :focus-visible) .wordmark-plate { background: linear-gradient(#f3e0b0, #d2aa6b); }
 @media (prefers-reduced-motion: no-preference) {
