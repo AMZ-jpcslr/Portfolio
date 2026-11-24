@@ -45,7 +45,7 @@ function startOpening() {
     if (!pending || document.hidden) return;
     pending = false;
     // A visitor who was handed in by the card arm does not need the boiler again.
-    if (motion.matches || location.hash.startsWith('#work-') || document.documentElement.classList.contains('card-arriving')) return;
+    if (motion.matches || location.hash.startsWith('#work-') || document.documentElement.classList.contains('page-assembling')) return;
 
     const controller = new AbortController();
     const { signal } = controller;
