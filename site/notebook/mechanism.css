@@ -474,7 +474,7 @@ html.page-assembling body { visibility: hidden; }
 html.page-dismantling, html.page-built { overflow-x: hidden; }
 html.page-dismantling body { pointer-events: none; }
 
-.gantry { position: fixed; inset: 0 0 auto; z-index: 70; height: 64px; pointer-events: none; animation: gantry-in .28s cubic-bezier(.3, .7, .4, 1.2) both; }
+.gantry { position: fixed; inset: 0 0 auto; z-index: 70; height: 64px; overflow: hidden; pointer-events: none; animation: gantry-in .28s cubic-bezier(.3, .7, .4, 1.2) both; }
 .gantry--retract { animation: gantry-out .3s ease-in forwards; }
 .gantry-rail {
   position: absolute; inset: 8px 0 auto; height: 18px; border-block: 2px solid #2c2521;
@@ -489,14 +489,19 @@ html.page-dismantling body { pointer-events: none; }
 .gantry-trolley {
   position: absolute; top: 4px; left: 0; width: 46px; height: 26px; border: 2px solid #120e0b; border-radius: 4px;
   background: linear-gradient(#4a403a, #2c2521); box-shadow: inset 0 0 0 2px #c69a56;
-  animation: trolley-run 1.1s ease-in-out infinite alternate;
+  translate: -46px 0;
 }
+.gantry--leave .gantry-trolley { animation: trolley-out .9s .22s linear both; }
+.gantry--arrive .gantry-trolley { animation: trolley-back .9s .22s linear both; }
+.gantry--arrive .gantry-gear { animation-direction: reverse; }
+.gantry--arrive .gantry-gear--right { animation-direction: normal; }
 .gantry-cable { position: absolute; left: 50%; top: 100%; width: 2px; height: 22px; margin-left: -1px; background: #2c2521; }
 .gantry-hook { position: absolute; left: calc(50% - 7px); top: calc(100% + 20px); width: 14px; height: 12px; border: 3px solid #7a5a33; border-top-color: transparent; border-radius: 0 0 9px 9px; }
 @keyframes gantry-in { from { translate: 0 -110%; } }
 @keyframes gantry-out { to { translate: 0 -110%; } }
 @keyframes gantry-spin { to { rotate: 360deg; } }
-@keyframes trolley-run { from { translate: 70px 0; } to { translate: calc(100vw - 116px) 0; } }
+@keyframes trolley-out { from { translate: -46px 0; } to { translate: 100vw 0; } }
+@keyframes trolley-back { from { translate: 100vw 0; } to { translate: -46px 0; } }
 
 /* A pressed key springs back past its rest and settles, like a typewriter key. */
 .key-spring { animation: key-spring .32s var(--tick); }

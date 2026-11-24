@@ -148,8 +148,8 @@ function springKeys() {
   });
 }
 
-// Moving between pages: a gantry crane rolls in along the top edge, unbolts the page's parts one by one and
-// hoists them away; on the next page it lowers that page's parts into place, top to bottom.
+// Moving between pages: a gantry crane rolls in along the top edge. On the way out its trolley runs left to right
+// and hoists away each part it passes over; on the next page it runs back and lowers that page's parts into place.
 const gantryArt = `<div class="gantry-rail"></div>
   <img class="gantry-gear gantry-gear--left" src="/notebook/gears/brass-12.svg" alt="" width="46" height="46">
   <img class="gantry-gear gantry-gear--right" src="/notebook/gears/green-8.svg" alt="" width="38" height="38">
@@ -187,27 +187,35 @@ function pageParts(limit = 36) {
 
 const tilt = () => (Math.random() * 10 - 5).toFixed(1) + 'deg';
 
-function dismantle(parts, span) {
-  // Bottom parts first, so the crane clears the page upward.
-  [...parts].reverse().forEach(({ element, box }, index) => {
-    const lift = -(box.bottom + 80) + 'px';
+// The trolley crosses the rail at an even pace; a part is handled the moment the hook is over its middle.
+const sweep = { start: 220, length: 900, trolley: 46 };
+function hookReaches(box, outbound) {
+  const share = (box.left + box.width / 2 + sweep.trolley / 2) / (innerWidth + sweep.trolley);
+  // Parts under the same spot (common on a phone) go one after another, top first.
+  return sweep.start + sweep.length * (outbound ? share : 1 - share) + Math.max(0, box.top) / innerHeight * 160;
+}
+
+function dismantle(parts) {
+  // Outbound, left to right: each part is shaken loose under the hook and hoisted away.
+  parts.forEach(({ element, box }) => {
     const turn = tilt();
     element.animate([
       { translate: '0 0', rotate: '0deg' },
       { translate: '0 3px', rotate: '0deg', offset: .12 },
       { translate: '0 -4px', rotate: turn, offset: .3 },
-      { translate: '0 ' + lift, rotate: turn }
-    ], { duration: 460, delay: 120 + index * (span / Math.max(parts.length, 1)), easing: 'cubic-bezier(.45, 0, .8, .3)', fill: 'forwards' });
+      { translate: '0 ' + (-(box.bottom + 80)) + 'px', rotate: turn }
+    ], { duration: 460, delay: Math.max(0, hookReaches(box, true) - 120), easing: 'cubic-bezier(.45, 0, .8, .3)', fill: 'forwards' });
   });
 }
 
-function assemble(parts, span) {
-  return parts.map(({ element, box }, index) => element.animate([
+function assemble(parts) {
+  // Return trip, right to left: each part is lowered from the hook and lands as the hook passes.
+  return parts.map(({ element, box }) => element.animate([
     { translate: '0 ' + (-(box.bottom + 80)) + 'px', rotate: tilt() },
     { translate: '0 5px', rotate: '0deg', offset: .72 },
     { translate: '0 -2px', rotate: '0deg', offset: .86 },
     { translate: '0 0', rotate: '0deg' }
-  ], { duration: 520, delay: 160 + index * (span / Math.max(parts.length, 1)), easing: 'cubic-bezier(.3, .6, .4, 1)', fill: 'backwards' }));
+  ], { duration: 520, delay: Math.max(0, hookReaches(box, false) - 300), easing: 'cubic-bezier(.3, .6, .4, 1)', fill: 'backwards' }));
 }
 
 function wireDoors() {
@@ -219,7 +227,7 @@ function wireDoors() {
       // Measured and hung on the crane in the same frame the page is shown, so no part is seen in place first.
       root.classList.add('page-built');
       root.classList.remove('page-assembling');
-      const runs = assemble(pageParts(), 620);
+      const runs = assemble(pageParts());
       Promise.all(runs.map(run => run.finished)).catch(() => {}).then(() => setTimeout(() => { gantry.classList.add('gantry--retract'); setTimeout(finish, 320); }, 80));
     } catch { finish(); }
   }
@@ -240,8 +248,8 @@ function wireDoors() {
     try { sessionStorage.setItem('workshop-door', '1'); } catch { /* The next page just opens without the crane. */ }
     buildGantry('leave');
     root.classList.add('page-dismantling');
-    dismantle(pageParts(), 560);
-    setTimeout(() => { location.href = url.href; }, 1180);
+    dismantle(pageParts());
+    setTimeout(() => { location.href = url.href; }, sweep.start + sweep.length + 260);
   });
 }
 
