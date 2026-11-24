@@ -474,8 +474,8 @@ html.page-assembling body { visibility: hidden; }
 html.page-dismantling, html.page-built { overflow-x: hidden; }
 html.page-dismantling body { pointer-events: none; }
 
-.gantry { position: fixed; inset: 0 0 auto; z-index: 70; height: 64px; overflow: hidden; pointer-events: none; animation: gantry-in .28s cubic-bezier(.3, .7, .4, 1.2) both; }
-.gantry--retract { animation: gantry-out .3s ease-in forwards; }
+.gantry { position: fixed; inset: 0 0 auto; z-index: 70; height: 64px; overflow: hidden; pointer-events: none; animation: gantry-in .18s cubic-bezier(.3, .7, .4, 1.2) both; }
+.gantry--retract { animation: gantry-out .2s ease-in forwards; }
 .gantry-rail {
   position: absolute; inset: 8px 0 auto; height: 18px; border-block: 2px solid #2c2521;
   background:
@@ -483,7 +483,7 @@ html.page-dismantling body { pointer-events: none; }
     linear-gradient(#f0d9a2, #c69a56 55%, #7a5a33);
   box-shadow: 0 4px 10px #0005;
 }
-.gantry-gear { position: absolute; top: -6px; max-width: none; filter: drop-shadow(0 2px 2px #0006); animation: gantry-spin .9s linear infinite; }
+.gantry-gear { position: absolute; top: -6px; max-width: none; filter: drop-shadow(0 2px 2px #0006); animation: gantry-spin .6s linear infinite; }
 .gantry-gear--left { left: 10px; }
 .gantry-gear--right { right: 12px; top: -2px; animation-direction: reverse; animation-duration: .7s; }
 .gantry-trolley {
@@ -491,8 +491,8 @@ html.page-dismantling body { pointer-events: none; }
   background: linear-gradient(#4a403a, #2c2521); box-shadow: inset 0 0 0 2px #c69a56;
   translate: -46px 0;
 }
-.gantry--leave .gantry-trolley { animation: trolley-out .9s .22s linear both; }
-.gantry--arrive .gantry-trolley { animation: trolley-back .9s .22s linear both; }
+.gantry--leave .gantry-trolley { animation: trolley-out .52s .12s linear both; }
+.gantry--arrive .gantry-trolley { animation: trolley-back .52s .12s linear both; }
 .gantry--arrive .gantry-gear { animation-direction: reverse; }
 .gantry--arrive .gantry-gear--right { animation-direction: normal; }
 .gantry-cable { position: absolute; left: 50%; top: 100%; width: 2px; height: 22px; margin-left: -1px; background: #2c2521; }

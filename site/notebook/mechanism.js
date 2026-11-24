@@ -188,11 +188,11 @@ function pageParts(limit = 36) {
 const tilt = () => (Math.random() * 10 - 5).toFixed(1) + 'deg';
 
 // The trolley crosses the rail at an even pace; a part is handled the moment the hook is over its middle.
-const sweep = { start: 220, length: 900, trolley: 46 };
+const sweep = { start: 120, length: 520, trolley: 46 };
 function hookReaches(box, outbound) {
   const share = (box.left + box.width / 2 + sweep.trolley / 2) / (innerWidth + sweep.trolley);
   // Parts under the same spot (common on a phone) go one after another, top first.
-  return sweep.start + sweep.length * (outbound ? share : 1 - share) + Math.max(0, box.top) / innerHeight * 160;
+  return sweep.start + sweep.length * (outbound ? share : 1 - share) + Math.max(0, box.top) / innerHeight * 90;
 }
 
 function dismantle(parts) {
@@ -204,7 +204,7 @@ function dismantle(parts) {
       { translate: '0 3px', rotate: '0deg', offset: .12 },
       { translate: '0 -4px', rotate: turn, offset: .3 },
       { translate: '0 ' + (-(box.bottom + 80)) + 'px', rotate: turn }
-    ], { duration: 460, delay: Math.max(0, hookReaches(box, true) - 120), easing: 'cubic-bezier(.45, 0, .8, .3)', fill: 'forwards' });
+    ], { duration: 340, delay: Math.max(0, hookReaches(box, true) - 90), easing: 'cubic-bezier(.45, 0, .8, .3)', fill: 'forwards' });
   });
 }
 
@@ -215,7 +215,7 @@ function assemble(parts) {
     { translate: '0 5px', rotate: '0deg', offset: .72 },
     { translate: '0 -2px', rotate: '0deg', offset: .86 },
     { translate: '0 0', rotate: '0deg' }
-  ], { duration: 520, delay: Math.max(0, hookReaches(box, false) - 300), easing: 'cubic-bezier(.3, .6, .4, 1)', fill: 'backwards' }));
+  ], { duration: 400, delay: Math.max(0, hookReaches(box, false) - 230), easing: 'cubic-bezier(.3, .6, .4, 1)', fill: 'backwards' }));
 }
 
 function wireDoors() {
@@ -228,7 +228,7 @@ function wireDoors() {
       root.classList.add('page-built');
       root.classList.remove('page-assembling');
       const runs = assemble(pageParts());
-      Promise.all(runs.map(run => run.finished)).catch(() => {}).then(() => setTimeout(() => { gantry.classList.add('gantry--retract'); setTimeout(finish, 320); }, 80));
+      Promise.all(runs.map(run => run.finished)).catch(() => {}).then(() => setTimeout(() => { gantry.classList.add('gantry--retract'); setTimeout(finish, 220); }, 0));
     } catch { finish(); }
   }
   addEventListener('pageshow', event => {
@@ -249,7 +249,7 @@ function wireDoors() {
     buildGantry('leave');
     root.classList.add('page-dismantling');
     dismantle(pageParts());
-    setTimeout(() => { location.href = url.href; }, sweep.start + sweep.length + 260);
+    setTimeout(() => { location.href = url.href; }, sweep.start + sweep.length + 180);
   });
 }
 
