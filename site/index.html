@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/notebook/style.css">
     <link rel="stylesheet" href="/notebook/icons.css">
     <link rel="stylesheet" href="/notebook/mechanism.css">
-    <script>try{if(localStorage.getItem('workshop-light')==='night')document.documentElement.dataset.workshop='night'}catch{}try{if(sessionStorage.getItem('workshop-door')){sessionStorage.removeItem('workshop-door');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('door-arriving')}}catch{}</script>
+    <script>try{if(localStorage.getItem('workshop-light')==='night')document.documentElement.dataset.workshop='night'}catch{}try{var c=sessionStorage.getItem('workshop-door');if(c){sessionStorage.removeItem('workshop-door');window.workshopCard=c;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('card-arriving')}}catch{}</script>
     <script type="module" src="/notebook/interactions.js"></script>
   </head>
   <body>
@@ -31,7 +31,7 @@
     <main id="main" tabindex="-1"><!-- notebook-content --></main>
     <footer class="site-footer">
       <span>北岡 英磨 <span lang="en">/ Yoma Kitaoka</span></span>
-      <a class="mail-link" href="mailto:Yomasan55@gmail.com">Yomasan55@gmail.com</a>
+      <a class="mail-link" href="mailto:yomasan55@gmail.com">yomasan55@gmail.com</a>
       <a class="github-link" href="https://github.com/AMZ-jpcslr"><img src="/notebook/icons/github.svg" alt="" width="16" height="16">GitHub <span aria-hidden="true">↗</span></a>
     </footer>
   </body>

@@ -44,8 +44,8 @@ function startOpening() {
   function playIfVisible() {
     if (!pending || document.hidden) return;
     pending = false;
-    // A visitor who walked in through the workshop doors does not need the boiler again.
-    if (motion.matches || location.hash.startsWith('#work-') || document.documentElement.classList.contains('door-arriving')) return;
+    // A visitor who was handed in by the card arm does not need the boiler again.
+    if (motion.matches || location.hash.startsWith('#work-') || document.documentElement.classList.contains('card-arriving')) return;
 
     const controller = new AbortController();
     const { signal } = controller;

@@ -468,37 +468,82 @@
   .site-header .site-nav { order: 2; width: 100%; margin-left: 0; justify-content: flex-end; }
 }
 
-/* ---------- Page change: heavy vault doors slam, a lock wheel turns, and they swing open on the next page ---------- */
+/* ---------- Page change: a geared arm pulls the page out like a kamishibai card ---------- */
+/* The next card waits behind the page; on arrival the title card covers it until the arm pulls it away. */
 html::before, html::after {
-  content: ""; position: fixed; z-index: 60; top: 0; bottom: 0; width: 50%; pointer-events: none; visibility: hidden;
-  background: #2c2521 center / 100% 100% no-repeat;
+  content: ""; position: fixed; inset: 0; pointer-events: none; visibility: hidden;
+  background:
+    url("/notebook/workshop-mark.svg") center calc(50% - 3.5rem) / 6.5rem no-repeat,
+    radial-gradient(#9e916724 .55px, transparent .8px) 0 0 / 5px 6px,
+    var(--paper);
+  box-shadow: inset 0 0 0 clamp(8px, 1.6vw, 18px) #5b3f27, inset 0 0 0 calc(clamp(8px, 1.6vw, 18px) + 3px) var(--brass), inset 0 0 40px calc(clamp(8px, 1.6vw, 18px) + 10px) #3d343322;
 }
-html::before { left: 0; translate: -101% 0; background-image: url("/notebook/doors/door-left.svg"); box-shadow: 14px 0 30px #0009; }
-html::after { right: 0; translate: 101% 0; background-image: url("/notebook/doors/door-right.svg"); box-shadow: -14px 0 30px #0009; }
-html.door-leaving::before { animation: door-close-left .55s cubic-bezier(.7, 0, .9, .6) both, door-thud .28s .55s linear; }
-html.door-leaving::after { animation: door-close-right .55s cubic-bezier(.7, 0, .9, .6) both, door-thud .28s .55s linear; }
-html.door-arriving::before { animation: door-close-left .75s .3s cubic-bezier(.5, 0, .2, 1) reverse both; }
-html.door-arriving::after { animation: door-close-right .75s .3s cubic-bezier(.5, 0, .2, 1) reverse both; }
-@keyframes door-close-left { from { visibility: visible; translate: -101% 0; } to { visibility: visible; translate: 0 0; } }
-@keyframes door-close-right { from { visibility: visible; translate: 101% 0; } to { visibility: visible; translate: 0 0; } }
-/* The slam: both leaves jolt, rebound and settle. */
-@keyframes door-thud { 0% { visibility: visible; translate: 0 0; } 20% { visibility: visible; translate: 0 5px; } 45% { visibility: visible; translate: 0 -3px; } 70% { visibility: visible; translate: 0 1px; } 100% { visibility: visible; translate: 0 0; } }
-.door-lock {
-  position: fixed; z-index: 61; left: 50%; top: 50%; translate: -50% -50%; pointer-events: none;
-  opacity: 0; animation: lock-turn .65s .62s cubic-bezier(.3, 1.5, .5, 1) forwards;
+html::before { z-index: 0; }
+html::after { z-index: 60; }
+html.card-leaving { background: #2c2521; overflow-x: hidden; }
+html.card-leaving::before { visibility: visible; }
+html.card-leaving body {
+  position: relative; z-index: 1; min-height: 100vh; overflow-x: clip;
+  background: var(--paper) radial-gradient(#9e916724 .55px, transparent .8px) 0 0 / 5px 6px;
+  box-shadow: -8px 0 24px #0006; transform-origin: 0 50%;
+  animation: card-pull 1.15s cubic-bezier(.55, 0, .35, 1) forwards;
 }
-@keyframes lock-turn { from { opacity: 1; rotate: 0deg; } to { opacity: 1; rotate: 150deg; } }
-.door-board {
-  position: fixed; z-index: 61; left: 50%; top: calc(50% + min(26vh, 13rem)); translate: -50% 0; max-width: calc(100% - 2rem);
+html.card-arriving::after { animation: card-cover 1s .2s cubic-bezier(.55, 0, .35, 1) both; box-shadow: inset 0 0 0 clamp(8px, 1.6vw, 18px) #5b3f27, inset 0 0 0 calc(clamp(8px, 1.6vw, 18px) + 3px) var(--brass), -10px 0 28px #0006; }
+@keyframes card-pull { 0%, 38% { translate: 0 0; rotate: 0deg; } 85%, 100% { translate: 104vw 0; rotate: 1.5deg; } }
+@keyframes card-cover { 0%, 15% { visibility: visible; translate: 0 0; rotate: 0deg; } 70% { visibility: visible; translate: 104vw 0; rotate: 1.5deg; } 100% { visibility: hidden; translate: 104vw 0; } }
+
+/* The machine: a riveted housing on the right edge, a pinion and idler, and a toothed rack ending in a clamp. */
+.card-arm { position: fixed; inset: 0; z-index: 70; pointer-events: none; overflow: hidden; }
+.arm-housing {
+  position: absolute; right: -14px; top: calc(50% - 128px); width: 150px; height: 150px;
+  animation: housing-in 1.15s ease both;
+}
+.arm-housing svg { width: 100%; height: 100%; overflow: visible; }
+.arm-pinion, .arm-idler { transform-box: fill-box; transform-origin: 50% 50%; }
+.arm-pinion { animation: pinion-turn 1.15s cubic-bezier(.55, 0, .35, 1) both; }
+.arm-idler { animation: idler-turn 1.15s cubic-bezier(.55, 0, .35, 1) both; }
+.arm-rack { position: absolute; left: calc(100% + 12px); top: calc(50% - 9px); height: 18px; width: 120vw; animation: rack-reach 1.15s cubic-bezier(.55, 0, .35, 1) both; }
+.arm-rack::before {
+  content: ""; position: absolute; inset: 0 0 0 30px; border: 1.5px solid #3a2a19; border-radius: 3px;
+  background: linear-gradient(#f0d9a2, #c69a56 55%, #7a5a33);
+}
+.arm-rack::after {
+  content: ""; position: absolute; left: 34px; right: 0; top: -7px; height: 8px;
+  background: repeating-linear-gradient(90deg, #8a6a3c 0 6px, transparent 6px 11px);
+  clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 0);
+}
+.arm-clamp { position: absolute; left: -16px; top: -27px; width: 52px; height: 72px; overflow: visible; }
+.clamp-jaw { transform-box: fill-box; }
+.clamp-jaw--top { transform-origin: 100% 100%; animation: jaw-top 1.15s ease both; }
+.clamp-jaw--bottom { transform-origin: 100% 0; animation: jaw-bottom 1.15s ease both; }
+@keyframes housing-in { 0% { translate: 110% 0; } 18%, 88% { translate: 0 0; } 100% { translate: 110% 0; } }
+@keyframes rack-reach { 0%, 8% { translate: 0 0; } 28%, 38% { translate: -96px 0; } 85%, 100% { translate: calc(104vw - 96px) 0; } }
+@keyframes pinion-turn { 0%, 8% { rotate: 0deg; } 28%, 38% { rotate: -160deg; } 85%, 100% { rotate: 1800deg; } }
+@keyframes idler-turn { 0%, 8% { rotate: 0deg; } 28%, 38% { rotate: 230deg; } 85%, 100% { rotate: -2600deg; } }
+@keyframes jaw-top { 0%, 26% { rotate: -28deg; } 34%, 100% { rotate: 0deg; } }
+@keyframes jaw-bottom { 0%, 26% { rotate: 28deg; } 34%, 100% { rotate: 0deg; } }
+/* Arriving: the arm is already gripping the title card and only pulls. */
+.card-arm--arrive .arm-housing { animation: housing-out 1.2s ease both; }
+.card-arm--arrive .arm-rack { animation: rack-pull 1s .2s cubic-bezier(.55, 0, .35, 1) both; }
+.card-arm--arrive .arm-pinion { animation: pinion-pull 1s .2s cubic-bezier(.55, 0, .35, 1) both; }
+.card-arm--arrive .arm-idler { animation: idler-pull 1s .2s cubic-bezier(.55, 0, .35, 1) both; }
+.card-arm--arrive .clamp-jaw { animation: none; }
+@keyframes housing-out { 0%, 80% { translate: 0 0; } 100% { translate: 110% 0; } }
+@keyframes rack-pull { 0%, 15% { translate: -96px 0; } 70%, 100% { translate: calc(104vw - 96px) 0; } }
+@keyframes pinion-pull { 0%, 15% { rotate: -160deg; } 70%, 100% { rotate: 1800deg; } }
+@keyframes idler-pull { 0%, 15% { rotate: 230deg; } 70%, 100% { rotate: -2600deg; } }
+
+.card-board {
+  position: fixed; z-index: 0; left: 50%; top: calc(50% + 1.6rem); translate: -50% 0; max-width: calc(100% - 3rem); margin: 0;
   padding: .55rem .8rem; border: 3px solid #c69a56; border-radius: 6px; background: var(--iron); outline: 2px solid #2c2521;
   font: 1.35rem/1.2 ui-monospace, "SFMono-Regular", Consolas, monospace; white-space: nowrap; pointer-events: none;
-  box-shadow: 0 6px 18px #000a; animation: board-drop .3s .7s var(--tick) both;
+  box-shadow: 0 6px 18px #0006;
 }
-.door-board .flap-char {
+.card-board .flap-char {
   min-width: 1.2em; margin-right: 2px; padding: .15em .1em; border-radius: 2px; color: var(--lamp);
-  background: linear-gradient(#4a4039 0 48%, #1d1915 48% 52%, #3a322c 52%);
+  background: linear-gradient(#4a403a 0 48%, #1d1915 48% 52%, #3a322c 52%);
 }
-@keyframes board-drop { from { opacity: 0; translate: -50% -.6rem; } }
+.card-board--arrive { z-index: 61; animation: card-cover 1s .2s cubic-bezier(.55, 0, .35, 1) both; }
 
 /* A pressed key springs back past its rest and settles, like a typewriter key. */
 .key-spring { animation: key-spring .32s var(--tick); }
