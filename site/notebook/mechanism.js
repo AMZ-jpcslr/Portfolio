@@ -148,67 +148,100 @@ function springKeys() {
   });
 }
 
-// Moving between pages: a geared arm grips the page's edge and pulls it away like a kamishibai card,
-// showing the next card with a flap board naming the destination. On arrival it pulls that card away too.
-const armHousing = `<svg viewBox="0 0 150 150" aria-hidden="true" focusable="false">
-  <path d="M60 6h90v132H74q-14 0-14-14z" fill="#3a322c" stroke="#120e0b" stroke-width="2"/>
-  <path d="M66 12h84v120H78q-12 0-12-12z" fill="none" stroke="#c69a56" stroke-width="2"/>
-  <circle cx="72" cy="20" r="3.4" fill="#d9b877" stroke="#3a2a19"/><circle cx="72" cy="124" r="3.4" fill="#d9b877" stroke="#3a2a19"/><circle cx="140" cy="20" r="3.4" fill="#d9b877" stroke="#3a2a19"/><circle cx="140" cy="124" r="3.4" fill="#d9b877" stroke="#3a2a19"/>
-  <g class="arm-idler"><path d="M133.9 49.9L133.9 54.1L128.6 55.7L127.6 58.8L130.9 63.2L128.5 66.5L123.2 64.8L120.7 66.6L120.7 72.2L116.8 73.5L113.6 68.9L110.4 68.9L107.2 73.5L103.3 72.2L103.3 66.6L100.8 64.8L95.5 66.5L93.1 63.2L96.4 58.8L95.4 55.7L90.1 54.1L90.1 49.9L95.4 48.3L96.4 45.2L93.1 40.8L95.5 37.5L100.8 39.2L103.3 37.4L103.3 31.8L107.2 30.5L110.4 35.1L113.6 35.1L116.8 30.5L120.7 31.8L120.7 37.4L123.2 39.2L128.5 37.5L130.9 40.8L127.6 45.2L128.6 48.3Z" fill="#8fa597" stroke="#2d4038" stroke-width="2" stroke-linejoin="round"/><circle cx="112" cy="52" r="6" fill="#efe6cf" stroke="#2d4038" stroke-width="2"/></g>
-  <g class="arm-pinion"><path d="M125.9 93.0L125.9 97.0L119.7 98.8L119.0 101.9L123.8 106.2L122.1 109.8L115.7 108.7L113.7 111.2L116.2 117.1L113.1 119.7L107.8 115.9L104.9 117.3L104.6 123.7L100.7 124.6L97.6 118.9L94.4 118.9L91.3 124.6L87.4 123.7L87.1 117.3L84.2 115.9L78.9 119.7L75.8 117.1L78.3 111.2L76.3 108.7L69.9 109.8L68.2 106.2L73.0 101.9L72.3 98.8L66.1 97.0L66.1 93.0L72.3 91.2L73.0 88.1L68.2 83.8L69.9 80.2L76.3 81.3L78.3 78.8L75.8 72.9L78.9 70.3L84.2 74.1L87.1 72.7L87.4 66.3L91.3 65.4L94.4 71.1L97.6 71.1L100.7 65.4L104.6 66.3L104.9 72.7L107.8 74.1L113.1 70.3L116.2 72.9L113.7 78.8L115.7 81.3L122.1 80.2L123.8 83.8L119.0 88.1L119.7 91.2Z" fill="#cba569" stroke="#5b4128" stroke-width="2" stroke-linejoin="round"/><circle cx="96" cy="95" r="12" fill="none" stroke="#5b4128" stroke-width="2"/><circle cx="96" cy="95" r="5" fill="#b0352a" stroke="#3a1410" stroke-width="1.5"/><path d="M96 71v48M72 95h48" stroke="#5b4128" stroke-width="2.5"/></g>
-</svg>`;
-const armClamp = `<svg class="arm-clamp" viewBox="0 0 52 72" aria-hidden="true" focusable="false">
-  <path class="clamp-jaw clamp-jaw--top" d="M48 30V10q0-6-6-6H10q-8 0-8 8v14h10v-12h28v16z" fill="#cba569" stroke="#3a2a19" stroke-width="2" stroke-linejoin="round"/>
-  <path class="clamp-jaw clamp-jaw--bottom" d="M48 42v20q0 6-6 6H10q-8 0-8-8V46h10v12h28V42z" fill="#cba569" stroke="#3a2a19" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="34" y="26" width="18" height="20" rx="3" fill="#3a322c" stroke="#120e0b" stroke-width="2"/>
-  <circle cx="43" cy="36" r="4" fill="#d9b877" stroke="#3a2a19"/>
-  <rect x="2" y="22" width="10" height="5" rx="1.5" fill="#b0352a"/><rect x="2" y="45" width="10" height="5" rx="1.5" fill="#b0352a"/>
-</svg>`;
+// Moving between pages: a gantry crane rolls in along the top edge, unbolts the page's parts one by one and
+// hoists them away; on the next page it lowers that page's parts into place, top to bottom.
+const gantryArt = `<div class="gantry-rail"></div>
+  <img class="gantry-gear gantry-gear--left" src="/notebook/gears/brass-12.svg" alt="" width="46" height="46">
+  <img class="gantry-gear gantry-gear--right" src="/notebook/gears/green-8.svg" alt="" width="38" height="38">
+  <div class="gantry-trolley"><span class="gantry-cable"></span><span class="gantry-hook"></span></div>`;
 
-function buildArm(arriving) {
-  const arm = document.createElement('div');
-  arm.className = 'card-arm' + (arriving ? ' card-arm--arrive' : '');
-  arm.setAttribute('aria-hidden', 'true');
-  arm.innerHTML = '<div class="arm-housing">' + armHousing + '</div><div class="arm-rack">' + armClamp + '</div>';
-  // Kept outside <body> so that moving the page does not carry the machine with it.
-  document.documentElement.append(arm);
-  return arm;
+function buildGantry(mode) {
+  document.querySelector('.gantry')?.remove();
+  const gantry = document.createElement('div');
+  gantry.className = 'gantry gantry--' + mode;
+  gantry.setAttribute('aria-hidden', 'true');
+  gantry.innerHTML = gantryArt;
+  document.body.append(gantry);
+  return gantry;
 }
 
-function buildBoard(text, arriving) {
-  const board = document.createElement('p');
-  board.className = 'card-board' + (arriving ? ' card-board--arrive' : '');
-  board.setAttribute('aria-hidden', 'true');
-  board.textContent = text;
-  document.documentElement.append(board);
-  return board;
+// The parts are the smallest sensible pieces on screen: a heading, a paragraph, a picture, a button or a card.
+const wholePart = 'img, svg, picture, video, canvas, figure, p, h1, h2, h3, h4, h5, h6, li, a, button, dt, dd, blockquote, pre, .work-card, .flap-word, .lantern-switch, .wordmark';
+function pageParts(limit = 36) {
+  const viewArea = innerWidth * innerHeight;
+  const parts = [];
+  const visit = element => {
+    if (parts.length >= limit || element.matches('script, style, template, .gantry, dialog:not([open])')) return;
+    const box = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    if (style.display === 'contents') { [...element.children].forEach(visit); return; }
+    if (!box.width || !box.height || style.visibility === 'hidden' || style.position === 'fixed') return;
+    if (box.bottom < 0 || box.top > innerHeight || box.right < 0 || box.left > innerWidth) return;
+    const kids = [...element.children];
+    if (!kids.length || element.matches(wholePart) || (box.width * box.height < viewArea * .12 && !element.matches('.site-header, .site-nav'))) parts.push({ element, box });
+    else kids.forEach(visit);
+  };
+  document.querySelectorAll('.site-header, main, .site-footer').forEach(region => [...region.children].forEach(visit));
+  return parts;
+}
+
+const tilt = () => (Math.random() * 10 - 5).toFixed(1) + 'deg';
+
+function dismantle(parts, span) {
+  // Bottom parts first, so the crane clears the page upward.
+  [...parts].reverse().forEach(({ element, box }, index) => {
+    const lift = -(box.bottom + 80) + 'px';
+    const turn = tilt();
+    element.animate([
+      { translate: '0 0', rotate: '0deg' },
+      { translate: '0 3px', rotate: '0deg', offset: .12 },
+      { translate: '0 -4px', rotate: turn, offset: .3 },
+      { translate: '0 ' + lift, rotate: turn }
+    ], { duration: 460, delay: 120 + index * (span / Math.max(parts.length, 1)), easing: 'cubic-bezier(.45, 0, .8, .3)', fill: 'forwards' });
+  });
+}
+
+function assemble(parts, span) {
+  return parts.map(({ element, box }, index) => element.animate([
+    { translate: '0 ' + (-(box.bottom + 80)) + 'px', rotate: tilt() },
+    { translate: '0 5px', rotate: '0deg', offset: .72 },
+    { translate: '0 -2px', rotate: '0deg', offset: .86 },
+    { translate: '0 0', rotate: '0deg' }
+  ], { duration: 520, delay: 160 + index * (span / Math.max(parts.length, 1)), easing: 'cubic-bezier(.3, .6, .4, 1)', fill: 'backwards' }));
 }
 
 function wireDoors() {
   const root = document.documentElement;
-  const cleanUp = () => document.querySelectorAll('.card-arm, .card-board').forEach(node => node.remove());
-  if (root.classList.contains('card-arriving')) {
-    buildArm(true);
-    if (window.workshopCard && window.workshopCard !== '1') buildBoard(window.workshopCard, true);
-    setTimeout(() => { root.classList.remove('card-arriving'); cleanUp(); }, 1300);
+  if (root.classList.contains('page-assembling')) {
+    const gantry = buildGantry('arrive');
+    const finish = () => { root.classList.remove('page-assembling'); gantry.remove(); };
+    try {
+      // Measured and hung on the crane in the same frame the page is shown, so no part is seen in place first.
+      root.classList.add('page-built');
+      root.classList.remove('page-assembling');
+      const runs = assemble(pageParts(), 620);
+      Promise.all(runs.map(run => run.finished)).catch(() => {}).then(() => setTimeout(() => { gantry.classList.add('gantry--retract'); setTimeout(finish, 320); }, 80));
+    } catch { finish(); }
   }
-  addEventListener('pageshow', event => { if (event.persisted) { root.classList.remove('card-leaving', 'card-arriving'); cleanUp(); } });
+  addEventListener('pageshow', event => {
+    if (!event.persisted) return;
+    root.classList.remove('page-dismantling', 'page-assembling');
+    document.querySelector('.gantry')?.remove();
+    document.getAnimations().forEach(run => { if (run instanceof CSSAnimation) return; run.cancel(); });
+  });
   if (reduced.matches) return;
   document.addEventListener('click', event => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     const link = event.target.closest('a[href]');
-    if (!link || link.target || link.hasAttribute('download')) return;
+    if (!link || link.target || link.hasAttribute('download') || root.classList.contains('page-dismantling')) return;
     const url = new URL(link.href, location.href);
     if (url.origin !== location.origin || url.pathname === location.pathname) return;
     event.preventDefault();
-    const label = (link.getAttribute('aria-label') || link.textContent).replace(/[←↗→↓]/g, '').replace(/\s+/g, ' ').trim().slice(0, 18);
-    try { sessionStorage.setItem('workshop-door', label || '1'); } catch { /* The arm only works on this side. */ }
-    cleanUp();
-    const board = buildBoard(label, false);
-    buildArm(false);
-    root.classList.add('card-leaving');
-    setTimeout(() => flipFlaps(board, { stagger: 1, turns: 3 }), 450);
-    setTimeout(() => { location.href = url.href; }, 1200);
+    try { sessionStorage.setItem('workshop-door', '1'); } catch { /* The next page just opens without the crane. */ }
+    buildGantry('leave');
+    root.classList.add('page-dismantling');
+    dismantle(pageParts(), 560);
+    setTimeout(() => { location.href = url.href; }, 1180);
   });
 }
 
