@@ -1,4 +1,4 @@
-export const contactEmail = 'Yomasan55@gmail.com';
+export const contactEmail = 'yomasan55@gmail.com';
 export const githubUrl = 'https://github.com/AMZ-jpcslr';
 
 const lead = '選考や制作についてのご連絡は、メールでお気軽にどうぞ。';
