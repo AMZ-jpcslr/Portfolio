@@ -44,8 +44,12 @@ function startOpening() {
   function playIfVisible() {
     if (!pending || document.hidden) return;
     pending = false;
-    // A visitor who was handed in by the card arm does not need the boiler again.
-    if (motion.matches || location.hash.startsWith('#work-') || document.documentElement.classList.contains('page-assembling')) return;
+    // The boiler runs once per tab session. A link to a section, or a visitor handed in
+    // by the card arm, goes straight to the page.
+    let seen = false;
+    try { seen = sessionStorage.getItem('workshop-opening') === '1'; } catch { /* Storage blocked: fall back to playing. */ }
+    if (seen || motion.matches || location.hash || document.documentElement.classList.contains('page-assembling')) return;
+    try { sessionStorage.setItem('workshop-opening', '1'); } catch { /* The next visit plays again. */ }
 
     const controller = new AbortController();
     const { signal } = controller;

@@ -58,7 +58,7 @@ export async function buildSocialMetadata() {
     await cp(new URL(file, source), new URL(file, output));
   }
   const pages = [
-    { path: '/', title: siteName, description: homeDescription, render: renderHome },
+    { path: '/', title: `北岡 英磨のポートフォリオ ｜ ${siteName}`, description: homeDescription, render: renderHome },
     { path: '/about/', title: `経歴とスキル ｜ ${siteName}`, description: '高校・大学・UBC交換留学・現在の4章から、北岡 英磨の歩みと制作に使っている技術、資格を紹介します。', render: renderAbout },
     ...projectList.map(project => ({
       path: project.path, title: `${project.title} ｜ ${siteName}`,

@@ -46,6 +46,8 @@ function renderWelcome() {
       </button>
     </div>
     <div class="welcome-entry">
+      <p class="welcome-identity"><strong>北岡 英磨</strong><span>立命館大学 情報理工学部</span></p>
+      <p class="welcome-lead">社会や身近な困りごとに取り組む、個人開発と研究をしています。</p>
       <p class="welcome-tagline">紙と真鍮と歯車でできた、からくり修理屋の工房へようこそ。</p>
       <a href="#message" class="workshop-entry" data-turn-gears>${renderGearPair()}<span>メッセージを読む</span><span class="workshop-entry-arrow" aria-hidden="true">↓</span></a>
     </div>
